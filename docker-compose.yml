@@ -1,0 +1,52 @@
+version: '3.4'
+
+services:
+  myrtuscms-api:
+    image: ${DOCKER_REGISTRY-}myrtuscmsapi
+    container_name: MyrtusCMS.WebAPI
+    build:
+      context: .
+      dockerfile: src/Myrtus.CMS.WebAPI/Dockerfile
+    depends_on:
+      - myrtuscms-db
+
+  myrtuscms-db:
+    image: postgres:latest
+    container_name: MyrtusCMS.Db
+    environment:
+      - POSTGRES_DB=myrtusCMS
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  myrtuscms-idp:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: MyrtusCMS.Identity
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files:/opt/keycloak/data/import
+    ports:
+      - 18080:8080
+
+  myrtuscms-seq:
+    image: datalust/seq:latest
+    container_name: MyrtusCMS.Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+
+  myrtuscms-redis:
+    image: redis:latest
+    container_name: MyrtusCMS.Redis
+    restart: always
+    ports:
+      - 6379:6379
