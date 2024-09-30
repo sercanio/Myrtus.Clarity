@@ -50,3 +50,17 @@ services:
     restart: always
     ports:
       - 6379:6379
+
+  myrtuscms-redis-insight:
+    image: redis/redisinsight:latest
+    container_name: MyrtusCMS.RedisInsight
+    restart: always
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
+    environment:
+      - RIHOST=redis://myrtuscms-redis:6379
+
+volumes:
+  redis-insight:
