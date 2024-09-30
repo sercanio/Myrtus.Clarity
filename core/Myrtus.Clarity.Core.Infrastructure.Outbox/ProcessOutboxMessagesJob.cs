@@ -41,7 +41,7 @@ internal sealed class ProcessOutboxMessagesJob : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        _logger.LogInformation("Beginning to process outbox messages");
+        _logger.LogDebug("Beginning to process outbox messages");
 
         using IDbConnection connection = _sqlConnectionFactory.CreateConnection();
         using IDbTransaction transaction = connection.BeginTransaction();
@@ -75,7 +75,7 @@ internal sealed class ProcessOutboxMessagesJob : IJob
 
         transaction.Commit();
 
-        _logger.LogInformation("Completed processing outbox messages");
+        _logger.LogDebug("Completed processing outbox messages");
     }
 
     private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync(
