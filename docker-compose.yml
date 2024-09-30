@@ -31,7 +31,7 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
     volumes:
       - ./.containers/identity:/opt/keycloak/data
-      - ./.files:/opt/keycloak/data/import
+      - ./.containers/keycloak/data:/opt/keycloak/data/import
     ports:
       - 18080:8080
 
@@ -43,6 +43,8 @@ services:
     ports:
       - 5341:5341
       - 8081:80
+    volumes:
+      - ./.containers/logging/seq/data:/data
 
   myrtuscms-redis:
     image: redis:latest
