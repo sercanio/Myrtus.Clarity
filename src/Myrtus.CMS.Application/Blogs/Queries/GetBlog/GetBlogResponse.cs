@@ -9,6 +9,7 @@ namespace Myrtus.CMS.Application.Blogs.Queries.GetBlog
         public string Slug { get; init; }
         public Guid OwnerId { get; init; }
         public DateTime CreatedOnUtc { get; init; }
-        public DateTime UpdatedOnUtc { get; init; }
+        public DateTime? UpdatedOnUtc { get; init; }
+        public DateTime? DeletedOnUtc { get; init; }
     }
 }

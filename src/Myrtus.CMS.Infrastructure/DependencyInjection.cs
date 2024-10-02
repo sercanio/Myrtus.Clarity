@@ -28,6 +28,7 @@ using AuthenticationService = Myrtus.CMS.Infrastructure.Authentication.Keycloak.
 using IAuthenticationService = Myrtus.CMS.Application.Abstractions.Authentication.IAuthenticationService;
 using Myrtus.CMS.Infrastructure.Authorization;
 using Myrtus.CMS.Domain.Blogs;
+using Myrtus.CMS.Application.Repositories;
 
 namespace Myrtus.CMS.Infrastructure;
 

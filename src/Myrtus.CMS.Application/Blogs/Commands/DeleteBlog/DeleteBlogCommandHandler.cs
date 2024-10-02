@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
+using Myrtus.CMS.Application.Repositories;
 
 namespace Myrtus.CMS.Application.Blogs.Commands;
 

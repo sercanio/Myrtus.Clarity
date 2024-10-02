@@ -1,6 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Clock;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
+using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Blogs.Common;
 using Myrtus.CMS.Domain.Users;

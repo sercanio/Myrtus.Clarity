@@ -3,8 +3,8 @@ using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
+using Myrtus.CMS.Application.Repositories;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 
@@ -19,20 +19,23 @@ public sealed class GetAllBlogsQueryHandler : IRequestHandler<GetAllBlogsQuery, 
 
     public async Task<Result<IPaginatedList<BlogResponse>>> Handle(GetAllBlogsQuery request, CancellationToken cancellationToken)
     {
+     
         var paginatedBlogs = await _blogRepository.GetAllAsync(
             includeSoftDeleted: request.IncludeSoftDeleted,
             pageIndex: request.PageIndex,
             pageSize: request.PageSize,
-            cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken,
+            include: blog => blog.Owner);
 
         var blogResponses = paginatedBlogs.Items.Select(blog => new BlogResponse
         {
             Id = blog.Id,
-            Title = blog.Title?.Value ?? "Default Title", // Fallback for Title
-            Slug = blog.Slug?.Value ?? "default-slug", // Fallback for Slug
-            OwnerId = blog.Owner?.Id ?? Guid.Empty, // Fallback for OwnerId
+            Title = blog.Title.Value,
+            Slug = blog.Slug.Value,
+            OwnerId = blog.Owner.Id,
             CreatedOnUtc = blog.CreatedOnUtc,
-            UpdatedOnUtc = blog.UpdatedOnUtc ?? DateTime.UtcNow // TODO: Handle this.
+            UpdatedOnUtc = blog.UpdatedOnUtc,
+            DeletedOnUtc = blog.DeletedOnUtc,
         }).ToList();
 
         var paginatedList = new PaginatedList<BlogResponse>(blogResponses, paginatedBlogs.TotalCount, request.PageIndex, request.PageSize);
