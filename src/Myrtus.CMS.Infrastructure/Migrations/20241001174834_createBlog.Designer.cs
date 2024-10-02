@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Myrtus.CMS.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.CMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241001174834_createBlog")]
+    partial class createBlog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,14 +31,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<DateTime?>("DeletedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_on_utc");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid")
@@ -52,15 +47,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("title");
 
-                    b.Property<DateTime?>("UpdatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_on_utc");
-
                     b.HasKey("Id")
                         .HasName("pk_blogs");
-
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_blogs_id");
 
                     b.HasIndex("OwnerId")
                         .HasDatabaseName("ix_blogs_owner_id");
@@ -80,14 +68,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<DateTime?>("DeletedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_on_utc");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid")
                         .HasColumnName("post_id");
@@ -96,15 +76,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("post_id1");
 
-                    b.Property<DateTime?>("UpdatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_on_utc");
-
                     b.HasKey("Id")
                         .HasName("pk_comments");
-
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_comments_id");
 
                     b.HasIndex("PostId")
                         .HasDatabaseName("ix_comments_post_id");
@@ -141,14 +114,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("cover_image");
 
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<DateTime?>("DeletedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_on_utc");
-
                     b.Property<bool>("Reviewed")
                         .HasColumnType("boolean")
                         .HasColumnName("reviewed");
@@ -173,10 +138,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("title");
-
-                    b.Property<DateTime?>("UpdatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_on_utc");
 
                     b.HasKey("Id")
                         .HasName("pk_posts");
@@ -274,14 +235,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<DateTime?>("DeletedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_on_utc");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(400)
@@ -304,10 +257,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("last_name");
-
-                    b.Property<DateTime?>("UpdatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_on_utc");
 
                     b.HasKey("Id")
                         .HasName("pk_users");

@@ -1,6 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Myrtus.Clarity.Core.Domain.Abstractions;
 
 namespace Myrtus.CMS.Application;
 

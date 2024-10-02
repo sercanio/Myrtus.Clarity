@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Myrtus.CMS.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.CMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241002064817_addTimeStampsBlog")]
+    partial class addTimeStampsBlog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("title");
 
-                    b.Property<DateTime?>("UpdatedOnUtc")
+                    b.Property<DateTime>("UpdatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_on_utc");
 
@@ -96,7 +99,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("post_id1");
 
-                    b.Property<DateTime?>("UpdatedOnUtc")
+                    b.Property<DateTime>("UpdatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_on_utc");
 
@@ -174,7 +177,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("title");
 
-                    b.Property<DateTime?>("UpdatedOnUtc")
+                    b.Property<DateTime>("UpdatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_on_utc");
 
@@ -305,7 +308,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("last_name");
 
-                    b.Property<DateTime?>("UpdatedOnUtc")
+                    b.Property<DateTime>("UpdatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_on_utc");
 

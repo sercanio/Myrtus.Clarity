@@ -27,6 +27,7 @@ using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.
 using AuthenticationService = Myrtus.CMS.Infrastructure.Authentication.Keycloak.AuthenticationService;
 using IAuthenticationService = Myrtus.CMS.Application.Abstractions.Authentication.IAuthenticationService;
 using Myrtus.CMS.Infrastructure.Authorization;
+using Myrtus.CMS.Domain.Blogs;
 
 namespace Myrtus.CMS.Infrastructure;
 
@@ -66,7 +67,7 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IBlogRepository, BlogRepository>();
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         services.AddSingleton<ISqlConnectionFactory>(_ =>
