@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Domain.Abstractions;
+using Myrtus.CMS.Domain.Blogs;
 
 namespace Myrtus.CMS.Application;
 
@@ -21,7 +22,6 @@ public static class DependencyInjection
         });
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
-
         return services;
     }
 }

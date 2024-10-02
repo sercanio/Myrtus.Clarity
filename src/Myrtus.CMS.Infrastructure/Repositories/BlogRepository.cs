@@ -1,6 +1,5 @@
 ﻿using Myrtus.CMS.Domain.Blogs;
 using Microsoft.EntityFrameworkCore;
-using Myrtus.Clarity.Core.Application.Abstractions.Clock;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 
@@ -13,7 +12,7 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
     {
     }
 
-    public async Task<IPaginatedList<Blog>> GetAllAsync(bool includeSoftDeleted = false, int pageIndex = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<IPaginatedList<Blog>> GetAllAsync(bool includeSoftDeleted = false, int pageIndex = 0, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var query = DbContext.Set<Blog>().AsQueryable();
 
@@ -24,7 +23,7 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
 
         var count = await query.CountAsync(cancellationToken);
         var items = await query
-            .Skip((pageIndex - 1) * pageSize)
+            .Skip((pageIndex) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
