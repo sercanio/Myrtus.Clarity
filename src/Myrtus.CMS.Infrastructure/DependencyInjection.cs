@@ -29,6 +29,7 @@ using IAuthenticationService = Myrtus.CMS.Application.Abstractions.Authenticatio
 using Myrtus.CMS.Infrastructure.Authorization;
 using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.Clarity.Core.Domain.Users;
 
 namespace Myrtus.CMS.Infrastructure;
 

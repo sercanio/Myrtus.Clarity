@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using System.Linq.Expressions;
 
-namespace Myrtus.CMS.Application.Repositories;
+namespace Myrtus.Clarity.Core.Application.Repositories;
 
 public interface IRepository<T>
 {

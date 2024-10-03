@@ -24,6 +24,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Caching\Myrtus.Clarity.Core.Application.Abstractions.Caching.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Repositories\Myrtus.Clarity.Core.Application.Abstractions.Repositories.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Exceptions\Myrtus.Clarity.Core.Application.Exceptions.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Authorization\Myrtus.Clarity.Core.Infrastructure.Authorization.csproj" />

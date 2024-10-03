@@ -1,9 +1,9 @@
-﻿using Myrtus.Clarity.Core.Domain.Abstractions;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using System.Linq.Expressions;
-using Myrtus.CMS.Application.Repositories;
+using Myrtus.Clarity.Core.Application.Repositories;
+using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 

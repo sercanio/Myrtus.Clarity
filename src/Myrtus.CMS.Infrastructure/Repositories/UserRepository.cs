@@ -1,4 +1,5 @@
-﻿using Myrtus.CMS.Domain.Users;
+﻿using Myrtus.Clarity.Core.Domain.Users;
+using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 
