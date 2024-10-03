@@ -26,7 +26,7 @@ internal sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogComma
 
     public async Task<Result<Guid>> Handle(CreateBlogCommand request, CancellationToken cancellationToken)
     {
-        User? user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
+        User? user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken: cancellationToken);
 
         if (user is null)
         {

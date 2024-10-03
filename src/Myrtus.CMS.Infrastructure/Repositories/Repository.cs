@@ -19,10 +19,22 @@ internal abstract class Repository<T> : IRepository<T>
 
     public async Task<T?> GetByIdAsync(
         Guid id,
+        bool includeSoftDeleted = false,
         CancellationToken cancellationToken = default,
         params Expression<Func<T, object>>[] include)
     {
         var query = DbContext.Set<T>().AsQueryable();
+
+        // Exclude soft-deleted entities if `includeSoftDeleted` is false and 'DeletedOnUtc' property exists
+        if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
+        {
+            var parameter = Expression.Parameter(typeof(T), "entity");
+            var property = Expression.Property(parameter, "DeletedOnUtc");
+            var comparison = Expression.Equal(property, Expression.Constant(null));
+            var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+
+            query = query.Where(lambda);
+        }
 
         foreach (var item in include)
         {
@@ -33,15 +45,14 @@ internal abstract class Repository<T> : IRepository<T>
     }
 
     public async Task<IPaginatedList<T>> GetAllAsync(
-        bool includeSoftDeleted = false,
         int pageIndex = 0,
         int pageSize = 10,
+        bool includeSoftDeleted = false,
         CancellationToken cancellationToken = default,
         params Expression<Func<T, object>>[] include)
     {
         var query = DbContext.Set<T>().AsQueryable();
 
-        // Assuming soft delete logic uses a 'DeletedOnUtc' field
         if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
         {
             var parameter = Expression.Parameter(typeof(T), "entity");

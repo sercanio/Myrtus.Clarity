@@ -54,10 +54,10 @@ public class BlogsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllBlogs([FromQuery] bool includeSoftDeleted = false, [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetAllBlogs([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
 
-        var query = new GetAllBlogsQuery(pageIndex, pageSize, includeSoftDeleted);
+        var query = new GetAllBlogsQuery(pageIndex, pageSize);
         var result = await _sender.Send(query, cancellationToken);
 
         if (result.IsFailure)

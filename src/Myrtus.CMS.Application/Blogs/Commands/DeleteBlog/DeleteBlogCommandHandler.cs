@@ -21,7 +21,7 @@ public class DeleteBlogCommandHandler : IRequestHandler<DeleteBlogCommand, bool>
 
     public async Task<bool> Handle(DeleteBlogCommand request, CancellationToken cancellationToken)
     {
-        var blog = await _blogRepository.GetByIdAsync(request.BlogId, cancellationToken);
+        var blog = await _blogRepository.GetByIdAsync(request.BlogId, cancellationToken: cancellationToken);
 
         if (blog == null)
         {

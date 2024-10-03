@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Domain.Blogs;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 
@@ -18,6 +19,11 @@ public sealed class GetBlogQueryHandler : IRequestHandler<GetBlogQuery, Result<B
             request.BlogId, 
             include: blog => blog.Owner,
             cancellationToken: cancellationToken);
+
+        if(blog is null)
+        {
+            return Result.Failure<BlogResponse>(BlogErrors.NotFound);
+        }
 
         BlogResponse blogResponse = new()
         {
