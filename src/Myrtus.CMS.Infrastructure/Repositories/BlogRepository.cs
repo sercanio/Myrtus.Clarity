@@ -1,9 +1,7 @@
-﻿using Myrtus.CMS.Domain.Blogs;
-using Microsoft.EntityFrameworkCore;
-using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
-using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Domain.Blogs.Common;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 
@@ -14,10 +12,30 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
     {
     }
 
-    public async Task<bool> BlogExistsAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Blog?> GetBlogByIdAsync(
+        Guid id,
+        bool includeSoftDeleted = false,
+        CancellationToken cancellationToken = default,
+        params Expression<Func<Blog, object>>[] include)
     {
-        return await DbContext.Set<Blog>()
-            .AnyAsync(blog => blog.Id == id && blog.DeletedOnUtc == null, cancellationToken);
+        return await GetAsync(blog => blog.Id == id, includeSoftDeleted, cancellationToken, include);
+    }
+
+    public async Task<bool> BlogExistsByIdAsync(
+             Guid id,
+             CancellationToken cancellationToken = default)
+    {
+        return await ExistsAsync(blog => blog.Id == id, cancellationToken:cancellationToken);
+    }
+
+    public async Task<bool> BlogExistsByTitleAsync(Title title, CancellationToken cancellationToken = default)
+    {
+        return await ExistsAsync(blog => blog.Title == title, cancellationToken: cancellationToken);
+    }
+
+    public async Task<bool> BlogExistsBySlugAsync(Slug slug, CancellationToken cancellationToken = default)
+    {
+        return await ExistsAsync(blog => blog.Slug == slug, cancellationToken: cancellationToken);
     }
 
     public override void Add(Blog blog)

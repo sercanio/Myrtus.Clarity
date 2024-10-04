@@ -15,12 +15,12 @@ public sealed class GetBlogQueryHandler : IRequestHandler<GetBlogQuery, Result<B
     }
     public async Task<Result<BlogResponse>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
     {
-        var blog = await _blogRepository.GetByIdAsync(
+        var blog = await _blogRepository.GetBlogByIdAsync(
             request.BlogId, 
             include: blog => blog.Owner,
             cancellationToken: cancellationToken);
 
-        if(blog is null)
+        if (blog is null)
         {
             return Result.Failure<BlogResponse>(BlogErrors.NotFound);
         }

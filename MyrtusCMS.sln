@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{ED5CDE04-7D40-4CC8-BB06-B2949158F655}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4634D63C-717B-405B-8434-3EB156F021F2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4634D63C-717B-405B-8434-3EB156F021F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4736657B-5DD3-4C41-9B25-8F896C590C13}"
 EndProject
@@ -50,6 +50,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrastructure.Pagination", "core\Myrtus.Clarity.Core.Infrastructure.Pagination\Myrtus.Clarity.Core.Infrastructure.Pagination.csproj", "{32EFB480-650C-4B84-8FFB-D3A0921C034C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Pagination", "core\Myrtus.Clarity.Core.Application.Abstractions.Pagination\Myrtus.Clarity.Core.Application.Abstractions.Pagination.csproj", "{810180F5-8283-4CD7-AE55-DEBC786041A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Repositories", "core\Myrtus.Clarity.Core.Application.Abstractions.Repositories\Myrtus.Clarity.Core.Application.Abstractions.Repositories.csproj", "{4E47E423-FC2A-45CB-915E-4B5D86DAADB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{202FB0B2-02DD-4D2E-869E-7B29DC80FC91}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtus.CMS.Application.Tests.Unit", "tests\Myrtus.CMS.Application.Tests.Unit\Myrtus.CMS.Application.Tests.Unit.csproj", "{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +150,14 @@ Global
 		{810180F5-8283-4CD7-AE55-DEBC786041A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{810180F5-8283-4CD7-AE55-DEBC786041A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{810180F5-8283-4CD7-AE55-DEBC786041A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E47E423-FC2A-45CB-915E-4B5D86DAADB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E47E423-FC2A-45CB-915E-4B5D86DAADB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E47E423-FC2A-45CB-915E-4B5D86DAADB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E47E423-FC2A-45CB-915E-4B5D86DAADB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +183,8 @@ Global
 		{B6CBEAC6-CCA9-4A98-9555-AC779E698734} = {4736657B-5DD3-4C41-9B25-8F896C590C13}
 		{32EFB480-650C-4B84-8FFB-D3A0921C034C} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{810180F5-8283-4CD7-AE55-DEBC786041A1} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
+		{4E47E423-FC2A-45CB-915E-4B5D86DAADB9} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
+		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907} = {4634D63C-717B-405B-8434-3EB156F021F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7949CCE5-84CB-4073-9DF1-B959B76413D5}

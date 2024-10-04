@@ -24,7 +24,7 @@ public sealed class UpdateBlogCommandHandler : ICommandHandler<UpdateBlogCommand
 
     public async Task<Result<bool>> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
     {
-        var blog = await _blogRepository.GetByIdAsync(request.BlogId, cancellationToken: cancellationToken);
+        var blog = await _blogRepository.GetBlogByIdAsync(request.BlogId, cancellationToken: cancellationToken);
 
         if (blog is null)
         {

@@ -1,14 +1,14 @@
 ﻿using Asp.Versioning;
-using Myrtus.CMS.WebAPI.Controllers;
 using MediatR;
-using Myrtus.Clarity.Core.Domain.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 using Myrtus.CMS.Application.Blogs.Commands.CreateBlog;
 using Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 using Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
 using Myrtus.CMS.Application.Blogs.Commands.UpdateBlog;
+using Myrtus.CMS.WebAPI.Controllers;
 
 namespace Myrtus.CMS.Api.Controllers.Blogs;
 
@@ -52,6 +52,7 @@ public class BlogsController : ControllerBase
 
         return CreatedAtAction(nameof(GetBlog), new { id = result.Value }, result.Value);
     }
+
 
     [HttpGet]
     public async Task<IActionResult> GetAllBlogs([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)

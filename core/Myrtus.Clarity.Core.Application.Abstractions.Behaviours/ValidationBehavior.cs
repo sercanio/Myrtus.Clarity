@@ -1,7 +1,7 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.Clarity.Core.Application.Exceptions;
+﻿using MediatR;
 using FluentValidation;
-using MediatR;
+using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
+using Myrtus.Clarity.Core.Application.Exceptions;
 
 namespace Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 

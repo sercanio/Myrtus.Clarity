@@ -1,6 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractions.Authentication;
+using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Users.RegisterUser;

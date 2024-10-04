@@ -5,96 +5,116 @@ using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.Clarity.Core.Application.Repositories;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 
-namespace Myrtus.CMS.Infrastructure.Repositories;
-
-internal abstract class Repository<T> : IRepository<T>
-    where T : Entity
+namespace Myrtus.CMS.Infrastructure.Repositories
 {
-    protected readonly ApplicationDbContext DbContext;
-
-    protected Repository(ApplicationDbContext dbContext)
+    internal abstract class Repository<T> : IRepository<T>
+        where T : Entity
     {
-        DbContext = dbContext;
-    }
+        protected readonly ApplicationDbContext DbContext;
 
-    public async Task<T?> GetByIdAsync(
-        Guid id,
-        bool includeSoftDeleted = false,
-        CancellationToken cancellationToken = default,
-        params Expression<Func<T, object>>[] include)
-    {
-        var query = DbContext.Set<T>().AsQueryable();
-
-        // Exclude soft-deleted entities if `includeSoftDeleted` is false and 'DeletedOnUtc' property exists
-        if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
+        protected Repository(ApplicationDbContext dbContext)
         {
-            var parameter = Expression.Parameter(typeof(T), "entity");
-            var property = Expression.Property(parameter, "DeletedOnUtc");
-            var comparison = Expression.Equal(property, Expression.Constant(null));
-            var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
-
-            query = query.Where(lambda);
+            DbContext = dbContext;
         }
 
-        foreach (var item in include)
+        public async Task<T?> GetAsync(
+            Expression<Func<T, bool>> predicate,
+            bool includeSoftDeleted = false,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<T, object>>[] include)
         {
-            query = query.Include(item);
+            var query = DbContext.Set<T>().AsQueryable();
+
+            if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
+            {
+                var parameter = Expression.Parameter(typeof(T), "entity");
+                var property = Expression.Property(parameter, "DeletedOnUtc");
+                var comparison = Expression.Equal(property, Expression.Constant(null));
+                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+
+                query = query.Where(lambda);
+            }
+
+            foreach (var item in include)
+            {
+                query = query.Include(item);
+            }
+
+            return await query.FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
-        return await query.FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
-    }
-
-    public async Task<IPaginatedList<T>> GetAllAsync(
-        int pageIndex = 0,
-        int pageSize = 10,
-        bool includeSoftDeleted = false,
-        CancellationToken cancellationToken = default,
-        params Expression<Func<T, object>>[] include)
-    {
-        var query = DbContext.Set<T>().AsQueryable();
-
-        if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
+        public async Task<IPaginatedList<T>> GetAllAsync(
+            int pageIndex = 0,
+            int pageSize = 10,
+            bool includeSoftDeleted = false,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<T, object>>[] include)
         {
-            var parameter = Expression.Parameter(typeof(T), "entity");
-            var property = Expression.Property(parameter, "DeletedOnUtc");
-            var comparison = Expression.Equal(property, Expression.Constant(null));
-            var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+            var query = DbContext.Set<T>().AsQueryable();
 
-            query = query.Where(lambda);
+            if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
+            {
+                var parameter = Expression.Parameter(typeof(T), "entity");
+                var property = Expression.Property(parameter, "DeletedOnUtc");
+                var comparison = Expression.Equal(property, Expression.Constant(null));
+                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+
+                query = query.Where(lambda);
+            }
+
+            foreach (var item in include)
+            {
+                query = query.Include(item);
+            }
+
+            var count = await query.CountAsync(cancellationToken);
+            var items = await query
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
 
-        foreach (var item in include)
+        public virtual async Task<bool> ExistsAsync(
+            Expression<Func<T, bool>> predicate,
+            bool includeSoftDeleted = false,
+            CancellationToken cancellationToken = default)
         {
-            query = query.Include(item);
+            var query = DbContext.Set<T>().AsQueryable();
+
+            if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
+            {
+                var parameter = Expression.Parameter(typeof(T), "entity");
+                var property = Expression.Property(parameter, "DeletedOnUtc");
+                var comparison = Expression.Equal(property, Expression.Constant(null));
+                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+
+                query = query.Where(lambda);
+            }
+
+            return await query.AnyAsync(predicate, cancellationToken);
         }
 
-        var count = await query.CountAsync(cancellationToken);
-        var items = await query
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return new PaginatedList<T>(items, count, pageIndex, pageSize);
-    }
-
-    public virtual void Add(T entity)
-    {
-        DbContext.Add(entity);
-    }
-
-    public virtual void Update(T entity)
-    {
-        DbContext.Update(entity);
-    }
-
-    public virtual void Delete(T entity)
-    {
-        var property = typeof(T).GetProperty("MarkDeleted");
-        if (property != null)
+        public virtual void Add(T entity)
         {
-            property.SetValue(entity, null);
+            DbContext.Add(entity);
         }
 
-        DbContext.Update(entity);
+        public virtual void Update(T entity)
+        {
+            DbContext.Update(entity);
+        }
+
+        public virtual void Delete(T entity)
+        {
+            var property = typeof(T).GetProperty("MarkDeleted");
+            if (property != null)
+            {
+                property.SetValue(entity, null);
+            }
+
+            DbContext.Update(entity);
+        }
     }
 }
