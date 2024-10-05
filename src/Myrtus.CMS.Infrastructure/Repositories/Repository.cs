@@ -96,9 +96,9 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             return await query.AnyAsync(predicate, cancellationToken);
         }
 
-        public virtual void Add(T entity)
+        public virtual async Task AddAsync(T entity)
         {
-            DbContext.Add(entity);
+            await DbContext.AddAsync(entity);
         }
 
         public virtual void Update(T entity)

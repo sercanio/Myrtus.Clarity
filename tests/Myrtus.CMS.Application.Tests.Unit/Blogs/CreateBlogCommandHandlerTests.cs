@@ -11,6 +11,7 @@ using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Blogs.Common;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Domain.Users;
+using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 
 namespace Myrtus.CMS.Application.Tests.Units.Blogs;
 
@@ -34,6 +35,52 @@ public class CreateBlogCommandHandlerTests
             _userRepositoryMock.Object,
             _unitOfWorkMock.Object
         );
+    }
+
+    [Fact]
+    public async Task CreateBlogCommandHandler_ShouldReturnSuccess_WhenBlogIsCreated()
+    {
+        // Arrange
+        var ownerId = Guid.NewGuid();
+        var firstName = new FirstName("Test");
+        var lastName = new LastName("User");
+        var email = new Email("test@example.com");
+        var owner = User.Create(firstName, lastName, email); // Use the Create method
+
+        var command = new CreateBlogCommand("NewTitle", "newslug", ownerId);
+        Blog createdBlog = null; // Variable to capture the blog
+
+        _blogRepositoryMock.Setup(repo => repo.BlogExistsByTitleAsync(It.IsAny<Title>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false); // Ensure the title is not already taken
+        _blogRepositoryMock.Setup(repo => repo.BlogExistsBySlugAsync(It.IsAny<Slug>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false); // Ensure the slug is not already taken
+        _blogRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Blog>()))
+            .Callback<Blog>(blog => createdBlog = blog) // Capture the created blog
+            .Returns(Task.CompletedTask);
+
+        // Ensure user retrieval returns a valid user
+        _userRepositoryMock
+            .Setup(repo => repo.GetUserByIdAsync(ownerId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(owner);
+
+        // Simulate a successful save operation
+        _unitOfWorkMock
+            .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1); // Simulate one change
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().Be(new CreateBlogCommandResponse(
+            createdBlog.Id,
+            createdBlog.Title.Value,
+            createdBlog.Slug.Value,
+            createdBlog.Owner.Id,
+            createdBlog.CreatedOnUtc)); // Assert the blog was created successfully with a valid ID
+        _blogRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Blog>()), Times.Once);
+        _unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -75,7 +122,7 @@ public class CreateBlogCommandHandlerTests
         result.Error.Should().Be(UserErrors.NotFound); // Ensure correct error is returned
 
         // Verify that the blog was not added to the repository
-        _blogRepositoryMock.Verify(repo => repo.Add(It.IsAny<Blog>()), Times.Never);
+        _blogRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Blog>()), Times.Never);
     }
 
     [Fact]
@@ -150,7 +197,7 @@ public class CreateBlogCommandHandlerTests
         result.Error.Should().Be(BlogErrors.TitleAlreadyExists); // Ensure correct error is returned
 
         // Verify that the blog was not added to the repository
-        _blogRepositoryMock.Verify(repo => repo.Add(It.IsAny<Blog>()), Times.Never);
+        _blogRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Blog>()), Times.Never);
     }
 
     [Fact]
@@ -226,6 +273,6 @@ public class CreateBlogCommandHandlerTests
         result.Error.Should().Be(BlogErrors.SlugAlreadyExists); // Ensure correct error is returned
 
         // Verify that the blog was not added to the repository
-        _blogRepositoryMock.Verify(repo => repo.Add(It.IsAny<Blog>()), Times.Never);
+        _blogRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Blog>()), Times.Never);
     }
 }

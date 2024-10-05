@@ -38,7 +38,7 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
 
         user.SetIdentityId(identityId);
 
-        _userRepository.Add(user);
+        await _userRepository.AddAsync(user);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

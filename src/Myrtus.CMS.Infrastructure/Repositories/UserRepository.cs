@@ -1,4 +1,6 @@
 ﻿using Myrtus.CMS.Application.Abstractionss.Repositories;
+using Myrtus.CMS.Domain.Blogs.Events;
+using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
@@ -15,13 +17,13 @@ internal sealed class UserRepository : Repository<User>, IUserRepository
         return await GetAsync(user => user.Id == id, cancellationToken: cancellationToken);
     }
 
-    public override void Add(User user)
+    public override async Task AddAsync(User user)
     {
         foreach (Role role in user.Roles)
         {
             DbContext.Attach(role);
         }
 
-        DbContext.Add(user);
+      await DbContext.AddAsync(user);
     }
 }

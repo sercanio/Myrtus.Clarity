@@ -39,9 +39,10 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
         return await ExistsAsync(blog => blog.Slug == slug, cancellationToken: cancellationToken);
     }
 
-    public override void Add(Blog blog)
+
+    public override async Task AddAsync(Blog blog)
     {
-        DbContext.Add(blog);
+        await DbContext.AddAsync(blog);
         blog.RaiseDomainEvent(new BlogCreatedEvent(blog.Id));
     }
 

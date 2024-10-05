@@ -1,11 +1,10 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Domain.Blogs.Events;
 using Myrtus.CMS.Domain.Blogs.Posts;
 using Myrtus.CMS.Domain.Blogs.Common;
 using Myrtus.CMS.Domain.Blogs.Posts.Events;
-using Myrtus.CMS.Domain.Blogs.Events;
 using Myrtus.CMS.Domain.Users.Events;
+using Myrtus.CMS.Domain.Common;
 
 namespace Myrtus.CMS.Domain.Blogs;
 
@@ -32,6 +31,10 @@ public sealed class Blog : Entity
     public Title Title { get; private set; }
     public Slug Slug { get; private set; }
     public User Owner { get; private set; }
+    public User? LastUpdatedBy { get; private set; }
+    public Description? UpdateReason { get; private set; }
+    public User? DeletedBy { get; private set; }
+    public Description? DeleteReason { get; private set; }
 
     public IReadOnlyCollection<Post> Posts => _posts.AsReadOnly();
 

@@ -49,7 +49,7 @@ public sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogCommand
 
         var blog = Blog.Create(title, slug, user);
 
-        _blogRepository.Add(blog);
+        await _blogRepository.AddAsync(blog);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

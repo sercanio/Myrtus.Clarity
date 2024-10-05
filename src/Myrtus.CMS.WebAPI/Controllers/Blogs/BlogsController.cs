@@ -43,14 +43,14 @@ public class BlogsController : ControllerBase
             request.Slug,
             request.UserId);
 
-        Result<Guid> result = await _sender.Send(command, cancellationToken);
+        Result<CreateBlogCommandResponse> result = await _sender.Send(command, cancellationToken);
 
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
 
-        return CreatedAtAction(nameof(GetBlog), new { id = result.Value }, result.Value);
+        return CreatedAtAction(nameof(GetBlog), new { id = result.Value.Id }, result.Value);
     }
 
 
@@ -72,21 +72,23 @@ public class BlogsController : ControllerBase
     {
         var command = new UpdateBlogCommand(
             id,
+            request.UpdatedById,
             request.Title,
-            request.Slug);
+            request.Slug,
+            request.Description);
 
-        Result<bool> result = await _sender.Send(command, cancellationToken);
+        Result<UpdateBlogCommandResponse> result = await _sender.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
         {
             return BadRequest(result.Error);
         }
 
-        return NoContent();
+        return CreatedAtAction(nameof(GetBlog), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> SoftDeleteBlog(Guid id)
+    public async Task<IActionResult> DeleteBlog(Guid id)
     {
         var command = new DeleteBlogCommand(id);
         var result = await _sender.Send(command);

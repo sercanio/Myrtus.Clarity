@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Myrtus.CMS.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.CMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241005151640_updateBlogEntity")]
+    partial class updateBlogEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,15 +35,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on_utc");
-
-                    b.Property<string>("DeleteReason")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("delete_reason");
-
-                    b.Property<Guid?>("DeletedById")
-                        .HasColumnType("uuid")
-                        .HasColumnName("deleted_by_id");
 
                     b.Property<DateTime?>("DeletedOnUtc")
                         .HasColumnType("timestamp with time zone")
@@ -65,20 +59,12 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("title");
 
-                    b.Property<string>("UpdateReason")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("update_reason");
-
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_on_utc");
 
                     b.HasKey("Id")
                         .HasName("pk_blogs");
-
-                    b.HasIndex("DeletedById")
-                        .HasDatabaseName("ix_blogs_deleted_by_id");
 
                     b.HasIndex("Id")
                         .HasDatabaseName("ix_blogs_id");
@@ -403,12 +389,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Blogs.Blog", b =>
                 {
-                    b.HasOne("Myrtus.CMS.Domain.Users.User", "DeletedBy")
-                        .WithMany()
-                        .HasForeignKey("DeletedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_blogs_users_deleted_by_id");
-
                     b.HasOne("Myrtus.CMS.Domain.Users.User", "LastUpdatedBy")
                         .WithMany()
                         .HasForeignKey("LastUpdatedById")
@@ -421,8 +401,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_blogs_users_owner_id");
-
-                    b.Navigation("DeletedBy");
 
                     b.Navigation("LastUpdatedBy");
 

@@ -22,7 +22,7 @@ public interface IRepository<T>
             bool includeSoftDeleted = false,
             CancellationToken cancellationToken = default);
 
-    void Add(T entity);
+    Task AddAsync(T entity);
     void Update(T entity);
     void Delete(T entity);
 }
