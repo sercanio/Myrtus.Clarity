@@ -14,4 +14,14 @@ internal sealed class UserRepository : Repository<User>, IUserRepository
     {
         return await GetAsync(user => user.Id == id, cancellationToken: cancellationToken);
     }
+
+    public override void Add(User user)
+    {
+        foreach (Role role in user.Roles)
+        {
+            DbContext.Attach(role);
+        }
+
+        DbContext.Add(user);
+    }
 }
