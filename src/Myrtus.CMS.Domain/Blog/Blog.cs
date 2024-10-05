@@ -4,6 +4,8 @@ using Myrtus.CMS.Domain.Blogs.Events;
 using Myrtus.CMS.Domain.Blogs.Posts;
 using Myrtus.CMS.Domain.Blogs.Common;
 using Myrtus.CMS.Domain.Blogs.Posts.Events;
+using Myrtus.CMS.Domain.Blogs.Events;
+using Myrtus.CMS.Domain.Users.Events;
 
 namespace Myrtus.CMS.Domain.Blogs;
 
@@ -38,12 +40,15 @@ public sealed class Blog : Entity
         Slug slug, 
         User owner)
     {
-        return new Blog(
-            Guid.NewGuid(), 
-            title, 
-            slug, 
+        Blog blog = new Blog(
+            Guid.NewGuid(),
+            title,
+            slug,
             owner);
+
+        return blog;
     }
+
     public void Delete()
     {
         foreach (var post in _posts)
@@ -53,7 +58,6 @@ public sealed class Blog : Entity
 
         _posts.Clear();
         MarkDeleted();
-        RaiseDomainEvent(new BlogDeletedEvent(this));
     }
 
     public void ChangeTitle(Title title)

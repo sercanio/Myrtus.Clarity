@@ -28,7 +28,7 @@ namespace Myrtus.Clarity.Core.Domain.Abstractions
             _domainEvents.Clear();
         }
 
-        protected void RaiseDomainEvent(IDomainEvent domainEvent)
+        public void RaiseDomainEvent(IDomainEvent domainEvent)
         {
             _domainEvents.Add(domainEvent);
         }

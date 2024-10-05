@@ -2,6 +2,7 @@
 using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Blogs.Common;
+using Myrtus.CMS.Domain.Blogs.Events;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 
@@ -41,6 +42,7 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
     public override void Add(Blog blog)
     {
         DbContext.Add(blog);
+        blog.RaiseDomainEvent(new BlogCreatedEvent(blog.Id));
     }
 
     public override void Update(Blog blog)
