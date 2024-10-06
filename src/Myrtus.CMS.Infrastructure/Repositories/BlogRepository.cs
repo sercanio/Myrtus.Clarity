@@ -31,14 +31,17 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
 
     public async Task<bool> BlogExistsByTitleAsync(Title title, CancellationToken cancellationToken = default)
     {
-        return await ExistsAsync(blog => blog.Title == title, cancellationToken: cancellationToken);
+        return await ExistsAsync(blog =>
+            string.Equals(blog.Title.Value, title.Value, StringComparison.OrdinalIgnoreCase),
+            cancellationToken: cancellationToken);
     }
 
     public async Task<bool> BlogExistsBySlugAsync(Slug slug, CancellationToken cancellationToken = default)
     {
-        return await ExistsAsync(blog => blog.Slug == slug, cancellationToken: cancellationToken);
+        return await ExistsAsync(blog =>
+            string.Equals(blog.Slug.Value, slug.Value, StringComparison.OrdinalIgnoreCase),
+            cancellationToken: cancellationToken);
     }
-
 
     public override async Task AddAsync(Blog blog)
     {
