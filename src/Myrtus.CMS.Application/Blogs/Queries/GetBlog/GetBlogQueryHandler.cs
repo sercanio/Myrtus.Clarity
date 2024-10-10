@@ -13,6 +13,7 @@ public sealed class GetBlogQueryHandler : IRequestHandler<GetBlogQuery, Result<B
     {
         _blogRepository = blogRepository;
     }
+
     public async Task<Result<BlogResponse>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
     {
         var blog = await _blogRepository.GetBlogByIdAsync(
@@ -38,5 +39,4 @@ public sealed class GetBlogQueryHandler : IRequestHandler<GetBlogQuery, Result<B
 
         return Result.Success(blogResponse);
     }
-
 }

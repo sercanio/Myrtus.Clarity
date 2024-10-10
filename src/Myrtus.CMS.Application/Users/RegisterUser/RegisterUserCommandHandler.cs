@@ -31,10 +31,15 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
             new LastName(request.LastName),
             new Email(request.Email));
 
-        string identityId = await _authenticationService.RegisterAsync(
+        var identityId = await _authenticationService.RegisterAsync(
             user,
             request.Password,
             cancellationToken);
+
+        if (identityId is null) 
+        {
+            return Result.Failure<Guid>(UserErrors.IdentityIdNotFound);
+        }
 
         user.SetIdentityId(identityId);
 

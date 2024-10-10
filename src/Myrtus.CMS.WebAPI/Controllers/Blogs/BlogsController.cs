@@ -1,4 +1,5 @@
-﻿using Asp.Versioning;
+﻿using System.Net;
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 using Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
 using Myrtus.CMS.Application.Blogs.Commands.UpdateBlog;
 using Myrtus.CMS.WebAPI.Controllers;
+using Myrtus.CMS.Domain.Blogs;
 
 namespace Myrtus.CMS.Api.Controllers.Blogs;
 
@@ -47,12 +49,14 @@ public class BlogsController : ControllerBase
 
         if (result.IsFailure)
         {
-            return BadRequest(result.Error);
+            return Problem(
+                detail: result.Error.Name, 
+                statusCode: result.Error.StatusCode, 
+                title: result.Error.Code);
         }
 
         return CreatedAtAction(nameof(GetBlog), new { id = result.Value.Id }, result.Value);
     }
-
 
     [HttpGet]
     public async Task<IActionResult> GetAllBlogs([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
@@ -81,7 +85,10 @@ public class BlogsController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Error);
+            return Problem(
+                detail: result.Error.Name,
+                statusCode: result.Error.StatusCode,
+                title: result.Error.Code);
         }
 
         return CreatedAtAction(nameof(GetBlog), new { id = result.Value.Id }, result.Value);
@@ -93,12 +100,14 @@ public class BlogsController : ControllerBase
         var command = new DeleteBlogCommand(id);
         var result = await _sender.Send(command);
 
-        if (!result)
+        if (result.IsFailure)
         {
-            return NotFound();
+            return Problem(
+                detail: result.Error.Name,
+                statusCode: result.Error.StatusCode,
+                title: result.Error.Code);
         }
 
-        return NoContent();
+        return Ok(result.Value);
     }
-
 }

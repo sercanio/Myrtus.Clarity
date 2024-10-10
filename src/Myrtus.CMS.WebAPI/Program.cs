@@ -85,13 +85,11 @@ if (app.Environment.IsDevelopment())
         options.OAuthAppName("Myrtus CMS Swagger UI");
         options.OAuthUsePkce();
 
-        // Set redirect URI from appsettings.json
         options.OAuth2RedirectUrl(redirectUri);
     });
 
     app.ApplyMigrations();
 
-    // REMARK: Uncomment if you want to seed initial data.
     app.SeedData();
 }
 

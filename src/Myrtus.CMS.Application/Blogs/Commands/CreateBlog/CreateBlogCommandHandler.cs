@@ -61,6 +61,6 @@ public sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogCommand
             blog.CreatedOnUtc
             );
 
-        return Result.Success<CreateBlogCommandResponse>(response);
+        return Result.Success(response);
     }
 }

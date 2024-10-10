@@ -104,6 +104,10 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     slug = table.Column<string>(type: "text", nullable: false),
                     owner_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    last_updated_by_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    update_reason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    deleted_by_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    delete_reason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -111,6 +115,18 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_blogs", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_blogs_users_deleted_by_id",
+                        column: x => x.deleted_by_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_blogs_users_last_updated_by_id",
+                        column: x => x.last_updated_by_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_blogs_users_owner_id",
                         column: x => x.owner_id,
@@ -216,9 +232,19 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 values: new object[] { 1, 1 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_blogs_deleted_by_id",
+                table: "blogs",
+                column: "deleted_by_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_blogs_id",
                 table: "blogs",
                 column: "id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_blogs_last_updated_by_id",
+                table: "blogs",
+                column: "last_updated_by_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_blogs_owner_id",
