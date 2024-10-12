@@ -1,4 +1,5 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
+﻿using Ardalis.Result;
+using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractions.Authentication;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
@@ -38,7 +39,7 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
 
         if (identityId is null) 
         {
-            return Result.Failure<Guid>(UserErrors.IdentityIdNotFound);
+            return Result.NotFound(UserErrors.IdentityIdNotFound.Name);
         }
 
         user.SetIdentityId(identityId);

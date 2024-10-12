@@ -1,7 +1,7 @@
-﻿using Myrtus.Clarity.Core.Domain.Abstractions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using Ardalis.Result;
 
 namespace Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 
@@ -36,7 +36,7 @@ public sealed class LoggingBehavior<TRequest, TResponse>
             }
             else
             {
-                using (LogContext.PushProperty("Error", result.Error, true))
+                using (LogContext.PushProperty("Error", result.Value, true))
                 {
                     _logger.LogError("Request {RequestName} processed with error", requestName);
                 }

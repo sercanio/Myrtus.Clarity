@@ -60,6 +60,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.CMS.Application.Tests.Unit", "tests\Myrtus.CMS.Application.Tests.Unit\Myrtus.CMS.Application.Tests.Unit.csproj", "{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtus.Clarity.Core.WebApi", "core\Myrtus.Clarity.Core.WebApi\Myrtus.Clarity.Core.WebApi.csproj", "{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +160,10 @@ Global
 		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +191,7 @@ Global
 		{810180F5-8283-4CD7-AE55-DEBC786041A1} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{4E47E423-FC2A-45CB-915E-4B5D86DAADB9} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{AB134C2D-F8C6-44DE-80E6-1FA6CB34E907} = {4634D63C-717B-405B-8434-3EB156F021F2}
+		{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7949CCE5-84CB-4073-9DF1-B959B76413D5}

@@ -1,6 +1,6 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
+﻿using Ardalis.Result;
+using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Users.LogInUser;
@@ -23,9 +23,9 @@ internal sealed class LogInUserCommandHandler : ICommandHandler<LogInUserCommand
             request.Password,
             cancellationToken);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
-            return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
+            return Result.NotFound(UserErrors.InvalidCredentials.Name);
         }
 
         return new AccessTokenResponse(result.Value);

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.Models;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
+using Ardalis.Result;
 
 namespace Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
 
@@ -54,14 +55,14 @@ public sealed class JwtService : IJwtService
 
             if (authorizationToken is null)
             {
-                return Result.Failure<string>(AuthenticationFailed);
+                return Result.Forbidden(AuthenticationFailed.Code);
             }
 
             return authorizationToken.AccessToken;
         }
         catch (HttpRequestException)
         {
-            return Result.Failure<string>(AuthenticationFailed);
+            return Result.Forbidden(AuthenticationFailed.Code);
         }
     }
 }

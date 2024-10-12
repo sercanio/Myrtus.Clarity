@@ -1,5 +1,5 @@
-﻿using Myrtus.Clarity.Core.Domain.Abstractions;
-using MediatR;
+﻿using MediatR;
+using Ardalis.Result;
 
 namespace Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 

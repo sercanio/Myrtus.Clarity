@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Myrtus.Clarity.Core.Application.Exceptions\Myrtus.Clarity.Core.Application.Exceptions.csproj" />
     <ProjectReference Include="..\Myrtus.Clarity.Core.Infrastructure.Clock\Myrtus.Clarity.Core.Infrastructure.Clock.csproj" />
   </ItemGroup>
 

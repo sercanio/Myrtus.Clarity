@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.Clarity.Core.Domain.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Ardalis.Result;
 
 namespace Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 

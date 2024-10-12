@@ -1,4 +1,5 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Caching;
+﻿using Ardalis.Result;
+using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Repositories;
@@ -25,32 +26,32 @@ public sealed class UpdateBlogCommandHandler : ICommandHandler<UpdateBlogCommand
 
     public async Task<Result<UpdateBlogCommandResponse>> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
     {
-        var blog = await _blogRepository.GetBlogByIdAsync(request.BlogId, include: blog => blog.Owner, cancellationToken: cancellationToken);
+        Blog? blog = await _blogRepository.GetBlogByIdAsync(request.BlogId, include: blog => blog.Owner, cancellationToken: cancellationToken);
 
         if (blog is null)
         {
-            return Result.Failure<UpdateBlogCommandResponse>(BlogErrors.NotFound);
+            return Result.NotFound(BlogErrors.NotFound.Name);
         }
 
-        var slugAlreadyExists = await _blogRepository.BlogExistsBySlugAsync(new Slug(request.Slug), cancellationToken);
-        if (slugAlreadyExists && blog.Slug.Value != request.Slug) // Ensure we're not comparing to itself
+        bool slugAlreadyExists = await _blogRepository.BlogExistsBySlugAsync(new Slug(request.Slug), cancellationToken);
+        if (slugAlreadyExists && blog.Slug.Value != request.Slug)
         {
-            return Result.Failure<UpdateBlogCommandResponse>(BlogErrors.SlugAlreadyExists);
+            return Result.Conflict(BlogErrors.SlugAlreadyExists.Name);
         }
 
-        var titleAlreadyExists = await _blogRepository.BlogExistsByTitleAsync(new Title(request.Title), cancellationToken);
-        if (titleAlreadyExists && blog.Title.Value != request.Title) // Ensure we're not comparing to itself
+        bool titleAlreadyExists = await _blogRepository.BlogExistsByTitleAsync(new Title(request.Title), cancellationToken);
+        if (titleAlreadyExists && blog.Title.Value != request.Title)
         {
-            return Result.Failure<UpdateBlogCommandResponse>(BlogErrors.TitleAlreadyExists);
+            return Result.Conflict(BlogErrors.TitleAlreadyExists.Name);
         }
 
         blog.ChangeTitle(new Title(request.Title));
         blog.ChangeSlug(new Slug(request.Slug));
 
         _blogRepository.Update(blog);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Clear the cache for this blog
         await _cacheService.RemoveAsync($"blogs-{request.BlogId}", cancellationToken);
 
         UpdateBlogCommandResponse response = new UpdateBlogCommandResponse(
@@ -58,7 +59,7 @@ public sealed class UpdateBlogCommandHandler : ICommandHandler<UpdateBlogCommand
             blog.Title.Value,
             blog.Slug.Value,
             blog.Owner.Id,
-            blog.UpdatedOnUtc.Value
+            blog.UpdatedOnUtc!.Value // Ensuring the value exists
         );
 
         return Result.Success(response);

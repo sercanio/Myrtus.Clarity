@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Myrtus.Clarity.Core.Domain.Abstractions;
+﻿using Ardalis.Result;
+using MediatR;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Blogs;
 
@@ -17,13 +17,13 @@ public sealed class GetBlogQueryHandler : IRequestHandler<GetBlogQuery, Result<B
     public async Task<Result<BlogResponse>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
     {
         var blog = await _blogRepository.GetBlogByIdAsync(
-            request.BlogId, 
+            request.BlogId,
             include: blog => blog.Owner,
             cancellationToken: cancellationToken);
 
         if (blog is null)
         {
-            return Result.Failure<BlogResponse>(BlogErrors.NotFound);
+            return Result.NotFound(BlogErrors.NotFound.Name);
         }
 
         BlogResponse blogResponse = new()

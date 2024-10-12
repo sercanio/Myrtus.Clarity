@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Myrtus.CMS.Domain;
+using Myrtus.CMS.WebAPI;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +60,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDomain(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
+builder.Services.AddWebApi(builder.Configuration);
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 WebApplication app = builder.Build();

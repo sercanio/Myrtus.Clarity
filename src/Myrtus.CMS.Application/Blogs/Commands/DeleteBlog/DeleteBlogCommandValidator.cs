@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
 
-namespace Myrtus.CMS.Application.Blogs.Commands.CreateBlog;
+namespace Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
 
 public class DeleteBlogCommandValidator : AbstractValidator<DeleteBlogCommand>
 {

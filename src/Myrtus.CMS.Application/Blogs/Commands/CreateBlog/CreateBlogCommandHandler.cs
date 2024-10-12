@@ -1,4 +1,5 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
+﻿using Ardalis.Result;
+using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Repositories;
@@ -30,21 +31,21 @@ public sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogCommand
 
         if (user is null)
         {
-            return Result.Failure<CreateBlogCommandResponse>(UserErrors.NotFound);
+            return Result.NotFound(UserErrors.NotFound.Name);
         }
 
         var title = new Title(request.Title);
         bool titleExists = await _blogRepository.BlogExistsByTitleAsync(title, cancellationToken);
         if (titleExists)
         {
-            return Result.Failure<CreateBlogCommandResponse>(BlogErrors.TitleAlreadyExists);
+            return Result.Conflict(BlogErrors.TitleAlreadyExists.Name);
         }
 
         var slug = new Slug(request.Slug);
         bool slugExists = await _blogRepository.BlogExistsBySlugAsync(slug, cancellationToken);
         if (slugExists)
         {
-            return Result.Failure<CreateBlogCommandResponse>(BlogErrors.SlugAlreadyExists);
+            return Result.Conflict(BlogErrors.SlugAlreadyExists.Name);
         }
 
         var blog = Blog.Create(title, slug, user);

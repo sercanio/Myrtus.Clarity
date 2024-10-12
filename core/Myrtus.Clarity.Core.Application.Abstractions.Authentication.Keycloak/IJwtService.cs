@@ -1,4 +1,4 @@
-﻿using Myrtus.Clarity.Core.Domain.Abstractions;
+﻿using Ardalis.Result;
 
 namespace Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 

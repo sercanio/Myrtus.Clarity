@@ -5,6 +5,10 @@ using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 using Myrtus.CMS.Application.Repositories;
+using Ardalis.Result;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 
@@ -19,7 +23,6 @@ public sealed class GetAllBlogsQueryHandler : IRequestHandler<GetAllBlogsQuery, 
 
     public async Task<Result<IPaginatedList<BlogResponse>>> Handle(GetAllBlogsQuery request, CancellationToken cancellationToken)
     {
-     
         var paginatedBlogs = await _blogRepository.GetAllAsync(
             pageIndex: request.PageIndex,
             pageSize: request.PageSize,

@@ -2,25 +2,26 @@
 using Myrtus.CMS.Application.Users.GetLoggedInUser;
 using Myrtus.CMS.Application.Users.LogInUser;
 using Myrtus.CMS.Application.Users.RegisterUser;
-using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Myrtus.CMS.WebAPI.Controllers;
+using Ardalis.Result;
+using Myrtus.Clarity.Core.WebApi;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
 [ApiController]
 [ApiVersion(ApiVersions.V1)]
 [Route("api/v{version:apiVersion}/users")]
-public class UsersController : ControllerBase
+public class UsersController : BaseController
 {
-    private readonly ISender _sender;
-
-    public UsersController(ISender sender)
+    public UsersController(ISender sender, IErrorHandlingService errorHandlingService)
+        : base(sender, errorHandlingService)
     {
-        _sender = sender;
     }
 
     [HttpGet("me")]
@@ -28,8 +29,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
     {
         var query = new GetLoggedInUserQuery();
-
         Result<UserResponse> result = await _sender.Send(query, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return _errorHandlingService.HandleErrorResponse(result);
+        }
 
         return Ok(result.Value);
     }
@@ -48,9 +53,9 @@ public class UsersController : ControllerBase
 
         Result<Guid> result = await _sender.Send(command, cancellationToken);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
-            return BadRequest(result.Error);
+            return _errorHandlingService.HandleErrorResponse(result);
         }
 
         return Ok(result.Value);
@@ -63,12 +68,11 @@ public class UsersController : ControllerBase
         CancellationToken cancellationToken)
     {
         var command = new LogInUserCommand(request.Email, request.Password);
-
         Result<AccessTokenResponse> result = await _sender.Send(command, cancellationToken);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
-            return Unauthorized(result.Error);
+            return _errorHandlingService.HandleErrorResponse(result);
         }
 
         return Ok(result.Value);

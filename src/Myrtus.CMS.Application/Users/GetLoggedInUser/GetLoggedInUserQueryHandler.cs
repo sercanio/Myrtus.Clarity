@@ -2,8 +2,8 @@
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.Clarity.Core.Domain.Abstractions;
 using Dapper;
+using Ardalis.Result;
 
 namespace Myrtus.CMS.Application.Users.GetLoggedInUser;
 
