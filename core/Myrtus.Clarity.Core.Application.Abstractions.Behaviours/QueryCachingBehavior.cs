@@ -8,7 +8,6 @@ namespace Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 public sealed class QueryCachingBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICachedQuery
-    where TResponse : Result
 {
     private readonly ICacheService _cacheService;
     private readonly ILogger<QueryCachingBehavior<TRequest, TResponse>> _logger;
@@ -26,27 +25,24 @@ public sealed class QueryCachingBehavior<TRequest, TResponse>
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        TResponse? cachedResult = await _cacheService.GetAsync<TResponse>(
+        TResponse? cachedResponse = await _cacheService.GetAsync<TResponse>(
             request.CacheKey,
             cancellationToken);
 
         string name = typeof(TRequest).Name;
-        if (cachedResult is not null)
+
+        if (cachedResponse is not null)
         {
             _logger.LogInformation("Cache hit for {Query}", name);
-
-            return cachedResult;
+            return cachedResponse;
         }
 
         _logger.LogInformation("Cache miss for {Query}", name);
 
-        TResponse result = await next();
+        TResponse response = await next();
 
-        if (result.IsSuccess)
-        {
-            await _cacheService.SetAsync(request.CacheKey, result, request.Expiration, cancellationToken);
-        }
+        await _cacheService.SetAsync(request.CacheKey, response, request.Expiration, cancellationToken);
 
-        return result;
+        return response;
     }
 }
