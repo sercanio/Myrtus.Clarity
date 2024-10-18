@@ -1,46 +1,58 @@
 ﻿using System.Data;
+using Dapper;
 using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
-using Myrtus.CMS.Application.Repositories;
 using Ardalis.Result;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 
 public sealed class GetAllBlogsQueryHandler : IRequestHandler<GetAllBlogsQuery, Result<IPaginatedList<BlogResponse>>>
 {
-    private readonly IBlogRepository _blogRepository;
+    private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-    public GetAllBlogsQueryHandler(IBlogRepository blogRepository)
+    public GetAllBlogsQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
     {
-        _blogRepository = blogRepository;
+        _sqlConnectionFactory = sqlConnectionFactory;
     }
 
     public async Task<Result<IPaginatedList<BlogResponse>>> Handle(GetAllBlogsQuery request, CancellationToken cancellationToken)
     {
-        var paginatedBlogs = await _blogRepository.GetAllAsync(
-            pageIndex: request.PageIndex,
-            pageSize: request.PageSize,
-            cancellationToken: cancellationToken,
-            include: blog => blog.Owner);
+        using IDbConnection connection = _sqlConnectionFactory.CreateConnection();
 
-        var blogResponses = paginatedBlogs.Items.Select(blog => new BlogResponse
-        {
-            Id = blog.Id,
-            Title = blog.Title.Value,
-            Slug = blog.Slug.Value,
-            OwnerId = blog.Owner.Id,
-            CreatedOnUtc = blog.CreatedOnUtc,
-            UpdatedOnUtc = blog.UpdatedOnUtc,
-            DeletedOnUtc = blog.DeletedOnUtc,
-        }).ToList();
+        const string sql = """
+                SELECT 
+                    b.id as Id, 
+                    b.title as Title, 
+                    b.slug as Slug, 
+                    b.owner_id as OwnerId, 
+                    b.created_on_utc as CreatedOnUtc, 
+                    b.updated_on_utc as UpdatedOnUtc, 
+                    b.deleted_on_utc as DeletedOnUtc,
+                    u.Id as OwnerId,
+                    u.email as OwnerEmail
+                FROM Blogs b
+                LEFT JOIN Users u ON b.owner_id = u.Id
+                WHERE b.deleted_on_utc IS NULL
+                ORDER BY b.created_on_utc DESC
+                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY
+            """;
 
-        var paginatedList = new PaginatedList<BlogResponse>(blogResponses, paginatedBlogs.TotalCount, request.PageIndex, request.PageSize);
+        var blogs = await connection.QueryAsync<BlogResponse>(
+             sql,
+             new
+             {
+                 Offset = request.PageIndex * request.PageSize,
+                 PageSize = request.PageSize
+             });
+
+
+        const string countSql = "SELECT COUNT(*) FROM Blogs WHERE deleted_on_utc IS NULL";
+        var totalCount = await connection.ExecuteScalarAsync<int>(countSql);
+
+        var paginatedList = new PaginatedList<BlogResponse>(blogs.ToList(), totalCount, request.PageIndex, request.PageSize);
 
         return Result.Success<IPaginatedList<BlogResponse>>(paginatedList);
     }

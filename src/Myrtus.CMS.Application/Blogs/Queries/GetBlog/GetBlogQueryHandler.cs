@@ -1,42 +1,50 @@
-﻿using Ardalis.Result;
+﻿using System.Data;
+using Dapper;
+using Ardalis.Result;
 using MediatR;
-using Myrtus.CMS.Application.Repositories;
+using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 using Myrtus.CMS.Domain.Blogs;
+using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 
-public sealed class GetBlogQueryHandler : IRequestHandler<GetBlogQuery, Result<BlogResponse>>
+public sealed class GetBlogQueryHandler : IQueryHandler<GetBlogQuery, BlogResponse>
 {
-    private readonly IBlogRepository _blogRepository;
+    private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-    public GetBlogQueryHandler(IBlogRepository blogRepository)
+    public GetBlogQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
     {
-        _blogRepository = blogRepository;
+        _sqlConnectionFactory = sqlConnectionFactory;
     }
 
     public async Task<Result<BlogResponse>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
     {
-        var blog = await _blogRepository.GetBlogByIdAsync(
-            request.BlogId,
-            include: blog => blog.Owner,
-            cancellationToken: cancellationToken);
+        using IDbConnection connection = _sqlConnectionFactory.CreateConnection();
+
+        const string sql = """
+            SELECT 
+                b.id as Id, 
+                b.title as Title, 
+                b.slug as Slug, 
+                b.owner_id as OwnerId, 
+                b.created_on_utc as CreatedOnUtc, 
+                b.updated_on_utc as UpdatedOnUtc, 
+                b.deleted_on_utc as DeletedOnUtc,
+                u.email as OwnerEmail
+            FROM Blogs b
+            LEFT JOIN Users u ON b.owner_id = u.Id
+            WHERE b.id = @BlogId AND b.deleted_on_utc IS NULL
+        """;
+
+        BlogResponse? blog = await connection.QuerySingleOrDefaultAsync<BlogResponse>(
+            sql,
+            new { BlogId = request.BlogId });
 
         if (blog is null)
         {
-            return Result.NotFound(BlogErrors.NotFound.Name);
+            return Result<BlogResponse>.NotFound(BlogErrors.NotFound.Name);
         }
 
-        BlogResponse blogResponse = new()
-        {
-            Id = blog.Id,
-            Title = blog.Title.Value,
-            Slug = blog.Slug.Value,
-            OwnerId = blog.Owner.Id,
-            CreatedOnUtc = blog.CreatedOnUtc,
-            UpdatedOnUtc = blog.UpdatedOnUtc,
-            DeletedOnUtc = blog.DeletedOnUtc,
-        };
-
-        return Result.Success(blogResponse);
+        return Result.Success<BlogResponse>(blog);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 

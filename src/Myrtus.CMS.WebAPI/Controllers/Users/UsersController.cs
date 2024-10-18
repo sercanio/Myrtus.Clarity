@@ -6,11 +6,8 @@ using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Myrtus.CMS.WebAPI.Controllers;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.WebApi;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
