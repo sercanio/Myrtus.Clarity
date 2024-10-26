@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Api.Controllers.Blogs;
+﻿namespace Myrtus.CMS.WebAPI.Controllers.Blogs;
 
 public sealed class UpdateBlogRequest
 {

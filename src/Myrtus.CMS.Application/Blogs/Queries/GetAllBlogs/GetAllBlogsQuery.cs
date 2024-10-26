@@ -4,14 +4,6 @@ using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 
-public class GetAllBlogsQuery : IQuery<IPaginatedList<BlogResponse>>
-{
-    public int PageIndex { get; }
-    public int PageSize { get; }
-
-    public GetAllBlogsQuery(int pageIndex, int pageSize)
-    {
-        PageIndex = pageIndex;
-        PageSize = pageSize;
-    }
-}
+public sealed record GetAllBlogsQuery(
+    int PageIndex, 
+    int PageSize) : IQuery<IPaginatedList<GetBlogQueryResponse>>;

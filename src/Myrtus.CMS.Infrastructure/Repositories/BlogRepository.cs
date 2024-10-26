@@ -26,7 +26,7 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
              Guid id,
              CancellationToken cancellationToken = default)
     {
-        return await ExistsAsync(blog => blog.Id == id, cancellationToken:cancellationToken);
+        return await ExistsAsync(blog => blog.Id == id, cancellationToken: cancellationToken);
     }
 
     public async Task<bool> BlogExistsByTitleAsync(Title title, CancellationToken cancellationToken = default)
@@ -51,9 +51,17 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
         DbContext.Update(blog);
     }
 
-    public override void Delete(Blog blog)
+    public override void Delete(Blog blog, bool isSoftDelete = true)
     {
-        blog.MarkDeleted();
-        DbContext.Update(blog);
+        if (isSoftDelete)
+        {
+
+            blog.MarkDeleted();
+            DbContext.Update(blog);
+        }
+        else
+        {
+            DbContext.Remove(blog);
+        }
     }
 }

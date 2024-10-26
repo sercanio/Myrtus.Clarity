@@ -1,6 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using Myrtus.CMS.Domain.Users;
+using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Infrastructure.Authorization;
 

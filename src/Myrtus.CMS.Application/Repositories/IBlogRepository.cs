@@ -1,7 +1,7 @@
-﻿using Myrtus.Clarity.Core.Application.Repositories;
+﻿using System.Linq.Expressions;
+using Myrtus.Clarity.Core.Application.Repositories;
 using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Blogs.Common;
-using System.Linq.Expressions;
 
 namespace Myrtus.CMS.Application.Repositories;
 public interface IBlogRepository : IRepository<Blog>

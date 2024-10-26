@@ -1,7 +1,7 @@
 ﻿using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Abstractions.Authentication;
+using Myrtus.CMS.Application.Abstractions.Auth;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Domain.Users;
 
@@ -9,12 +9,12 @@ namespace Myrtus.CMS.Application.Users.RegisterUser;
 
 public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IUserService _authenticationService;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public RegisterUserCommandHandler(
-        IAuthenticationService authenticationService,
+        IUserService authenticationService,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {

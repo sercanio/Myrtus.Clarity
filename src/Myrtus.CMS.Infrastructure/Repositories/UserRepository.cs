@@ -2,6 +2,7 @@
 using Myrtus.CMS.Domain.Blogs.Events;
 using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Users;
+using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 

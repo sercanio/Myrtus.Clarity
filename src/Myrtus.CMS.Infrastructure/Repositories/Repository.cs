@@ -106,7 +106,7 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             DbContext.Update(entity);
         }
 
-        public virtual void Delete(T entity)
+        public virtual void Delete(T entity, bool isSoftDelete = true)
         {
             var property = typeof(T).GetProperty("MarkDeleted");
             if (property != null)

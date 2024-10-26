@@ -213,12 +213,15 @@ namespace Myrtus.CMS.Infrastructure.Migrations
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Users.Permission", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("feature");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -233,24 +236,83 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"),
+                            Feature = "users",
                             Name = "users:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78"),
+                            Feature = "users",
+                            Name = "users:create"
+                        },
+                        new
+                        {
+                            Id = new Guid("25bb194c-ea15-4339-9f45-5a895c51b626"),
+                            Feature = "users",
+                            Name = "users:update"
+                        },
+                        new
+                        {
+                            Id = new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4"),
+                            Feature = "users",
+                            Name = "users:delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201"),
+                            Feature = "roles",
+                            Name = "roles:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba"),
+                            Feature = "roles",
+                            Name = "roles:create"
+                        },
+                        new
+                        {
+                            Id = new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566"),
+                            Feature = "roles",
+                            Name = "roles:update"
+                        },
+                        new
+                        {
+                            Id = new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760"),
+                            Feature = "roles",
+                            Name = "roles:delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("0eeb5f27-10fd-430a-9257-a8457107141a"),
+                            Feature = "permissions",
+                            Name = "permissions:read"
                         });
                 });
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Users.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_on_utc");
 
                     b.HasKey("Id")
                         .HasName("pk_roles");
@@ -260,19 +322,20 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
+                            CreatedOnUtc = new DateTime(2024, 10, 25, 10, 14, 41, 899, DateTimeKind.Utc).AddTicks(2869),
                             Name = "Registered"
                         });
                 });
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Users.RolePermission", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
                         .HasColumnName("role_id");
 
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uuid")
                         .HasColumnName("permission_id");
 
                     b.HasKey("RoleId", "PermissionId")
@@ -286,8 +349,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = 1,
-                            PermissionId = 1
+                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
+                            PermissionId = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca")
                         });
                 });
 
@@ -384,8 +447,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid")
                         .HasColumnName("roles_id");
 
                     b.Property<Guid>("UsersId")

@@ -1,13 +1,13 @@
-﻿using Asp.Versioning;
-using Myrtus.CMS.Application.Users.GetLoggedInUser;
-using Myrtus.CMS.Application.Users.LogInUser;
-using Myrtus.CMS.Application.Users.RegisterUser;
-using Myrtus.Clarity.Core.Infrastructure.Authorization;
+﻿using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.WebApi;
+using Myrtus.CMS.Application.Users.GiveRoleToUser;
+using Myrtus.CMS.Application.Users.TakeRoleFromUser;
+using Myrtus.CMS.Application.Users.GetAllUsers;
+using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.CMS.Application.Users.GetUser;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
@@ -21,12 +21,15 @@ public class UsersController : BaseController
     {
     }
 
-    [HttpGet("me")]
-    [HasPermission(Permissions.UsersRead)]
-    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers(
+        [FromQuery] GetAllUsersRequest request,
+        CancellationToken cancellationToken
+        )
     {
-        var query = new GetLoggedInUserQuery();
-        Result<UserResponse> result = await _sender.Send(query, cancellationToken);
+        var query = new GetAllUsersQuery(request.Pagination.PageIndex, request.Pagination.PageSize);
+
+        Result<IPaginatedList<GetUserQueryResponse>> result = await _sender.Send(query, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -36,19 +39,14 @@ public class UsersController : BaseController
         return Ok(result.Value);
     }
 
-    [AllowAnonymous]
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(
-        RegisterUserRequest request,
-        CancellationToken cancellationToken)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserById(
+        Guid userId,
+        CancellationToken cancellationToken = default)
     {
-        var command = new RegisterUserCommand(
-            request.Email,
-            request.FirstName,
-            request.LastName,
-            request.Password);
+        var query = new GetUserQuery(userId);
 
-        Result<Guid> result = await _sender.Send(command, cancellationToken);
+        Result<GetUserQueryResponse> result = await _sender.Send(query, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -58,14 +56,31 @@ public class UsersController : BaseController
         return Ok(result.Value);
     }
 
-    [AllowAnonymous]
-    [HttpPost("login")]
-    public async Task<IActionResult> LogIn(
-        LogInUserRequest request,
-        CancellationToken cancellationToken)
+    [HttpPut("giveroletouser")]
+    public async Task<IActionResult> GiveRoleToUser(
+        GiveRoleToUserRequest request,
+        CancellationToken cancellationToken = default)
     {
-        var command = new LogInUserCommand(request.Email, request.Password);
-        Result<AccessTokenResponse> result = await _sender.Send(command, cancellationToken);
+        var command = new GiveRoleToUserCommand(request.RoleId, request.UserId);
+
+        Result<GiveRoleToUserCommandResponse> result = await _sender.Send(command, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return _errorHandlingService.HandleErrorResponse(result);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPut("takerolefromuser")]
+    public async Task<IActionResult> TakeRoleFromUser(
+        TakeRoleFromUserRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new TakeRoleFromUserCommand(request.RoleId, request.UserId);
+
+        Result<TakeRoleFromUserCommandResponse> result = await _sender.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
         {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
-using Myrtus.CMS.Domain.Users;
 using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Infrastructure.Authorization;
 

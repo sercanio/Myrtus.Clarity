@@ -2,7 +2,7 @@
 
 namespace Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 
-public sealed record GetBlogQuery(Guid BlogId) : ICachedQuery<BlogResponse>
+public sealed record GetBlogQuery(Guid BlogId) : ICachedQuery<GetBlogQueryResponse>
 {
     public string CacheKey => $"blogs-{BlogId}";
 

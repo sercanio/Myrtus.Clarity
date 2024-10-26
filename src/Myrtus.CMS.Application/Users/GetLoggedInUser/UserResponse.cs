@@ -1,12 +1,11 @@
 ﻿namespace Myrtus.CMS.Application.Users.GetLoggedInUser;
 
-public sealed class UserResponse
+public sealed record UserResponse
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; set; }
+    public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 
-    public string Email { get; init; }
-
-    public string FirstName { get; init; }
-
-    public string LastName { get; init; }
-}
+    private UserResponse() { }
+};

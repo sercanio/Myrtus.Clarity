@@ -3,15 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
+using Myrtus.Clarity.Core.WebApi;
 using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
 using Myrtus.CMS.Application.Blogs.Commands.CreateBlog;
 using Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
 using Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
 using Myrtus.CMS.Application.Blogs.Commands.UpdateBlog;
-using Myrtus.CMS.WebAPI.Controllers;
-using Myrtus.Clarity.Core.WebApi;
 
-namespace Myrtus.CMS.Api.Controllers.Blogs;
+namespace Myrtus.CMS.WebAPI.Controllers.Blogs;
 
 [ApiVersion(ApiVersions.V1)]
 [Route("api/v{version:apiVersion}/blogs")]
@@ -26,7 +25,7 @@ public class BlogsController : BaseController
     public async Task<IActionResult> GetBlog(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetBlogQuery(id);
-        Result<BlogResponse> result = await _sender.Send(query, cancellationToken);
+        Result<GetBlogQueryResponse> result = await _sender.Send(query, cancellationToken);
 
         if (!result.IsSuccess)
         {

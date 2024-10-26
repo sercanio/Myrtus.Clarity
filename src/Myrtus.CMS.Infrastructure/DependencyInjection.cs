@@ -1,4 +1,13 @@
-﻿using Asp.Versioning;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Asp.Versioning;
+using Dapper;
+using Quartz;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Clock;
@@ -9,27 +18,16 @@ using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
 using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
-using Myrtus.Clarity.Core.Infrastructure.Outbox;
-using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Application.Abstractions.Email;
-using Myrtus.CMS.Infrastructure.Email;
 using Myrtus.CMS.Infrastructure.Repositories;
-using Dapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Quartz;
-using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
-using AuthenticationService = Myrtus.CMS.Infrastructure.Authentication.Keycloak.AuthenticationService;
-using IAuthenticationService = Myrtus.CMS.Application.Abstractions.Authentication.IAuthenticationService;
+using Myrtus.Clarity.Core.Infrastructure.Outbox;
+using Myrtus.CMS.Infrastructure.Authentication.Keycloak;
+using Myrtus.CMS.Application.Abstractions.Auth;
 using Myrtus.CMS.Infrastructure.Authorization;
-using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
+using Myrtus.CMS.Application.Abstractions.Mailing;
+using Myrtus.CMS.Infrastructure.Mailing;
+using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
 
 namespace Myrtus.CMS.Infrastructure;
 
@@ -69,6 +67,7 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IBlogRepository, BlogRepository>();
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
@@ -92,7 +91,7 @@ public static class DependencyInjection
 
         services.AddTransient<AdminAuthorizationDelegatingHandler>();
 
-        services.AddHttpClient<IAuthenticationService, AuthenticationService>((serviceProvider, httpClient) =>
+        services.AddHttpClient<IUserService, UserService>((serviceProvider, httpClient) =>
         {
             KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
 

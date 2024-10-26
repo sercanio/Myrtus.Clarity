@@ -1,6 +1,6 @@
-﻿using Myrtus.CMS.Domain.Users;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Infrastructure.Configurations;
 
