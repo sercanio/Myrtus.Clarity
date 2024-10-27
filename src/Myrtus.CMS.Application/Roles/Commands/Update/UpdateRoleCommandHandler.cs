@@ -13,7 +13,6 @@ public sealed class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
 
-
     public UpdateRoleCommandHandler(IRoleRepository roleRepository, IUnitOfWork unitOfWork, ICacheService cacheService)
     {
         _roleRepository = roleRepository;
@@ -24,8 +23,8 @@ public sealed class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand
     public async Task<Result<UpdateRoleCommandResponse>> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.GetAsync(
-            predicate: role => role.Id == request.RoleId,
-            include: role => role.Permissions,
+            predicate: r => r.Id == request.RoleId,
+            include: r => r.Permissions,
             cancellationToken: cancellationToken);
 
         if (role == null)
@@ -33,19 +32,23 @@ public sealed class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand
             return Result.NotFound();
         }
 
-        role.Permissions = new List<Permission>();
+        var existingPermissions = new List<Permission>();
 
-        foreach(Permission permission in request.Permissions)
+        foreach (var permission in request.Permissions)
         {
-            role.Permissions.Add(permission);
+            var dbPermission = role?.Permissions.FirstOrDefault(p => p.Id == permission.Id);
+            if (dbPermission == null)
+            {
+                existingPermissions.Add(permission);
+            }
         }
+
+        role.Permissions = existingPermissions;
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
 
-        UpdateRoleCommandResponse response = new UpdateRoleCommandResponse(
-            role.Id,
-            role.Permissions);
+        var response = new UpdateRoleCommandResponse(role.Id, role.Permissions);
 
         return Result.Success(response);
     }

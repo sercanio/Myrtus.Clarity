@@ -3,6 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
 
@@ -19,7 +20,7 @@ public class PermissionsController : BaseController
     }
 
     [HttpGet]
-    //[HasPermission(Permissions.PermissionsRead)]
+    [HasPermission(Permissions.PermissionsRead)]
     public async Task<IActionResult> GetAllPermissions(
         [FromQuery] int pageIndex = 0,
         [FromQuery] int pageSize = 10,

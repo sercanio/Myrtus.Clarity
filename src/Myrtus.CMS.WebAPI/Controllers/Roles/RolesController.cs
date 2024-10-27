@@ -3,6 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
 using Myrtus.CMS.Application.Roles.Commands.Update;
@@ -24,7 +25,7 @@ public class RolesController : BaseController
     }
 
     [HttpGet]
-    //[HasPermission(Permissions.RolesRead)]
+    [HasPermission(Permissions.RolesRead)]
     public async Task<IActionResult> GetAllRoles(
         [FromQuery] int pageIndex = 0,
         [FromQuery] int pageSize = 10,
@@ -44,7 +45,7 @@ public class RolesController : BaseController
     }
 
     [HttpPost]
-    //[HasPermission(Permissions.RolesCreate)]
+    [HasPermission(Permissions.RolesCreate)]
     public async Task<IActionResult> CreateRole(
         CreateRoleRequest request,
         CancellationToken cancellationToken = default)
@@ -62,7 +63,7 @@ public class RolesController : BaseController
     }
 
     [HttpGet("{roleId}")]
-    //[HasPermission(Permissions.RolesRead)]
+    [HasPermission(Permissions.RolesRead)]
     public async Task<IActionResult> GetRoleById([FromRoute] Guid roleId, CancellationToken cancellationToken = default)
     {
         var query = new GetRoleByIdQuery(roleId);
@@ -78,7 +79,7 @@ public class RolesController : BaseController
     }
 
     [HttpPatch("{roleId}/permissions")]
-    //[HasPermission(Permissions.RolesUpdate)]
+    [HasPermission(Permissions.RolesUpdate)]
     public async Task<IActionResult> UpdateRole(
         UpdateRolePermissionsRequest request,
         Guid roleId,
@@ -97,7 +98,7 @@ public class RolesController : BaseController
     }
 
     [HttpDelete("{roleId}")]
-    //[HasPermission(Permissions.RolesDelete)]
+    [HasPermission(Permissions.RolesDelete)]
     public async Task<IActionResult> DeleteRole(
         [FromRoute] Guid roleId,
         CancellationToken cancellationToken = default)

@@ -2,13 +2,12 @@
 using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
-using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Users.GiveRoleToUser;
-using Myrtus.CMS.Application.Users.TakeRoleFromUser;
-using Myrtus.CMS.Application.Users.GetAllUsers;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.WebApi;
+using Myrtus.CMS.Application.Users.GetAllUsers;
 using Myrtus.CMS.Application.Users.GetUser;
 using Myrtus.CMS.Application.Users.Update.UpdateUserRoles;
+using Myrtus.Clarity.Core.Infrastructure.Authorization;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
@@ -23,6 +22,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
+    [HasPermission(Permissions.UsersRead)]
     public async Task<IActionResult> GetAllUsers(
         [FromQuery] GetAllUsersRequest request,
         CancellationToken cancellationToken
@@ -41,6 +41,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{userId}")]
+    [HasPermission(Permissions.UsersRead)]
     public async Task<IActionResult> GetUserById(
         Guid userId,
         CancellationToken cancellationToken = default)
@@ -59,6 +60,7 @@ public class UsersController : BaseController
 
 
     [HttpPatch("{userId}/roles")]
+    [HasPermission(Permissions.UsersRead)]
     public async Task<IActionResult> UpdateUserRoles(
         UpdateUserRolesRequest request,
         Guid userId,

@@ -1,6 +1,4 @@
-﻿using Myrtus.CMS.Domain.Users;
-
-namespace Myrtus.CMS.WebAPI.Controllers;
+﻿namespace Myrtus.CMS.WebAPI.Controllers;
 
 internal static class Permissions
 {
