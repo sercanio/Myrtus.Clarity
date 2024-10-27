@@ -6,5 +6,5 @@ public sealed record GetBlogQuery(Guid BlogId) : ICachedQuery<GetBlogQueryRespon
 {
     public string CacheKey => $"blogs-{BlogId}";
 
-    public TimeSpan? Expiration => TimeSpan.FromMinutes(10);
+    public TimeSpan? Expiration => null;
 }

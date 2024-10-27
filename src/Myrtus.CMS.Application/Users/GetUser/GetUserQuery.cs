@@ -7,5 +7,5 @@ public sealed record GetUserQuery(
 {
     public string CacheKey => $"users-{UserId}";
 
-    public TimeSpan? Expiration => TimeSpan.FromMinutes(10);
+    public TimeSpan? Expiration => null;
 }
