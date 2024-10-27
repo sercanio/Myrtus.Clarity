@@ -6,11 +6,10 @@ using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
 using Myrtus.CMS.Application.Roles.Commands.Update;
-using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Application.Roles.Queries.GetRoleById;
 using Myrtus.CMS.Application.Roles.Commands.Delete;
 using Myrtus.CMS.Application.Roles.Commands.Create;
-using Myrtus.CMS.WebAPI.Controllers.UserRoles;
+using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.WebAPI.Controllers.UserRoles;
 
@@ -78,14 +77,14 @@ public class RolesController : BaseController
         return Ok(result.Value);
     }
 
-    [HttpPut("{roleId}")]
+    [HttpPatch("{roleId}/permissions")]
     //[HasPermission(Permissions.RolesUpdate)]
     public async Task<IActionResult> UpdateRole(
-        [FromRoute] Guid roleId,
-        [FromBody] ICollection<Permission> permissions,
+        UpdateRolePermissionsRequest request,
+        Guid roleId,
         CancellationToken cancellationToken = default)
     {
-        var command = new UpdateRoleCommand(roleId, permissions);
+        var command = new UpdateRoleCommand(roleId, request.permissions);
 
         Result<UpdateRoleCommandResponse> result = await _sender.Send(command, cancellationToken);
 

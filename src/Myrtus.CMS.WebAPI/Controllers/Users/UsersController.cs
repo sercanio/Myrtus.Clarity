@@ -8,6 +8,7 @@ using Myrtus.CMS.Application.Users.TakeRoleFromUser;
 using Myrtus.CMS.Application.Users.GetAllUsers;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.CMS.Application.Users.GetUser;
+using Myrtus.CMS.Application.Users.Update.UpdateUserRoles;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
@@ -56,14 +57,16 @@ public class UsersController : BaseController
         return Ok(result.Value);
     }
 
-    [HttpPut("giveroletouser")]
-    public async Task<IActionResult> GiveRoleToUser(
-        GiveRoleToUserRequest request,
+
+    [HttpPatch("{userId}/roles")]
+    public async Task<IActionResult> UpdateUserRoles(
+        UpdateUserRolesRequest request,
+        Guid userId,
         CancellationToken cancellationToken = default)
     {
-        var command = new GiveRoleToUserCommand(request.RoleId, request.UserId);
+        var command = new UpdateUserRolesCommand(userId, request.Operation, request.RoleId);
 
-        Result<GiveRoleToUserCommandResponse> result = await _sender.Send(command, cancellationToken);
+        Result<UpdateUserRolesCommandResponse> result = await _sender.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -73,20 +76,4 @@ public class UsersController : BaseController
         return Ok(result.Value);
     }
 
-    [HttpPut("takerolefromuser")]
-    public async Task<IActionResult> TakeRoleFromUser(
-        TakeRoleFromUserRequest request,
-        CancellationToken cancellationToken = default)
-    {
-        var command = new TakeRoleFromUserCommand(request.RoleId, request.UserId);
-
-        Result<TakeRoleFromUserCommandResponse> result = await _sender.Send(command, cancellationToken);
-
-        if (!result.IsSuccess)
-        {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
-
-        return Ok(result.Value);
-    }
 }
