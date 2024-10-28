@@ -18,5 +18,29 @@ internal sealed class RolePermissionConfiguration : IEntityTypeConfiguration<Rol
                 RoleId = Role.Registered.Id,
                 PermissionId = Permission.UsersRead.Id
             });
+
+        var adminPermissions = new[]
+        {
+            Permission.UsersRead,
+            Permission.UsersCreate,
+            Permission.UsersUpdate,
+            Permission.UsersDelete,
+            Permission.RolesRead,
+            Permission.RolesCreate,
+            Permission.RolesUpdate,
+            Permission.RolesDelete,
+            Permission.PermissionsRead
+        };
+
+        foreach (var permission in adminPermissions)
+        {
+            builder.HasData(
+                new RolePermission
+                {
+                    RoleId = Role.Admin.Id,
+                    PermissionId = permission.Id
+                }
+            );
+        }
     }
 }

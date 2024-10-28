@@ -52,7 +52,7 @@ internal sealed class AuthorizationService
 
         var permissions = await _dbContext.Set<User>()
             .Where(u => u.IdentityId == identityId)
-            .SelectMany(u => u.Roles.SelectMany(r => r.Permissions))
+            .SelectMany(u => u.UserRoles.SelectMany(r => r.Role.Permissions))
             .Select(p => p.Name)
             .ToListAsync();
 

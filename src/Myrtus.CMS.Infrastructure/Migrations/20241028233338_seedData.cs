@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Myrtus.CMS.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class seedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -139,24 +139,24 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "role_user",
+                name: "role_users",
                 columns: table => new
                 {
-                    roles_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    users_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_role_user", x => new { x.roles_id, x.users_id });
+                    table.PrimaryKey("pk_role_users", x => new { x.role_id, x.user_id });
                     table.ForeignKey(
-                        name: "fk_role_user_role_roles_id",
-                        column: x => x.roles_id,
+                        name: "fk_role_users_roles_role_id",
+                        column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_role_user_user_users_id",
-                        column: x => x.users_id,
+                        name: "fk_role_users_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -184,7 +184,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("pk_posts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_posts_blogs_blog_id",
+                        name: "fk_posts_blog_blog_id",
                         column: x => x.blog_id,
                         principalTable: "blogs",
                         principalColumn: "id",
@@ -238,12 +238,42 @@ namespace Myrtus.CMS.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "roles",
                 columns: new[] { "id", "created_on_utc", "deleted_on_utc", "name", "updated_on_utc" },
-                values: new object[] { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new DateTime(2024, 10, 25, 10, 14, 41, 899, DateTimeKind.Utc).AddTicks(2869), null, "Registered", null });
+                values: new object[,]
+                {
+                    { new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"), new DateTime(2024, 10, 28, 23, 33, 38, 11, DateTimeKind.Utc).AddTicks(3052), null, "Admin", null },
+                    { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new DateTime(2024, 10, 28, 23, 33, 38, 11, DateTimeKind.Utc).AddTicks(2667), null, "Registered", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "id", "created_on_utc", "deleted_on_utc", "email", "first_name", "identity_id", "last_name", "updated_on_utc" },
+                values: new object[] { new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6"), new DateTime(2024, 10, 28, 23, 33, 38, 376, DateTimeKind.Utc).AddTicks(3210), null, "admin@email.com", "Admin", "a67c921a-d8b5-4e1e-a741-ee021f6ba29f", "Admin", null });
 
             migrationBuilder.InsertData(
                 table: "role_permissions",
                 columns: new[] { "permission_id", "role_id" },
-                values: new object[] { new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"), new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e") });
+                values: new object[,]
+                {
+                    { new Guid("0eeb5f27-10fd-430a-9257-a8457107141a"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("25bb194c-ea15-4339-9f45-5a895c51b626"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201"), new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd") },
+                    { new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"), new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "role_users",
+                columns: new[] { "role_id", "user_id" },
+                values: new object[,]
+                {
+                    { new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"), new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6") },
+                    { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6") }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "ix_blogs_deleted_by_id",
@@ -291,9 +321,9 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 column: "permission_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_role_user_users_id",
-                table: "role_user",
-                column: "users_id");
+                name: "ix_role_users_user_id",
+                table: "role_users",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_users_email",
@@ -321,7 +351,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 name: "role_permissions");
 
             migrationBuilder.DropTable(
-                name: "role_user");
+                name: "role_users");
 
             migrationBuilder.DropTable(
                 name: "posts");

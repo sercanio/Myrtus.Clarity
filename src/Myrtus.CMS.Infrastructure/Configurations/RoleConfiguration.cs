@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Myrtus.CMS.Domain.Roles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Infrastructure.Configurations;
 
@@ -13,9 +13,10 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasKey(role => role.Id);
 
         builder.HasMany(role => role.Permissions)
-            .WithMany()
-            .UsingEntity<RolePermission>();
+               .WithMany()
+               .UsingEntity<RolePermission>();
 
-        builder.HasData(Role.Registered);
+        // Seed predefined roles
+        builder.HasData(Role.Registered, Role.Admin);
     }
 }

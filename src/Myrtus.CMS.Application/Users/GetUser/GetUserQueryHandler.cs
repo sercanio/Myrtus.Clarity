@@ -32,8 +32,8 @@ public sealed class GetUserQueryHandler : IQueryHandler<GetUserQuery, GetUserQue
                 r.id AS {nameof(GetRoleByIdQueryResponse.Id)},
                 r.name AS {nameof(GetRoleByIdQueryResponse.Name)}
             FROM Users u
-            LEFT JOIN role_user ru ON u.id = ru.users_id
-            LEFT JOIN Roles r ON r.id = ru.roles_id
+            LEFT JOIN role_users ru ON u.id = ru.user_id
+            LEFT JOIN Roles r ON r.id = ru.role_id
             WHERE u.id = @UserId AND u.deleted_on_utc IS NULL;
             """;
 
