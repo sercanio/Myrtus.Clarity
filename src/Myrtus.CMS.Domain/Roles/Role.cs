@@ -8,7 +8,6 @@ public sealed class Role : Entity
 {
     public static readonly Role Registered = new(Guid.Parse("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), "Registered");
     public static readonly Role Admin = new(Guid.Parse("4b606d86-3537-475a-aa20-26aadd8f5cfd"), "Admin");
-    public ICollection<RoleUser> RoleUsers{ get; set; }
     public Role(Guid id, string name) : base(id)
     {
         Name = name;
@@ -30,5 +29,8 @@ public sealed class Role : Entity
 
         return role;
     }
+    
+    // EF Core navigation property
+    public IReadOnlyCollection<RoleUser> RoleUsers { get; set; }
 
 }

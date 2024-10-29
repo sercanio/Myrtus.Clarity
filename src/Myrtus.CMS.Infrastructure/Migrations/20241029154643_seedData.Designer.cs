@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.CMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241028233338_seedData")]
+    [Migration("20241029154643_seedData")]
     partial class seedData
     {
         /// <inheritdoc />
@@ -326,13 +326,13 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
-                            CreatedOnUtc = new DateTime(2024, 10, 28, 23, 33, 38, 11, DateTimeKind.Utc).AddTicks(2667),
+                            CreatedOnUtc = new DateTime(2024, 10, 29, 15, 46, 43, 0, DateTimeKind.Utc).AddTicks(6513),
                             Name = "Registered"
                         },
                         new
                         {
                             Id = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            CreatedOnUtc = new DateTime(2024, 10, 28, 23, 33, 38, 11, DateTimeKind.Utc).AddTicks(3052),
+                            CreatedOnUtc = new DateTime(2024, 10, 29, 15, 46, 43, 0, DateTimeKind.Utc).AddTicks(6907),
                             Name = "Admin"
                         });
                 });
@@ -430,12 +430,12 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         new
                         {
                             RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
-                            UserId = new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6")
+                            UserId = new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2")
                         },
                         new
                         {
                             RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            UserId = new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6")
+                            UserId = new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2")
                         });
                 });
 
@@ -497,8 +497,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6"),
-                            CreatedOnUtc = new DateTime(2024, 10, 28, 23, 33, 38, 376, DateTimeKind.Utc).AddTicks(3210),
+                            Id = new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2"),
+                            CreatedOnUtc = new DateTime(2024, 10, 29, 15, 46, 43, 399, DateTimeKind.Utc).AddTicks(1088),
                             Email = "admin@email.com",
                             FirstName = "Admin",
                             IdentityId = "a67c921a-d8b5-4e1e-a741-ee021f6ba29f",

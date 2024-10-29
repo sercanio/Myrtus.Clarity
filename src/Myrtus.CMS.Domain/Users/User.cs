@@ -10,7 +10,6 @@ public sealed class User : Entity
 {
     private readonly List<Role> _roles = new();
     private readonly List<Blog> _blogs = new();
-    public ICollection<RoleUser> UserRoles { get; set; }
 
     private User(Guid id, FirstName firstName, LastName lastName, Email email)
         : base(id)
@@ -62,4 +61,7 @@ public sealed class User : Entity
     {
         IdentityId = identityId;
     }
+
+    // EF Core navigation property
+    public IReadOnlyCollection<RoleUser> UserRoles { get; set; }
 }

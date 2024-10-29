@@ -240,14 +240,14 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 columns: new[] { "id", "created_on_utc", "deleted_on_utc", "name", "updated_on_utc" },
                 values: new object[,]
                 {
-                    { new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"), new DateTime(2024, 10, 28, 23, 33, 38, 11, DateTimeKind.Utc).AddTicks(3052), null, "Admin", null },
-                    { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new DateTime(2024, 10, 28, 23, 33, 38, 11, DateTimeKind.Utc).AddTicks(2667), null, "Registered", null }
+                    { new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"), new DateTime(2024, 10, 29, 15, 46, 43, 0, DateTimeKind.Utc).AddTicks(6907), null, "Admin", null },
+                    { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new DateTime(2024, 10, 29, 15, 46, 43, 0, DateTimeKind.Utc).AddTicks(6513), null, "Registered", null }
                 });
 
             migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "id", "created_on_utc", "deleted_on_utc", "email", "first_name", "identity_id", "last_name", "updated_on_utc" },
-                values: new object[] { new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6"), new DateTime(2024, 10, 28, 23, 33, 38, 376, DateTimeKind.Utc).AddTicks(3210), null, "admin@email.com", "Admin", "a67c921a-d8b5-4e1e-a741-ee021f6ba29f", "Admin", null });
+                values: new object[] { new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2"), new DateTime(2024, 10, 29, 15, 46, 43, 399, DateTimeKind.Utc).AddTicks(1088), null, "admin@email.com", "Admin", "a67c921a-d8b5-4e1e-a741-ee021f6ba29f", "Admin", null });
 
             migrationBuilder.InsertData(
                 table: "role_permissions",
@@ -271,8 +271,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 columns: new[] { "role_id", "user_id" },
                 values: new object[,]
                 {
-                    { new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"), new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6") },
-                    { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new Guid("591ea9bd-8396-49ed-9414-db0f03ac92a6") }
+                    { new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"), new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2") },
+                    { new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"), new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2") }
                 });
 
             migrationBuilder.CreateIndex(
