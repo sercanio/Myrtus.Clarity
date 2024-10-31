@@ -1,21 +1,24 @@
-﻿using System.Text.Json.Serialization;
+﻿using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
 using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Application.Roles.Queries.GetRoleById;
 
 public sealed record GetRoleByIdQueryResponse
 {
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-    public ICollection<Permission> Permissions { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public ICollection<GetAllPermissionsQueryResponse> Permissions { get; set; } = [];
 
-    [JsonConstructor]
-    public GetRoleByIdQueryResponse(Guid id, string name, ICollection<Permission> permissions)
+    public GetRoleByIdQueryResponse(Guid ıd, string name)
     {
-        Id = id;
+        Id = ıd;
         Name = name;
-        Permissions = permissions ?? new List<Permission>();
     }
 
-    internal GetRoleByIdQueryResponse() { }
+    public GetRoleByIdQueryResponse(Guid ıd, string name, ICollection<GetAllPermissionsQueryResponse> permissions)
+    {
+        Id = ıd;
+        Name = name;
+        Permissions = permissions;
+    }
 };

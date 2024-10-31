@@ -29,10 +29,9 @@ public class RolesController : BaseController
     public async Task<IActionResult> GetAllRoles(
         [FromQuery] int pageIndex = 0,
         [FromQuery] int pageSize = 10,
-        [FromQuery] bool? briefRepresentation = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAllRolesQuery(pageIndex, pageSize, briefRepresentation);
+        var query = new GetAllRolesQuery(pageIndex, pageSize);
 
         Result<IPaginatedList<GetAllRolesQueryResponse>> result = await _sender.Send(query, cancellationToken);
 

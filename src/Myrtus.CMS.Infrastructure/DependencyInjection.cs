@@ -37,6 +37,9 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        if (configuration == null)
+            throw new ArgumentNullException(nameof(configuration), "Configuration cannot be null in AddInfrastructure.");
+
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 
         services.AddTransient<IEmailService, EmailService>();
@@ -66,6 +69,7 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IBlogRepository, BlogRepository>();

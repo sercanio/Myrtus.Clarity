@@ -1,4 +1,4 @@
-﻿using Myrtus.CMS.Application.Users.Update.UpdateUserRoles;
+﻿using Myrtus.CMS.Application.Users.Commands.Update.UpdateUserRoles;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 

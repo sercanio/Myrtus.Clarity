@@ -1,6 +1,5 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Domain.Users;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Myrtus.CMS.Domain.Roles;
 
@@ -15,13 +14,11 @@ public sealed class Role : Entity
 
     public string Name { get; init; }
 
-    [NotMapped]
-    public ICollection<User> Users { get; init; } = new List<User>();
-
-    public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
+    public ICollection<User> Users { get; set; }
+    public ICollection<Permission> Permissions { get; set; }
 
     public static Role Create(
-        string Name)
+        string Name) 
     {
         Role role = new Role(
             Guid.NewGuid(),
@@ -29,8 +26,4 @@ public sealed class Role : Entity
 
         return role;
     }
-    
-    // EF Core navigation property
-    public IReadOnlyCollection<RoleUser> RoleUsers { get; set; }
-
 }

@@ -1,9 +1,5 @@
-﻿namespace Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
+﻿using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
 
-public sealed record GetAllRolesQueryResponse
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
+namespace Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
 
-    public GetAllRolesQueryResponse() { }
-};
+public sealed record GetAllRolesQueryResponse(Guid Id, string Name);

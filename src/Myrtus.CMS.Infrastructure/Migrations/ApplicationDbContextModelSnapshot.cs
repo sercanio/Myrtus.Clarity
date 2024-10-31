@@ -218,6 +218,14 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
+
                     b.Property<string>("Feature")
                         .IsRequired()
                         .HasColumnType("text")
@@ -228,66 +236,14 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_on_utc");
+
                     b.HasKey("Id")
                         .HasName("pk_permissions");
 
                     b.ToTable("permissions", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"),
-                            Feature = "users",
-                            Name = "users:read"
-                        },
-                        new
-                        {
-                            Id = new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78"),
-                            Feature = "users",
-                            Name = "users:create"
-                        },
-                        new
-                        {
-                            Id = new Guid("25bb194c-ea15-4339-9f45-5a895c51b626"),
-                            Feature = "users",
-                            Name = "users:update"
-                        },
-                        new
-                        {
-                            Id = new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4"),
-                            Feature = "users",
-                            Name = "users:delete"
-                        },
-                        new
-                        {
-                            Id = new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201"),
-                            Feature = "roles",
-                            Name = "roles:read"
-                        },
-                        new
-                        {
-                            Id = new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba"),
-                            Feature = "roles",
-                            Name = "roles:create"
-                        },
-                        new
-                        {
-                            Id = new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566"),
-                            Feature = "roles",
-                            Name = "roles:update"
-                        },
-                        new
-                        {
-                            Id = new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760"),
-                            Feature = "roles",
-                            Name = "roles:delete"
-                        },
-                        new
-                        {
-                            Id = new Guid("0eeb5f27-10fd-430a-9257-a8457107141a"),
-                            Feature = "permissions",
-                            Name = "permissions:read"
-                        });
                 });
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Roles.Role", b =>
@@ -318,122 +274,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasName("pk_roles");
 
                     b.ToTable("roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
-                            CreatedOnUtc = new DateTime(2024, 10, 29, 15, 46, 43, 0, DateTimeKind.Utc).AddTicks(6513),
-                            Name = "Registered"
-                        },
-                        new
-                        {
-                            Id = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            CreatedOnUtc = new DateTime(2024, 10, 29, 15, 46, 43, 0, DateTimeKind.Utc).AddTicks(6907),
-                            Name = "Admin"
-                        });
-                });
-
-            modelBuilder.Entity("Myrtus.CMS.Domain.Roles.RolePermission", b =>
-                {
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.Property<Guid>("PermissionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("permission_id");
-
-                    b.HasKey("RoleId", "PermissionId")
-                        .HasName("pk_role_permissions");
-
-                    b.HasIndex("PermissionId")
-                        .HasDatabaseName("ix_role_permissions_permission_id");
-
-                    b.ToTable("role_permissions", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
-                            PermissionId = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("25bb194c-ea15-4339-9f45-5a895c51b626")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            PermissionId = new Guid("0eeb5f27-10fd-430a-9257-a8457107141a")
-                        });
-                });
-
-            modelBuilder.Entity("Myrtus.CMS.Domain.Roles.RoleUser", b =>
-                {
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("RoleId", "UserId")
-                        .HasName("pk_role_users");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_role_users_user_id");
-
-                    b.ToTable("role_users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
-                            UserId = new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2")
-                        },
-                        new
-                        {
-                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
-                            UserId = new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2")
-                        });
                 });
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Users.User", b =>
@@ -490,17 +330,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasDatabaseName("ix_users_identity_id");
 
                     b.ToTable("users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("69478a6a-d18c-4595-b913-ecd7be114fd2"),
-                            CreatedOnUtc = new DateTime(2024, 10, 29, 15, 46, 43, 399, DateTimeKind.Utc).AddTicks(1088),
-                            Email = "admin@email.com",
-                            FirstName = "Admin",
-                            IdentityId = "a67c921a-d8b5-4e1e-a741-ee021f6ba29f",
-                            LastName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Myrtus.Clarity.Core.Infrastructure.Outbox.OutboxMessage", b =>
@@ -536,6 +365,44 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasName("pk_outbox_messages");
 
                     b.ToTable("outbox_messages", (string)null);
+                });
+
+            modelBuilder.Entity("PermissionRole", b =>
+                {
+                    b.Property<Guid>("PermissionsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("permissions_id");
+
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("roles_id");
+
+                    b.HasKey("PermissionsId", "RolesId")
+                        .HasName("pk_permission_role");
+
+                    b.HasIndex("RolesId")
+                        .HasDatabaseName("ix_permission_role_roles_id");
+
+                    b.ToTable("permission_role", (string)null);
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("roles_id");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("users_id");
+
+                    b.HasKey("RolesId", "UsersId")
+                        .HasName("pk_role_user");
+
+                    b.HasIndex("UsersId")
+                        .HasDatabaseName("ix_role_user_users_id");
+
+                    b.ToTable("role_user", (string)null);
                 });
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Blogs.Blog", b =>
@@ -590,47 +457,43 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_posts_blog_blog_id");
+                        .HasConstraintName("fk_posts_blogs_blog_id");
 
                     b.Navigation("Blog");
                 });
 
-            modelBuilder.Entity("Myrtus.CMS.Domain.Roles.RolePermission", b =>
+            modelBuilder.Entity("PermissionRole", b =>
                 {
                     b.HasOne("Myrtus.CMS.Domain.Roles.Permission", null)
                         .WithMany()
-                        .HasForeignKey("PermissionId")
+                        .HasForeignKey("PermissionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_permissions_permissions_permission_id");
+                        .HasConstraintName("fk_permission_role_permission_permissions_id");
 
                     b.HasOne("Myrtus.CMS.Domain.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_permissions_roles_role_id");
+                        .HasConstraintName("fk_permission_role_role_roles_id");
                 });
 
-            modelBuilder.Entity("Myrtus.CMS.Domain.Roles.RoleUser", b =>
+            modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.HasOne("Myrtus.CMS.Domain.Roles.Role", "Role")
-                        .WithMany("RoleUsers")
-                        .HasForeignKey("RoleId")
+                    b.HasOne("Myrtus.CMS.Domain.Roles.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_users_roles_role_id");
+                        .HasConstraintName("fk_role_user_role_roles_id");
 
-                    b.HasOne("Myrtus.CMS.Domain.Users.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
+                    b.HasOne("Myrtus.CMS.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_users_users_user_id");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
+                        .HasConstraintName("fk_role_user_user_users_id");
                 });
 
             modelBuilder.Entity("Myrtus.CMS.Domain.Blogs.Blog", b =>
@@ -643,16 +506,9 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("Myrtus.CMS.Domain.Roles.Role", b =>
-                {
-                    b.Navigation("RoleUsers");
-                });
-
             modelBuilder.Entity("Myrtus.CMS.Domain.Users.User", b =>
                 {
                     b.Navigation("Blogs");
-
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

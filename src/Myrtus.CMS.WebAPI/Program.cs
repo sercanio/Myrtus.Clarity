@@ -10,6 +10,7 @@ using Serilog;
 using Myrtus.CMS.Domain;
 using Myrtus.CMS.WebAPI;
 using System.Text.Json.Serialization;
+using Myrtus.CMS.WebAPI.Extensions.SeedData;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    }); ;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -95,6 +96,9 @@ if (app.Environment.IsDevelopment())
     });
 
     app.ApplyMigrations();
+
+    // Uncomment for seed admin user, roles and permissions
+    //app.SeedDataAsync().GetAwaiter().GetResult();
 }
 
 app.UseHttpsRedirection();

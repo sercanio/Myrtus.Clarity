@@ -1,7 +1,5 @@
 ﻿using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Roles;
-using System.Linq.Expressions;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 

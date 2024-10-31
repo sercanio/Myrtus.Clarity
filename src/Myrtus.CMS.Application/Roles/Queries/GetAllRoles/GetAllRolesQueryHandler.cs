@@ -2,49 +2,32 @@
 using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Dapper;
 using System.Data;
-using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
+using Myrtus.CMS.Application.Repositories;
 
 namespace Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
 
 public sealed class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Result<IPaginatedList<GetAllRolesQueryResponse>>>
 {
-    private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-    public GetAllRolesQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+    private readonly IRoleRepository _roleRepository;
+    public GetAllRolesQueryHandler(IRoleRepository roleRepository)
     {
-        _sqlConnectionFactory = sqlConnectionFactory;
+        _roleRepository = roleRepository;
     }
 
     public async Task<Result<IPaginatedList<GetAllRolesQueryResponse>>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
     {
-        using IDbConnection connection = _sqlConnectionFactory.CreateConnection();
+        var roles = await _roleRepository.GetAllAsync(
+            pageIndex: request.PageIndex,
+            pageSize: request.PageSize,
+            cancellationToken: cancellationToken);
 
-        const string sql =
-            """
-            SELECT 
-                r.id, 
-                r.name
-            FROM roles r
-            OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY
-            """;
-
-        var roles = await connection.QueryAsync<GetAllRolesQueryResponse>(
-            sql,
-            new
-            {
-                Offset = request.PageIndex * request.PageSize,
-                request.PageSize
-            }
-        );
-
-        const string countSql = "SELECT COUNT(*) FROM Roles";
-        var totalCount = await connection.ExecuteScalarAsync<int>(countSql);
+        var mappedRoles = roles.Items.Select(role =>
+            new GetAllRolesQueryResponse(role.Id, role.Name)).ToList();
 
         var paginatedList = new PaginatedList<GetAllRolesQueryResponse>(
-            roles.ToList(),
-            totalCount,
+            mappedRoles,
+            roles.TotalCount,
             request.PageIndex,
             request.PageSize
         );

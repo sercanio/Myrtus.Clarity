@@ -28,17 +28,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(user => user.Email).IsUnique();
         builder.HasIndex(user => user.IdentityId).IsUnique();
-
-        // Seed Admin user without roles
-        var adminUser = User.CreateWithoutRolesForSeeding(
-            new FirstName("Admin"),
-            new LastName("Admin"),
-            new Email("admin@email.com"));
-        adminUser.SetIdentityId("a67c921a-d8b5-4e1e-a741-ee021f6ba29f");
-
-        AdminId = adminUser.Id;
-
-        builder.HasData(adminUser);
     }
 }
 

@@ -1,7 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Infrastructure.Authorization;
 
@@ -31,7 +30,7 @@ internal sealed class AuthorizationService
             .Select(u => new UserRolesResponse
             {
                 UserId = u.Id,
-                Roles = u.Roles.ToList()
+                Roles = u.Roles
             })
             .FirstAsync();
 
@@ -52,7 +51,7 @@ internal sealed class AuthorizationService
 
         var permissions = await _dbContext.Set<User>()
             .Where(u => u.IdentityId == identityId)
-            .SelectMany(u => u.UserRoles.SelectMany(r => r.Role.Permissions))
+            .SelectMany(u => u.Roles.SelectMany(r => r.Permissions))
             .Select(p => p.Name)
             .ToListAsync();
 

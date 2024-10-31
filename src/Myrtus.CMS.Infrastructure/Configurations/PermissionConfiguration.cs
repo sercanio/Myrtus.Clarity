@@ -10,16 +10,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
     {
         builder.ToTable("permissions");
 
-        builder.HasData(
-            Permission.UsersRead,
-            Permission.UsersCreate,
-            Permission.UsersUpdate,
-            Permission.UsersDelete,
-            Permission.RolesRead,
-            Permission.RolesCreate,
-            Permission.RolesUpdate,
-            Permission.RolesDelete,
-            Permission.PermissionsRead
-        );
+        builder.HasKey(p => p.Id);
     }
 }

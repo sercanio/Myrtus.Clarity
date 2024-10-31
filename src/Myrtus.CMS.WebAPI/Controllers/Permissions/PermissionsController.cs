@@ -28,7 +28,7 @@ public class PermissionsController : BaseController
     {
         var query = new GetAllPermissionsQuery(pageIndex, pageSize);
 
-        Result<IPaginatedList<GroupedPermissionsResponse>> result = await _sender.Send(query, cancellationToken);
+        Result<IPaginatedList<GetAllPermissionsQueryResponse>> result = await _sender.Send(query, cancellationToken);
 
         if (!result.IsSuccess)
         {

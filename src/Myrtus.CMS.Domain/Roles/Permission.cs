@@ -1,6 +1,8 @@
-﻿namespace Myrtus.CMS.Domain.Roles;
+﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 
-public sealed class Permission
+namespace Myrtus.CMS.Domain.Roles;
+
+public sealed class Permission : Entity
 {
     public static readonly Permission UsersRead = new(Guid.Parse("33261a4a-c423-4876-8f15-e40068aea5ca"), "users", "users:read");
     public static readonly Permission UsersCreate = new(Guid.Parse("9f79a54c-0b54-4de5-94b9-8582a5f32e78"), "users", "users:create");
@@ -32,4 +34,5 @@ public sealed class Permission
     public string Feature { get; set; }
     public string Name { get; init; }
 
+    public IReadOnlyCollection<Role> Roles { get; set; }
 }

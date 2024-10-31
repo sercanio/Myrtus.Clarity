@@ -13,6 +13,9 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        if (configuration == null)
+            throw new ArgumentNullException(nameof(configuration), "Configuration cannot be null in AddInfrastructure.");
+
         return services;
     }
 }

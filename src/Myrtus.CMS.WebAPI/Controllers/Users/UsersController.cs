@@ -4,10 +4,10 @@ using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Users.GetAllUsers;
-using Myrtus.CMS.Application.Users.GetUser;
-using Myrtus.CMS.Application.Users.Update.UpdateUserRoles;
+using Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
+using Myrtus.CMS.Application.Users.Queries.GetUser;
+using Myrtus.CMS.Application.Users.Commands.Update.UpdateUserRoles;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
@@ -24,11 +24,11 @@ public class UsersController : BaseController
     [HttpGet]
     [HasPermission(Permissions.UsersRead)]
     public async Task<IActionResult> GetAllUsers(
-        [FromQuery] GetAllUsersRequest request,
-        CancellationToken cancellationToken
-        )
+        [FromQuery] int pageIndex = 0,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
     {
-        var query = new GetAllUsersQuery(request.Pagination.PageIndex, request.Pagination.PageSize);
+        var query = new GetAllUsersQuery(pageIndex, pageSize);
 
         Result<IPaginatedList<GetUserQueryResponse>> result = await _sender.Send(query, cancellationToken);
 
@@ -77,5 +77,4 @@ public class UsersController : BaseController
 
         return Ok(result.Value);
     }
-
 }
