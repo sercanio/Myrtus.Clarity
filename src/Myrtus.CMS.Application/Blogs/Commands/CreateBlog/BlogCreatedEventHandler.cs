@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Myrtus.CMS.Domain.Blogs.Events;
-using Myrtus.CMS.Domain.Users;
 using Myrtus.CMS.Domain.Blogs;
-using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Repositories;
 using Microsoft.Extensions.Logging;
 using Myrtus.CMS.Application.Abstractions.Mailing;

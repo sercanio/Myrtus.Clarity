@@ -28,16 +28,13 @@ public sealed class GetAllBlogsQueryHandler : IRequestHandler<GetAllBlogsQuery, 
 
         var mappedBlogs = blogs.Items.Select(blog =>
         {
-            // Map the owner to GetUserQueryResponse
             var ownerResponse = new GetUserQueryResponse(
                 blog.Owner.Id,
                 blog.Owner.Email.Value,
                 blog.Owner.FirstName.Value,
                 blog.Owner.LastName.Value
-            // Include any other properties you may need from GetUserQueryResponse
             );
 
-            // Map the blog to GetBlogQueryResponse
             return new GetBlogQueryResponse(
                 blog.Id,
                 blog.Title.Value,

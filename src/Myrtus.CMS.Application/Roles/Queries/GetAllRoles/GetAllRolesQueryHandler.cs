@@ -1,8 +1,8 @@
-﻿using Ardalis.Result;
+﻿using System.Data;
 using MediatR;
+using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using System.Data;
 using Myrtus.CMS.Application.Repositories;
 
 namespace Myrtus.CMS.Application.Roles.Queries.GetAllRoles;

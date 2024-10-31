@@ -15,11 +15,9 @@ public static class SeedUsers
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        // Get the SQL connection factory from the service provider
         ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
         using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
-        // Create admin user
         var adminUser = User.CreateWithoutRolesForSeeding(
             new FirstName("Admin"),
             new LastName("Admin"),
@@ -28,7 +26,6 @@ public static class SeedUsers
         adminUser.SetIdentityId("a67c921a-d8b5-4e1e-a741-ee021f6ba29f");
         AdminId = adminUser.Id;
 
-        // Prepare the admin user data object for Dapper
         var adminUserDto = new
         {
             Id = adminUser.Id,
@@ -39,7 +36,6 @@ public static class SeedUsers
             CreatedOnUtc = DateTime.UtcNow
         };
 
-        // SQL for inserting user
         const string userSql = """
             INSERT INTO users (id, first_name, last_name, email, identity_id, created_on_utc)
             VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedOnUtc)
@@ -47,7 +43,6 @@ public static class SeedUsers
             """;
         connection.Execute(userSql, adminUserDto);
 
-        // Seed the roles associated with the user
         List<object> roleUsers = new()
         {
             new { RoleId = Role.Registered.Id, UserId = adminUser.Id },

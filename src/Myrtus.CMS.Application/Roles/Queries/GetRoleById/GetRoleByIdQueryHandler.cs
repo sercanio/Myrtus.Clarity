@@ -1,9 +1,9 @@
-﻿using Ardalis.Result;
+﻿using System.Data;
+using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
-using System.Data;
 
 namespace Myrtus.CMS.Application.Roles.Queries.GetRoleById;
 

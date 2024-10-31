@@ -5,5 +5,4 @@ public sealed record CreateBlogCommandResponse(
  string Title,
  string Slug,
  Guid OwnerId,
- DateTime CreatedOnUtc
-);
+ DateTime CreatedOnUtc);

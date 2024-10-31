@@ -1,6 +1,4 @@
 ﻿using Myrtus.CMS.Application.Abstractionss.Repositories;
-using Myrtus.CMS.Domain.Blogs.Events;
-using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Users;
 using Myrtus.CMS.Domain.Roles;
 

@@ -1,6 +1,5 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
-using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
 

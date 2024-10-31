@@ -1,6 +1,5 @@
 ﻿using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
-using Myrtus.Clarity.Core.Application.Abstractions.Data;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Users.GetLoggedInUser;

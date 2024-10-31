@@ -1,5 +1,4 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.CMS.Domain.Blogs;
 
 namespace Myrtus.CMS.Application.Blogs.Commands.UpdateBlog;
 

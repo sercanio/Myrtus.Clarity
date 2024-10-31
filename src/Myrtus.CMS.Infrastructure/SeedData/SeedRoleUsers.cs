@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
-using System.Data;
+﻿using System.Data;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Dapper;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 using Myrtus.CMS.Domain.Roles;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Myrtus.CMS.Infrastructure.SeedData;
 

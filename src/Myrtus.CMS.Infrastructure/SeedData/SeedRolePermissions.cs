@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Dapper;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 

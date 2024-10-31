@@ -4,10 +4,7 @@ using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
-using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
-using Myrtus.CMS.Application.Roles.Queries.GetRoleById;
 using Myrtus.CMS.Application.Users.Queries.GetUser;
-using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 

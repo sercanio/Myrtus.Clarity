@@ -1,5 +1,4 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Clock;
-using Myrtus.Clarity.Core.Domain.Abstractions;
+﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 
 namespace Myrtus.CMS.Domain.Blogs.Posts;
 

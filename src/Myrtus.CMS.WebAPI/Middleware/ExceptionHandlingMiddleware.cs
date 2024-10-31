@@ -1,5 +1,4 @@
-﻿using Myrtus.Clarity.Core.Application.Exceptions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 
 namespace Myrtus.CMS.WebAPI.Middleware;

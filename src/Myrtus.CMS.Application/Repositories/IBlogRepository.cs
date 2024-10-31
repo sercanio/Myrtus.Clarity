@@ -4,6 +4,7 @@ using Myrtus.CMS.Domain.Blogs;
 using Myrtus.CMS.Domain.Blogs.Common;
 
 namespace Myrtus.CMS.Application.Repositories;
+
 public interface IBlogRepository : IRepository<Blog>
 {
     Task<Blog?> GetBlogByIdAsync(

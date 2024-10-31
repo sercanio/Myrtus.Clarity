@@ -1,5 +1,4 @@
 ﻿using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
-using Myrtus.CMS.Domain.Roles;
 
 namespace Myrtus.CMS.Application.Roles.Queries.GetRoleById;
 

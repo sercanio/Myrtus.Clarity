@@ -10,7 +10,6 @@ public sealed record GetUserQueryResponse
     public string? LastName { get; set; }
     public ICollection<GetRoleByIdQueryResponse> Roles { get; set; } = [];
 
-
     public GetUserQueryResponse(Guid id, string email, string? firstName, string? lastName, ICollection<GetRoleByIdQueryResponse> roles)
     {
         Id = id;
@@ -27,7 +26,6 @@ public sealed record GetUserQueryResponse
         FirstName = firstName;
         LastName = lastName;
     }
-
 
     public GetUserQueryResponse() { }
 }
