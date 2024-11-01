@@ -59,8 +59,7 @@ public sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogCommand
             blog.Title.Value,
             blog.Slug.Value,
             blog.Owner.Id,
-            blog.CreatedOnUtc
-            );
+            blog.CreatedOnUtc);
 
         return Result.Success(response);
     }

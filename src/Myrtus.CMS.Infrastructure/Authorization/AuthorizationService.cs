@@ -30,7 +30,7 @@ internal sealed class AuthorizationService
             .Select(u => new UserRolesResponse
             {
                 UserId = u.Id,
-                Roles = u.Roles
+                Roles = (ICollection<Domain.Roles.Role>)u.Roles
             })
             .FirstAsync();
 

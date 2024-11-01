@@ -10,6 +10,14 @@ public sealed class User : Entity
     private readonly List<Role> _roles = new();
     private readonly List<Blog> _blogs = new();
 
+    public FirstName FirstName { get; private set; }
+    public LastName LastName { get; private set; }
+    public Email Email { get; private set; }
+    public string IdentityId { get; private set; } = string.Empty;
+
+    public IReadOnlyCollection<Role> Roles => _roles.ToList();
+    public IReadOnlyCollection<Blog> Blogs => _blogs.ToList();
+
     private User(Guid id, FirstName firstName, LastName lastName, Email email)
         : base(id)
     {
@@ -22,13 +30,6 @@ public sealed class User : Entity
     {
     }
 
-    public FirstName FirstName { get; private set; }
-    public LastName LastName { get; private set; }
-    public Email Email { get; private set; }
-    public string IdentityId { get; private set; } = string.Empty;
-
-    public ICollection<Role> Roles { get; set; }
-    public ICollection<Blog> Blogs { get; set; }
 
     public static User Create(FirstName firstName, LastName lastName, Email email)
     {
