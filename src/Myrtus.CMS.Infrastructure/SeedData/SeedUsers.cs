@@ -23,7 +23,7 @@ public static class SeedUsers
             new LastName("Admin"),
             new Email("admin@email.com"));
 
-        adminUser.SetIdentityId("a67c921a-d8b5-4e1e-a741-ee021f6ba29f");
+        adminUser.SetIdentityId("d81eefe5-aa20-4d5c-9a22-6476d2774b1a");
         AdminId = adminUser.Id;
 
         var adminUserDto = new
