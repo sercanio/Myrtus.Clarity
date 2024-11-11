@@ -58,8 +58,8 @@ public sealed class UpdateRolePermissionsCommandHandler : ICommandHandler<Update
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
+        //await _cacheService.RemoveAsync("roles", cancellationToken);
 
         return Result.Success(new UpdateRolePermissionsCommandResponse(role.Id, request.PermissionId));
     }
-
 }

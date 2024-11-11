@@ -20,4 +20,6 @@ public sealed record GetRoleByIdQueryResponse
         Name = name;
         Permissions = permissions;
     }
+
+    public GetRoleByIdQueryResponse() { }
 };
