@@ -23,6 +23,7 @@ internal sealed class GetLoggedInUserQueryHandler : IQueryHandler<GetLoggedInUse
     {
         var user = await _userRepository.GetAsync(
             predicate: u => u.IdentityId == _userContext.IdentityId.ToString(),
+            includeSoftDeleted: false,
             include: u=> u.Roles);
 
         if (user is null)

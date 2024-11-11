@@ -19,6 +19,7 @@ public sealed class GetUserQueryHandler : IQueryHandler<GetUserQuery, GetUserQue
     {
         var user = await _userRepository.GetAsync(
             predicate: u => u.Id == request.UserId && u.DeletedOnUtc == null,
+            includeSoftDeleted: false,
             include: u => u.Roles);
 
         if (user is null)

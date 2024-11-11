@@ -23,6 +23,7 @@ public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, 
         var users = await _userRepository.GetAllAsync(
             pageIndex: request.PageIndex,
             pageSize: request.PageSize,
+            includeSoftDeleted: false,
             include: user => user.Roles,
             cancellationToken: cancellationToken);
 
@@ -31,8 +32,8 @@ public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, 
             user.Email.Value,
             user.FirstName.Value,
             user.LastName.Value,
-            user.Roles.Select(role => new LoggedInUserRolesDto(role.Id, role.Name)).ToList()
-            )).ToList();
+            user.Roles.Where(role => role.DeletedOnUtc == null).Select(role => new LoggedInUserRolesDto(role.Id, role.Name)).ToList()
+        )).ToList();
 
         var paginatedList = new PaginatedList<GetAllUsersQueryResponse>(
             mappedUsers,
