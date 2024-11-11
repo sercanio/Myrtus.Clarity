@@ -4,11 +4,12 @@ using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
+using Myrtus.CMS.Application.Users.GetLoggedInUser;
 using Myrtus.CMS.Application.Users.Queries.GetUser;
 
 namespace Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 
-public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Result<IPaginatedList<GetUserQueryResponse>>>
+public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Result<IPaginatedList<GetAllUsersQueryResponse>>>
 {
     private readonly IUserRepository _userRepository;
 
@@ -17,7 +18,7 @@ public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, 
         _userRepository = userRepository;
     }
 
-    public async Task<Result<IPaginatedList<GetUserQueryResponse>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IPaginatedList<GetAllUsersQueryResponse>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllAsync(
             pageIndex: request.PageIndex,
@@ -25,20 +26,21 @@ public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, 
             include: user => user.Roles,
             cancellationToken: cancellationToken);
 
-        var mappedUsers = users.Items.Select(user => new GetUserQueryResponse(
+        var mappedUsers = users.Items.Select(user => new GetAllUsersQueryResponse(
             user.Id,
             user.Email.Value,
             user.FirstName.Value,
-            user.LastName.Value
+            user.LastName.Value,
+            user.Roles.Select(role => new LoggedInUserRolesDto(role.Id, role.Name)).ToList()
             )).ToList();
 
-        var paginatedList = new PaginatedList<GetUserQueryResponse>(
+        var paginatedList = new PaginatedList<GetAllUsersQueryResponse>(
             mappedUsers,
             users.TotalCount,
             request.PageIndex,
             request.PageSize
         );
 
-        return Result.Success<IPaginatedList<GetUserQueryResponse>>(paginatedList);
+        return Result.Success<IPaginatedList<GetAllUsersQueryResponse>>(paginatedList);
     }
 }

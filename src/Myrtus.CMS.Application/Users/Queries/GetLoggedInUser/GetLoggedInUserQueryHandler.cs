@@ -31,7 +31,7 @@ internal sealed class GetLoggedInUserQueryHandler : IQueryHandler<GetLoggedInUse
         }
 
         var mappedRoles = user.Roles.Select(role =>
-            new LoggedInUserRolesDto(role.Name)).ToList();
+            new LoggedInUserRolesDto(role.Id, role.Name)).ToList();
 
         var userResponse = new UserResponse
         {

@@ -30,7 +30,7 @@ public class UsersController : BaseController
     {
         var query = new GetAllUsersQuery(pageIndex, pageSize);
 
-        Result<IPaginatedList<GetUserQueryResponse>> result = await _sender.Send(query, cancellationToken);
+        Result<IPaginatedList<GetAllUsersQueryResponse>> result = await _sender.Send(query, cancellationToken);
 
         if (!result.IsSuccess)
         {

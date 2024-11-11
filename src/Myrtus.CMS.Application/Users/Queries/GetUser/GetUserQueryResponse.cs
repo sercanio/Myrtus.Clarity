@@ -8,9 +8,9 @@ public sealed record GetUserQueryResponse
     public string Email { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public ICollection<GetRoleByIdQueryResponse> Roles { get; set; } = [];
+    public List<GetRoleByIdQueryResponse> Roles { get; set; } = [];
 
-    public GetUserQueryResponse(Guid id, string email, string? firstName, string? lastName, ICollection<GetRoleByIdQueryResponse> roles)
+    public GetUserQueryResponse(Guid id, string email, string? firstName, string? lastName, List<GetRoleByIdQueryResponse> roles)
     {
         Id = id;
         Email = email;

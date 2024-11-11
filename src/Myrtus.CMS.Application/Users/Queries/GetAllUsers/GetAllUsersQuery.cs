@@ -6,4 +6,4 @@ namespace Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 
 public sealed record GetAllUsersQuery(
     int PageIndex,
-    int PageSize) : IQuery<IPaginatedList<GetUserQueryResponse>>;
+    int PageSize) : IQuery<IPaginatedList<GetAllUsersQueryResponse>>;
