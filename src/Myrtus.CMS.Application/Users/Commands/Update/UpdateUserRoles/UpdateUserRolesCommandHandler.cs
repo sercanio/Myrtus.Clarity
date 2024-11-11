@@ -3,6 +3,7 @@ using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
+using Myrtus.CMS.Application.Enums;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;

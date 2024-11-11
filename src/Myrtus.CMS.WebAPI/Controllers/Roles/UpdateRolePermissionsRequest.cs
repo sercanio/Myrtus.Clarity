@@ -1,5 +1,5 @@
-﻿using Myrtus.CMS.Domain.Roles;
+﻿using Myrtus.CMS.Application.Enums;
 
 namespace Myrtus.CMS.WebAPI.Controllers.UserRoles;
 
-public sealed record UpdateRolePermissionsRequest(ICollection<Permission> permissions);
+public sealed record UpdateRolePermissionsRequest(Guid PermissionId, OperationEnum Operation);

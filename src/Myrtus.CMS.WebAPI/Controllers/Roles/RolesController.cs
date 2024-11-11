@@ -79,14 +79,14 @@ public class RolesController : BaseController
 
     [HttpPatch("{roleId}/permissions")]
     [HasPermission(Permissions.RolesUpdate)]
-    public async Task<IActionResult> UpdateRole(
-        UpdateRolePermissionsRequest request,
-        Guid roleId,
+    public async Task<IActionResult> UpdateRolePermissions(
+        [FromBody] UpdateRolePermissionsRequest request,
+        [FromRoute] Guid roleId,
         CancellationToken cancellationToken = default)
     {
-        var command = new UpdateRoleCommand(roleId, request.permissions);
+        var command = new UpdateRolePermissionsCommand(roleId, request.PermissionId, request.Operation);
 
-        Result<UpdateRoleCommandResponse> result = await _sender.Send(command, cancellationToken);
+        Result<UpdateRolePermissionsCommandResponse> result = await _sender.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -95,6 +95,7 @@ public class RolesController : BaseController
 
         return Ok(result.Value);
     }
+
 
     [HttpDelete("{roleId}")]
     [HasPermission(Permissions.RolesDelete)]

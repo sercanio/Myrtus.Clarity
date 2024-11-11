@@ -16,7 +16,7 @@ public sealed class Permission : Entity
 
     public static readonly Permission PermissionsRead = new(Guid.Parse("0eeb5f27-10fd-430a-9257-a8457107141a"), "permissions", "permissions:read");
 
-    private Permission(Guid id, string feature, string name)
+    public Permission(Guid id, string feature, string name)
     {
         Id = id;
         Feature = feature;
@@ -28,7 +28,7 @@ public sealed class Permission : Entity
         Id = id;
     }
 
-    private Permission() { }
+    public Permission() { }
 
     public Guid Id { get; init; }
     public string Feature { get; set; }
