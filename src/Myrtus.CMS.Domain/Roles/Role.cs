@@ -12,7 +12,7 @@ public sealed class Role : Entity
         Name = name;
     }
 
-    public string Name { get; init; }
+    public string Name { get; set; }
 
     public ICollection<User> Users { get; set; }
     public ICollection<Permission> Permissions { get; set; }
@@ -24,6 +24,24 @@ public sealed class Role : Entity
             Guid.NewGuid(),
             Name);
 
+        return role;
+    }
+
+    public static Role ChangeName(Role role, string name)
+    {
+        role.Name = name;
+        return role;
+    }
+
+    public static Role AddPermission(Role role, Permission permission)
+    {
+        role.Permissions.Add(permission);
+        return role;
+    }
+
+    public static Role RemovePermission(Role role, Permission permission)
+    {
+        role.Permissions.Remove(permission);
         return role;
     }
 }

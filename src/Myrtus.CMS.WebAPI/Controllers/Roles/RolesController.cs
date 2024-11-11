@@ -6,11 +6,11 @@ using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
-using Myrtus.CMS.Application.Roles.Commands.Update;
 using Myrtus.CMS.Application.Roles.Queries.GetRoleById;
 using Myrtus.CMS.Application.Roles.Commands.Delete;
 using Myrtus.CMS.Application.Roles.Commands.Create;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.CMS.Application.Roles.Commands.Update.UpdatePermissions;
+using Myrtus.CMS.Application.Roles.Commands.Update.UpdateRoleName;
 
 namespace Myrtus.CMS.WebAPI.Controllers.UserRoles;
 
@@ -32,15 +32,9 @@ public class RolesController : BaseController
         CancellationToken cancellationToken = default)
     {
         var query = new GetAllRolesQuery(pageIndex, pageSize);
-
         Result<IPaginatedList<GetAllRolesQueryResponse>> result = await _sender.Send(query, cancellationToken);
 
-        if (!result.IsSuccess)
-        {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
-
-        return Ok(result.Value);
+        return result.IsSuccess ? Ok(result.Value) : _errorHandlingService.HandleErrorResponse(result);
     }
 
     [HttpPost]
@@ -50,15 +44,9 @@ public class RolesController : BaseController
         CancellationToken cancellationToken = default)
     {
         var command = new CreateRoleCommand(request.Name);
-
         Result<CreateRoleCommandResponse> result = await _sender.Send(command, cancellationToken);
 
-        if (!result.IsSuccess)
-        {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
-
-        return Ok(result.Value);
+        return result.IsSuccess ? Ok(result.Value) : _errorHandlingService.HandleErrorResponse(result);
     }
 
     [HttpGet("{roleId}")]
@@ -66,15 +54,9 @@ public class RolesController : BaseController
     public async Task<IActionResult> GetRoleById([FromRoute] Guid roleId, CancellationToken cancellationToken = default)
     {
         var query = new GetRoleByIdQuery(roleId);
-
         Result<GetRoleByIdQueryResponse> result = await _sender.Send(query, cancellationToken);
 
-        if (!result.IsSuccess)
-        {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
-
-        return Ok(result.Value);
+        return result.IsSuccess ? Ok(result.Value) : _errorHandlingService.HandleErrorResponse(result);
     }
 
     [HttpPatch("{roleId}/permissions")]
@@ -85,17 +67,23 @@ public class RolesController : BaseController
         CancellationToken cancellationToken = default)
     {
         var command = new UpdateRolePermissionsCommand(roleId, request.PermissionId, request.Operation);
-
         Result<UpdateRolePermissionsCommandResponse> result = await _sender.Send(command, cancellationToken);
 
-        if (!result.IsSuccess)
-        {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
-
-        return Ok(result.Value);
+        return result.IsSuccess ? Ok(result.Value) : _errorHandlingService.HandleErrorResponse(result);
     }
 
+    [HttpPatch("{roleId}/name")]
+    [HasPermission(Permissions.RolesUpdate)]
+    public async Task<IActionResult> UpdateRoleName(
+        [FromBody] UpdateRoleNameRequest request,
+        [FromRoute] Guid roleId,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateRoleNameCommand(roleId, request.Name);
+        Result<UpdateRoleNameCommandResponse> result = await _sender.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : _errorHandlingService.HandleErrorResponse(result);
+    }
 
     [HttpDelete("{roleId}")]
     [HasPermission(Permissions.RolesDelete)]
@@ -104,14 +92,8 @@ public class RolesController : BaseController
         CancellationToken cancellationToken = default)
     {
         var command = new DeleteRoleCommand(roleId);
-
         Result<DeleteRoleCommandResponse> result = await _sender.Send(command, cancellationToken);
 
-        if (!result.IsSuccess)
-        {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
-
-        return Ok(result.Value);
+        return result.IsSuccess ? Ok(result.Value) : _errorHandlingService.HandleErrorResponse(result);
     }
 }

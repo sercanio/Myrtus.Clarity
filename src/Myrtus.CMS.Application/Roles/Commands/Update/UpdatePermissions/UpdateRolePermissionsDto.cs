@@ -1,6 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 
-namespace Myrtus.CMS.Application.Roles.Commands.Update;
+namespace Myrtus.CMS.Application.Roles.Commands.Update.UpdatePermissions;
 
 public sealed class UpdateRolePermissionsDto : Entity
 {
