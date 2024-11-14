@@ -10,15 +10,15 @@ public sealed class User : Entity
     private readonly List<Role> _roles = new();
     private readonly List<Blog> _blogs = new();
 
-    public FirstName FirstName { get; private set; }
-    public LastName LastName { get; private set; }
-    public Email Email { get; private set; }
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public string Email { get; private set; }
     public string IdentityId { get; private set; } = string.Empty;
 
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
     public IReadOnlyCollection<Blog> Blogs => _blogs.ToList();
 
-    private User(Guid id, FirstName firstName, LastName lastName, Email email)
+    private User(Guid id, string firstName, string lastName, string email)
         : base(id)
     {
         FirstName = firstName;
@@ -31,7 +31,7 @@ public sealed class User : Entity
     }
 
 
-    public static User Create(FirstName firstName, LastName lastName, Email email)
+    public static User Create(string firstName, string lastName, string email)
     {
         var user = new User(Guid.NewGuid(), firstName, lastName, email);
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
@@ -39,7 +39,7 @@ public sealed class User : Entity
         return user;
     }
 
-    public static User CreateWithoutRolesForSeeding(FirstName firstName, LastName lastName, Email email)
+    public static User CreateWithoutRolesForSeeding(string firstName, string lastName, string email)
     {
         return new User(Guid.NewGuid(), firstName, lastName, email);
     }

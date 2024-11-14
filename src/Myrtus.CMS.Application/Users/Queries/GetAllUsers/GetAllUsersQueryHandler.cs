@@ -29,9 +29,9 @@ public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, 
 
         var mappedUsers = users.Items.Select(user => new GetAllUsersQueryResponse(
             user.Id,
-            user.Email.Value,
-            user.FirstName.Value,
-            user.LastName.Value,
+            user.Email,
+            user.FirstName,
+            user.LastName,
             user.Roles.Where(role => role.DeletedOnUtc == null).Select(role => new LoggedInUserRolesDto(role.Id, role.Name)).ToList()
         )).ToList();
 

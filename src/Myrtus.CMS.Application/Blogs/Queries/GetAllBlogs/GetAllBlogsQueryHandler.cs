@@ -30,9 +30,9 @@ public sealed class GetAllBlogsQueryHandler : IRequestHandler<GetAllBlogsQuery, 
         {
             var ownerResponse = new GetUserQueryResponse(
                 blog.Owner.Id,
-                blog.Owner.Email.Value,
-                blog.Owner.FirstName.Value,
-                blog.Owner.LastName.Value
+                blog.Owner.Email,
+                blog.Owner.FirstName,
+                blog.Owner.LastName
             );
 
             return new GetBlogQueryResponse(

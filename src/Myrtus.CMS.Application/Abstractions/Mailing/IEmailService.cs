@@ -1,8 +1,6 @@
-﻿using Myrtus.CMS.Domain.Users;
-
-namespace Myrtus.CMS.Application.Abstractions.Mailing;
+﻿namespace Myrtus.CMS.Application.Abstractions.Mailing;
 
 public interface IEmailService
 {
-    Task SendAsync(Email recipient, string subject, string body);
+    Task SendAsync(string recipient, string subject, string body);
 }

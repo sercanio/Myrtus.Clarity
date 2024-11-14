@@ -61,9 +61,9 @@ public class UpdateBlogCommandHandlerTests
     {
         // Arrange
         var blogId = Guid.NewGuid();
-        var firstName = new FirstName("Test");
-        var lastName = new LastName("User");
-        var email = new Email("test@example.com");
+        var firstName = "Test";
+        var lastName = "User";
+        var email = "test@example.com";
         var owner = User.Create(firstName, lastName, email);
         var blog = Blog.Create(new Title("Old Title"), new Slug("old-slug"), owner);
 
@@ -91,7 +91,7 @@ public class UpdateBlogCommandHandlerTests
     {
         // Arrange
         var blogId = Guid.NewGuid();
-        var owner = User.Create(new FirstName("Test"), new LastName("User"), new Email("test@example.com"));
+        var owner = User.Create("Test", "User", "test@example.com");
         var blog = Blog.Create(new Title("Old Title"), new Slug("old-slug"), owner);
 
         _blogRepositoryMock.Setup(repo => repo.GetBlogByIdAsync(
@@ -118,7 +118,7 @@ public class UpdateBlogCommandHandlerTests
     {
         // Arrange
         var blogId = Guid.NewGuid();
-        var owner = User.Create(new FirstName("Test"), new LastName("User"), new Email("test@example.com"));
+        var owner = User.Create("Test", "User","test@example.com");
         var blog = Blog.Create(new Title("Old Title"), new Slug("old-slug"), owner);
 
         _blogRepositoryMock.Setup(repo => repo.GetBlogByIdAsync(

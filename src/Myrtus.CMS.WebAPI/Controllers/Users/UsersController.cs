@@ -8,6 +8,8 @@ using Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.CMS.Application.Users.Queries.GetUser;
 using Myrtus.CMS.Application.Users.Commands.Update.UpdateUserRoles;
+using Myrtus.CMS.Application.Users.Queries.GetAllUsersDynamic;
+using Myrtus.Clarity.Core.Infrastructure.Dynamic;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 
@@ -31,6 +33,30 @@ public class UsersController : BaseController
         var query = new GetAllUsersQuery(pageIndex, pageSize);
 
         Result<IPaginatedList<GetAllUsersQueryResponse>> result = await _sender.Send(query, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return _errorHandlingService.HandleErrorResponse(result);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("dynamic")]
+    [HasPermission(Permissions.UsersRead)]
+    public async Task<IActionResult> GetAllUsersDynamic(
+    [FromBody] DynamicQuery dynamicQuery,
+    [FromQuery] int pageIndex = 0,
+    [FromQuery] int pageSize = 10,
+    CancellationToken cancellationToken = default)
+    {
+        var query = new GetAllUsersDynamicQuery(
+            pageIndex,
+            pageSize,
+            dynamicQuery
+        );
+
+        Result<IPaginatedList<GetAllUsersDynamicQueryResponse>> result = await _sender.Send(query, cancellationToken);
 
         if (!result.IsSuccess)
         {

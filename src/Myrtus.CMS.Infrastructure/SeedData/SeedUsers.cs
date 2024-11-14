@@ -19,9 +19,9 @@ public static class SeedUsers
         using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
         var adminUser = User.CreateWithoutRolesForSeeding(
-            new FirstName("Admin"),
-            new LastName("Admin"),
-            new Email("admin@email.com"));
+            "Admin",
+            "Admin",
+            "admin@email.com");
 
         adminUser.SetIdentityId("d81eefe5-aa20-4d5c-9a22-6476d2774b1a");
         AdminId = adminUser.Id;
@@ -29,9 +29,9 @@ public static class SeedUsers
         var adminUserDto = new
         {
             Id = adminUser.Id,
-            FirstName = adminUser.FirstName.Value,
-            LastName = adminUser.LastName.Value,
-            Email = adminUser.Email.Value,
+            FirstName = adminUser.FirstName,
+            LastName = adminUser.LastName,
+            Email = adminUser.Email,
             IdentityId = adminUser.IdentityId,
             CreatedOnUtc = DateTime.UtcNow
         };

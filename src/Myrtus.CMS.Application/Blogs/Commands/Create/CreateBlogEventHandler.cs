@@ -41,7 +41,7 @@ public sealed class CreateBlogEventHandler : INotificationHandler<BlogCreatedEve
             return;
         }
 
-        _logger.LogInformation($"A new blog '{blog.Title.Value}' created by {blog.Owner.Email.Value}");
+        _logger.LogInformation($"A new blog '{blog.Title.Value}' created by {blog.Owner.Email}");
 
         await _emailService.SendAsync(
            blog.Owner.Email,

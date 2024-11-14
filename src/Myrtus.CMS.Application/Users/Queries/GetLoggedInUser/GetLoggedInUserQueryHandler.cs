@@ -37,9 +37,9 @@ internal sealed class GetLoggedInUserQueryHandler : IQueryHandler<GetLoggedInUse
         var userResponse = new UserResponse
         {
             Id = user.Id,
-            Email = user.Email.Value,
-            FirstName = user.FirstName.Value,
-            LastName = user.LastName.Value,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             Roles = mappedRoles
         };
 

@@ -28,9 +28,9 @@ public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCom
         CancellationToken cancellationToken)
     {
         var user = User.Create(
-            new FirstName(request.FirstName),
-            new LastName(request.LastName),
-            new Email(request.Email));
+            request.FirstName,
+            request.LastName,
+            request.Email);
 
         var identityId = await _authenticationService.RegisterAsync(
             user,

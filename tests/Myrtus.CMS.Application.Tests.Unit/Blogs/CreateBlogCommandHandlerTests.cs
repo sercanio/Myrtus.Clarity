@@ -35,9 +35,9 @@ public class CreateBlogCommandHandlerTests
     {
         // Arrange
         var ownerId = Guid.NewGuid();
-        var firstName = new FirstName("Test");
-        var lastName = new LastName("User");
-        var email = new Email("test@example.com");
+        var firstName = "Test";
+        var lastName = "User";
+        var email = "test@example.com";
         var owner = User.Create(firstName, lastName, email);
 
         var command = new CreateBlogCommand("NewTitle", "newslug", ownerId);
@@ -154,9 +154,9 @@ public class CreateBlogCommandHandlerTests
         var title = new Title(command.Title);
         var slug = new Slug(command.Slug);
 
-        var firstName = new FirstName("Test");
-        var lastName = new LastName("User");
-        var email = new Email("test@example.com");
+        var firstName = "Test";
+        var lastName = "User";
+        var email = "test@example.com";
         var user = User.Create(firstName, lastName, email);
 
         _userRepositoryMock
@@ -222,9 +222,9 @@ public class CreateBlogCommandHandlerTests
         var title = new Title(command.Title);
         var slug = new Slug(command.Slug);
 
-        var firstName = new FirstName("Test");
-        var lastName = new LastName("User");
-        var email = new Email("test@example.com");
+        var firstName = "Test";
+        var lastName = "User";
+        var email = "test@example.com";
         var user = User.Create(firstName, lastName, email);
 
         _userRepositoryMock

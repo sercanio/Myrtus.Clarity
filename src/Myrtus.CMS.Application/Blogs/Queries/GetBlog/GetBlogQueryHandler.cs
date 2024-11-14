@@ -31,9 +31,9 @@ public sealed class GetBlogQueryHandler : IQueryHandler<GetBlogQuery, GetBlogQue
         // Map the Owner entity to GetUserQueryResponse
         var ownerResponse = new GetUserQueryResponse(
             blog.Owner.Id,
-            blog.Owner.Email.Value,
-            blog.Owner.FirstName.Value,
-            blog.Owner.LastName.Value
+            blog.Owner.Email,
+            blog.Owner.FirstName,
+            blog.Owner.LastName
         // Add any additional properties if needed
         );
 
