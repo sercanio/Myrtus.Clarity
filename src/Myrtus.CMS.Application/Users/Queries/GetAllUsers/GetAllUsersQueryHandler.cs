@@ -5,7 +5,6 @@ using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Users.GetLoggedInUser;
-using Myrtus.CMS.Application.Users.Queries.GetUser;
 
 namespace Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 
