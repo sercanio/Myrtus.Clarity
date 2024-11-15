@@ -50,27 +50,38 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             int pageIndex = 0,
             int pageSize = 10,
             bool includeSoftDeleted = false,
+            Expression<Func<T, bool>>? predicate = null,
             CancellationToken cancellationToken = default,
             params Expression<Func<T, object>>[] include)
         {
             var query = DbContext.Set<T>().AsQueryable();
 
+            // Handle soft delete filtering
             if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
             {
                 var parameter = Expression.Parameter(typeof(T), "entity");
                 var property = Expression.Property(parameter, "DeletedOnUtc");
                 var comparison = Expression.Equal(property, Expression.Constant(null));
-                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
-
-                query = query.Where(lambda);
+                var softDeleteFilter = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+                query = query.Where(softDeleteFilter);
             }
 
-            foreach (var item in include)
+            // Apply additional filtering from the predicate if provided
+            if (predicate != null)
             {
-                query = query.Include(item);
+                query = query.Where(predicate);
             }
 
+            // Include related entities
+            foreach (var includeExpression in include)
+            {
+                query = query.Include(includeExpression);
+            }
+
+            // Get total count before pagination
             var count = await query.CountAsync(cancellationToken);
+
+            // Apply pagination
             var items = await query
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)

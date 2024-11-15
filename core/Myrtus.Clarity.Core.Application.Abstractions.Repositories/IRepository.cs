@@ -16,6 +16,7 @@ public interface IRepository<T>
         int pageIndex = 0,
         int pageSize = 10,
         bool includeSoftDeleted = false,
+        Expression<Func<T, bool>>? predicate = null,
         CancellationToken cancellationToken = default,
         params Expression<Func<T, object>>[] include);
 
