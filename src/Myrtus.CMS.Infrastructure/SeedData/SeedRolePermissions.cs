@@ -17,7 +17,7 @@ public static class SeedRolePermissions
 
         var rolePermissions = new List<object>
         {
-            new { RoleId = Role.Registered.Id, PermissionId = Permission.UsersRead.Id },
+            new { RoleId = Role.DefaultRole.Id, PermissionId = Permission.UsersRead.Id },
             new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersRead.Id },
             new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersCreate.Id },
             new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersUpdate.Id },

@@ -46,14 +46,19 @@ public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRo
             return Result.NotFound(RoleErrors.NotFound.Name);
         }
 
-        User updatedUser = request.Operation switch
+        switch (request.Operation)
         {
-            OperationEnum.Add => User.AddRole(user, role),
-            OperationEnum.Remove => User.RemoveRole(user, role),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+            case OperationEnum.Add:
+                user.AddRole(role);
+                break;
+            case OperationEnum.Remove:
+                user.RemoveRole(role);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
 
-        _userRepository.Update(updatedUser);
+        _userRepository.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         await _cacheService.RemoveAsync($"users-{user.Id}", cancellationToken);
 

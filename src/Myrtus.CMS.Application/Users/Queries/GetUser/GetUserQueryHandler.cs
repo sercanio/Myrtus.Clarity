@@ -28,7 +28,7 @@ public sealed class GetUserQueryHandler : IQueryHandler<GetUserQuery, GetUserQue
         }
 
         var mappedRoles = user.Roles.Select(role =>
-            new GetRoleByIdQueryResponse(role.Id, role.Name)).ToList();
+            new GetRoleByIdQueryResponse(role.Id, role.Name, role.IsDefault)).ToList();
 
         var response = new GetUserQueryResponse(user.Id, user.Email, user.FirstName, user.LastName, mappedRoles);
 

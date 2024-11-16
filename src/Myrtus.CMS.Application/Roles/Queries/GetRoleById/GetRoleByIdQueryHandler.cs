@@ -30,7 +30,11 @@ public sealed class GetRoleByIdQueryHandler : IQueryHandler<GetRoleByIdQuery, Ge
         var mappedPermissions = role.Permissions.Select(permission =>
             new GetAllPermissionsQueryResponse(permission.Id, permission.Feature, permission.Name)).ToList();
 
-        GetRoleByIdQueryResponse response = new GetRoleByIdQueryResponse(role.Id, role.Name, mappedPermissions);
+        GetRoleByIdQueryResponse response = new GetRoleByIdQueryResponse(
+            role.Id,
+            role.Name,
+            role.IsDefault,
+            mappedPermissions);
 
         return Result.Success(response);
     }

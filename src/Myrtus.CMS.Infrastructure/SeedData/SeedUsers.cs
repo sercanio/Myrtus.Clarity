@@ -45,7 +45,7 @@ public static class SeedUsers
 
         List<object> roleUsers = new()
         {
-            new { RoleId = Role.Registered.Id, UserId = adminUser.Id },
+            new { RoleId = Role.DefaultRole.Id, UserId = adminUser.Id },
             new { RoleId = Role.Admin.Id, UserId = adminUser.Id }
         };
 

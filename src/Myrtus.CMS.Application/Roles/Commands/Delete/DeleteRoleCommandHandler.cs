@@ -23,20 +23,26 @@ public sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleCommand
     public async Task<Result<DeleteRoleCommandResponse>> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.GetAsync(
-            predicate: role => role.Id == request.RoleId, 
+            predicate: role => role.Id == request.RoleId,
             cancellationToken: cancellationToken);
 
-        if(role is null)
+        if (role is null)
         {
             return Result.NotFound(RoleErrors.NotFound.Name);
         }
 
-        _roleRepository.Delete(role);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
+        try
+        {
+            _roleRepository.Delete(role);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
 
-        DeleteRoleCommandResponse response = new DeleteRoleCommandResponse(role.Id, role.Name);
-
-        return Result.Success<DeleteRoleCommandResponse>(response);
+            DeleteRoleCommandResponse response = new DeleteRoleCommandResponse(role.Id, role.Name);
+            return Result.Success(response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result.Forbidden(ex.Message);
+        }
     }
 }

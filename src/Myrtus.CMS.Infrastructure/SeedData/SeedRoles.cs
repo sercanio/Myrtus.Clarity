@@ -19,15 +19,15 @@ public static class SeedRoles
         ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
         using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
-        var registeredRole = Role.Registered;
+        var registeredRole = Role.DefaultRole;
         var adminRole = Role.Admin;
 
         RegisteredRoleId = registeredRole.Id;
         AdminRoleId = adminRole.Id;
 
         const string sql = """
-            INSERT INTO roles (id, name, created_on_utc)
-            VALUES (@Id, @Name, @CreatedOnUtc)
+            INSERT INTO roles (id, name, is_default, created_on_utc)
+            VALUES (@Id, @Name, @IsDefault, @CreatedOnUtc)
             ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
             """;
 
@@ -35,6 +35,7 @@ public static class SeedRoles
         {
             Id = registeredRole.Id,
             Name = registeredRole.Name,
+            IsDefault = true,
             CreatedOnUtc = DateTime.UtcNow
         });
 
@@ -42,6 +43,7 @@ public static class SeedRoles
         {
             Id = adminRole.Id,
             Name = adminRole.Name,
+            IsDefault = false,
             CreatedOnUtc = DateTime.UtcNow
         });
     }

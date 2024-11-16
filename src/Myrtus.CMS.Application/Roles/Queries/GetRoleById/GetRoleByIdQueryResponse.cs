@@ -6,18 +6,21 @@ public sealed record GetRoleByIdQueryResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
+    public bool IsDefault { get; set; }
     public ICollection<GetAllPermissionsQueryResponse> Permissions { get; set; } = [];
 
-    public GetRoleByIdQueryResponse(Guid ıd, string name)
+    public GetRoleByIdQueryResponse(Guid id, string name, bool isDefault)
     {
-        Id = ıd;
+        Id = id;
         Name = name;
+        IsDefault = isDefault;
     }
 
-    public GetRoleByIdQueryResponse(Guid ıd, string name, ICollection<GetAllPermissionsQueryResponse> permissions)
+    public GetRoleByIdQueryResponse(Guid id, string name, bool isDeault, ICollection<GetAllPermissionsQueryResponse> permissions)
     {
-        Id = ıd;
+        Id = id;
         Name = name;
+        IsDefault = isDeault;
         Permissions = permissions;
     }
 

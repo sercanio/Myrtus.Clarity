@@ -23,7 +23,7 @@ public sealed class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, 
             cancellationToken: cancellationToken);
 
         var mappedRoles = roles.Items.Select(role =>
-            new GetAllRolesQueryResponse(role.Id, role.Name)).ToList();
+            new GetAllRolesQueryResponse(role.Id, role.Name, role.IsDefault)).ToList();
 
         var paginatedList = new PaginatedList<GetAllRolesQueryResponse>(
             mappedRoles,

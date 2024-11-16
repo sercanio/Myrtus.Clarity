@@ -5,7 +5,7 @@ using Myrtus.CMS.Domain.Users.Events;
 
 namespace Myrtus.CMS.Domain.Users;
 
-public sealed class User : Entity
+public sealed class User : Entity, IAggregateRoot
 {
     private readonly List<Role> _roles = new();
     private readonly List<Blog> _blogs = new();
@@ -15,8 +15,8 @@ public sealed class User : Entity
     public string Email { get; private set; }
     public string IdentityId { get; private set; } = string.Empty;
 
-    public IReadOnlyCollection<Role> Roles => _roles.ToList();
-    public IReadOnlyCollection<Blog> Blogs => _blogs.ToList();
+    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+    public IReadOnlyCollection<Blog> Blogs => _blogs.AsReadOnly();
 
     private User(Guid id, string firstName, string lastName, string email)
         : base(id)
@@ -30,12 +30,11 @@ public sealed class User : Entity
     {
     }
 
-
     public static User Create(string firstName, string lastName, string email)
     {
-        var user = new User(Guid.NewGuid(), firstName, lastName, email);
+        User user = new(Guid.NewGuid(), firstName, lastName, email);
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
-        user._roles.Add(Role.Registered);
+        user.AddRole(Role.DefaultRole);
         return user;
     }
 
@@ -44,16 +43,40 @@ public sealed class User : Entity
         return new User(Guid.NewGuid(), firstName, lastName, email);
     }
 
-    public static User AddRole(User user, Role role)
+    public void AddRole(Role role)
     {
-        user._roles.Add(role);
-        return user;
+        if (_roles.Contains(role))
+        {
+            throw new InvalidOperationException("User already has this role.");
+        }
+        _roles.Add(role);
     }
 
-    public static User RemoveRole(User user, Role role)
+    public void RemoveRole(Role role)
     {
-        user._roles.Remove(role);
-        return user;
+        if (!_roles.Contains(role))
+        {
+            throw new InvalidOperationException("User does not have this role.");
+        }
+        _ = _roles.Remove(role);
+    }
+
+    public void AddBlog(Blog blog)
+    {
+        if (_blogs.Contains(blog))
+        {
+            throw new InvalidOperationException("User already has this blog.");
+        }
+        _blogs.Add(blog);
+    }
+
+    public void RemoveBlog(Blog blog)
+    {
+        if (!_blogs.Contains(blog))
+        {
+            throw new InvalidOperationException("User does not have this blog.");
+        }
+        _ = _blogs.Remove(blog);
     }
 
     public void SetIdentityId(string identityId)

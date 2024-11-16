@@ -49,6 +49,7 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    is_default = table.Column<bool>(type: "boolean", nullable: false),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -63,9 +64,9 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    first_name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    last_name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    email = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
                     identity_id = table.Column<string>(type: "text", nullable: false),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),

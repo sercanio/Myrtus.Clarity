@@ -20,7 +20,7 @@ public static class SeedRoleUser
         {
             new
             {
-                RoleId = Role.Registered.Id,
+                RoleId = Role.DefaultRole.Id,
                 UserId = adminId
             },
             new

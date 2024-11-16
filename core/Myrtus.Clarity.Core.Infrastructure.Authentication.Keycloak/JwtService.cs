@@ -9,7 +9,7 @@ namespace Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
 
 public sealed class JwtService : IJwtService
 {
-    private static readonly Error AuthenticationFailed = new(
+    private static readonly DomainError AuthenticationFailed = new(
         "Keycloak.AuthenticationFailed",
         401,
         "Failed to acquire access token do to authentication failure");
