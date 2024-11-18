@@ -4,13 +4,13 @@ using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Users.Queries.GetAllUsers;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
-using Myrtus.CMS.Application.Users.Queries.GetUser;
-using Myrtus.CMS.Application.Users.Commands.Update.UpdateUserRoles;
-using Myrtus.CMS.Application.Users.Queries.GetAllUsersDynamic;
 using Myrtus.Clarity.Core.Infrastructure.Dynamic;
-using Myrtus.CMS.Application.Users.Queries.GetAllUsersByRoleId;
+using Myrtus.CMS.Application.Features.Users.Queries.GetAllUsers;
+using Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersByRoleId;
+using Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersDynamic;
+using Myrtus.CMS.Application.Features.Users.Queries.GetUser;
+using Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Users;
 

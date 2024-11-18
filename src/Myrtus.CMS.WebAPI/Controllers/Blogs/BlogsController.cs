@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Blogs.Queries.GetBlog;
-using Myrtus.CMS.Application.Blogs.Commands.CreateBlog;
-using Myrtus.CMS.Application.Blogs.Queries.GetAllBlogs;
-using Myrtus.CMS.Application.Blogs.Commands.DeleteBlog;
-using Myrtus.CMS.Application.Blogs.Commands.UpdateBlog;
+using Myrtus.CMS.Application.Features.Blogs.Queries.GetAllBlogs;
+using Myrtus.CMS.Application.Features.Blogs.Commands.Create;
+using Myrtus.CMS.Application.Features.Blogs.Commands.Delete;
+using Myrtus.CMS.Application.Features.Blogs.Commands.Update;
+using Myrtus.CMS.Application.Features.Blogs.Queries.GetBlog;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Blogs;
 

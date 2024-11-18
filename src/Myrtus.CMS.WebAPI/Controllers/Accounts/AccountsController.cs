@@ -4,10 +4,9 @@ using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Accounts.LogInUser;
-using Myrtus.CMS.Application.Accounts.RegisterUser;
-using Myrtus.CMS.Application.Users.Queries.GetLoggedInUser;
-using Myrtus.CMS.Application.Users.GetLoggedInUser;
+using Myrtus.CMS.Application.Features.Accounts.LogInUser;
+using Myrtus.CMS.Application.Features.Accounts.RegisterUser;
+using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
 
 namespace Myrtus.CMS.WebAPI.Controllers.Accounts;
 

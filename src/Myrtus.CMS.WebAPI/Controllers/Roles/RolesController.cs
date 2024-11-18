@@ -5,12 +5,12 @@ using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Roles.Queries.GetAllRoles;
-using Myrtus.CMS.Application.Roles.Queries.GetRoleById;
-using Myrtus.CMS.Application.Roles.Commands.Delete;
-using Myrtus.CMS.Application.Roles.Commands.Create;
-using Myrtus.CMS.Application.Roles.Commands.Update.UpdatePermissions;
-using Myrtus.CMS.Application.Roles.Commands.Update.UpdateRoleName;
+using Myrtus.CMS.Application.Features.Roles.Commands.Create;
+using Myrtus.CMS.Application.Features.Roles.Commands.Delete;
+using Myrtus.CMS.Application.Features.Roles.Queries.GetAllRoles;
+using Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById;
+using Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions;
+using Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdateRoleName;
 
 namespace Myrtus.CMS.WebAPI.Controllers.UserRoles;
 

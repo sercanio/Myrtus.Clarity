@@ -5,7 +5,7 @@ using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Permissions.Queries.GetAllPermissions;
+using Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions;
 
 namespace Myrtus.CMS.WebAPI.Controllers.RolePermissions;
 
