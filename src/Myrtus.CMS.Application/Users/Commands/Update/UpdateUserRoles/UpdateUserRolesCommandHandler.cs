@@ -1,6 +1,9 @@
 ﻿using Ardalis.Result;
+using Microsoft.AspNetCore.Http;
+using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
+using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
+using Myrtus.Clarity.Core.Application.Abstractions.Commands;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Enums;
@@ -10,24 +13,33 @@ using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Users.Commands.Update.UpdateUserRoles;
 
-public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
+public sealed class UpdateUserRolesCommandHandler : BaseCommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
+    private readonly IUserContext _userContext;
 
-    public UpdateUserRolesCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository, IUnitOfWork unitOfWork, ICacheService cacheService)
+    public UpdateUserRolesCommandHandler(
+        IUserRepository userRepository,
+        IRoleRepository roleRepository,
+        IUnitOfWork unitOfWork,
+        ICacheService cacheService,
+        IUserContext userContext,
+        IAuditLogService auditLogService,
+        IHttpContextAccessor httpContextAccessor) : base(auditLogService, httpContextAccessor)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
+        _userContext = userContext;
     }
 
-    public async Task<Result<UpdateUserRolesCommandResponse>> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
+    public override async Task<Result<UpdateUserRolesCommandResponse>> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetAsync(
+        User? user = await _userRepository.GetAsync(
             predicate: user => user.Id == request.UserId,
             include: user => user.Roles,
             cancellationToken: cancellationToken);
@@ -37,7 +49,7 @@ public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRo
             return Result.NotFound(UserErrors.NotFound.Name);
         }
 
-        var role = await _roleRepository.GetAsync(
+        Role? role = await _roleRepository.GetAsync(
             predicate: role => role.Id == request.RoleId,
             cancellationToken: cancellationToken);
 
@@ -59,10 +71,20 @@ public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRo
         }
 
         _userRepository.Update(user);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        await _cacheService.RemoveAsync($"users-{user.Id}", cancellationToken);
+        _ = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var response = new UpdateUserRolesCommandResponse(role.Id, user.Id);
+        await _cacheService.RemoveAsync($"users-{user.Id}", cancellationToken);
+        await _cacheService.RemoveAsync($"auth:roles-{_userContext.IdentityId}", cancellationToken);
+        await _cacheService.RemoveAsync($"auth:permissions-{_userContext.IdentityId}", cancellationToken);
+
+        _ = request.Operation switch
+        {
+            OperationEnum.Add => LogAuditAsync("AddRole", "User", user.Email, $"Role '{role.Name}' added to user '{user.Email}'."),
+            OperationEnum.Remove => LogAuditAsync("RemoveRole", "User", user.Email, $"Role '{role.Name}' removed from user '{user.Email}'."),
+            _ => Task.CompletedTask
+        };
+
+        UpdateUserRolesCommandResponse response = new(role.Id, user.Id);
         return Result.Success(response);
     }
 }

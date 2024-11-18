@@ -28,6 +28,7 @@ using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Abstractions.Mailing;
 using Myrtus.CMS.Infrastructure.Mailing;
 using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
+using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 
 namespace Myrtus.CMS.Infrastructure;
 
@@ -57,6 +58,10 @@ public static class DependencyInjection
         AddApiVersioning(services);
 
         AddBackgroundJobs(services, configuration);
+
+        AddAuditing(services);
+
+        AddSignalR(services);
 
         return services;
     }
@@ -170,5 +175,15 @@ public static class DependencyInjection
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
         services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
+    }
+
+    private static void AddAuditing(IServiceCollection services)
+    {
+        services.AddTransient<IAuditLogService, AuditLogService>();
+    }
+
+    private static void AddSignalR(IServiceCollection services)
+    {
+        services.AddSignalR();
     }
 }

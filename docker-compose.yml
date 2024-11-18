@@ -64,5 +64,16 @@ services:
     environment:
       - RIHOST=redis://myrtuscms-redis:6379
 
+  myrtuscms-mongodb:
+    image: mongo:latest
+    container_name: MyrtusCMS.MongoDb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+    volumes:
+      - ./.containers/mongodb:/data/db
+    ports:
+      - 27017:27017
+       
 volumes:
   redis-insight:

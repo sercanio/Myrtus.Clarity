@@ -1,5 +1,8 @@
 ﻿using Ardalis.Result;
+using Microsoft.AspNetCore.Http;
+using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
+using Myrtus.Clarity.Core.Application.Abstractions.Commands;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Repositories;
@@ -8,7 +11,7 @@ using Myrtus.CMS.Domain.Blogs.Common;
 
 namespace Myrtus.CMS.Application.Blogs.Commands.UpdateBlog;
 
-public sealed class UpdateBlogCommandHandler : ICommandHandler<UpdateBlogCommand, UpdateBlogCommandResponse>
+public sealed class UpdateBlogCommandHandler : BaseCommandHandler<UpdateBlogCommand, UpdateBlogCommandResponse>
 {
     private readonly IBlogRepository _blogRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,14 +20,16 @@ public sealed class UpdateBlogCommandHandler : ICommandHandler<UpdateBlogCommand
     public UpdateBlogCommandHandler(
         IBlogRepository blogRepository,
         IUnitOfWork unitOfWork,
-        ICacheService cacheService)
+        ICacheService cacheService,
+        IAuditLogService auditLogService,
+        IHttpContextAccessor httpContextAccessor) : base(auditLogService, httpContextAccessor)
     {
         _blogRepository = blogRepository;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
     }
 
-    public async Task<Result<UpdateBlogCommandResponse>> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
+    public override async Task<Result<UpdateBlogCommandResponse>> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
     {
         Blog? blog = await _blogRepository.GetBlogByIdAsync(request.BlogId, include: blog => blog.Owner, cancellationToken: cancellationToken);
 
@@ -50,16 +55,18 @@ public sealed class UpdateBlogCommandHandler : ICommandHandler<UpdateBlogCommand
 
         _blogRepository.Update(blog);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        _ = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _cacheService.RemoveAsync($"blogs-{request.BlogId}", cancellationToken);
 
-        UpdateBlogCommandResponse response = new UpdateBlogCommandResponse(
+        await LogAuditAsync("UpdateBlog", "Blog", blog.Title.Value, $"Blog '{blog.Title.Value}' updated with '{request.Title}'.");
+
+        UpdateBlogCommandResponse response = new(
             blog.Id,
             blog.Title.Value,
             blog.Slug.Value,
             blog.Owner.Id,
-            blog.UpdatedOnUtc!.Value // Ensuring the value exists
+            blog.UpdatedOnUtc!.Value
         );
 
         return Result.Success(response);

@@ -11,11 +11,18 @@ using Myrtus.CMS.Domain;
 using Myrtus.CMS.WebAPI;
 using System.Text.Json.Serialization;
 using Myrtus.CMS.WebAPI.Extensions.SeedData;
+using Myrtus.Clarity.Core.Infrastructure.SignalR.Hubs;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
+
+// Configure MongoDB GuidRepresentation
+BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
@@ -135,6 +142,8 @@ app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.MapHub<AuditLogHub>("/auditLogHub");
 
 app.Run();
 

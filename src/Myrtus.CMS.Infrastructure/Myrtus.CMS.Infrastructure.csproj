@@ -23,10 +23,12 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Auditing\Myrtus.Clarity.Core.Application.Abstractions.Auditing.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Caching\Myrtus.Clarity.Core.Application.Abstractions.Caching.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Repositories\Myrtus.Clarity.Core.Application.Abstractions.Repositories.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Exceptions\Myrtus.Clarity.Core.Application.Exceptions.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Auditing\Myrtus.Clarity.Core.Infrastructure.Auditing.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Authorization\Myrtus.Clarity.Core.Infrastructure.Authorization.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Caching\Myrtus.Clarity.Core.Infrastructure.Caching.csproj" />
@@ -35,6 +37,7 @@
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.DynamicQuery\Myrtus.Clarity.Core.Infrastructure.DynamicQuery.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Outbox\Myrtus.Clarity.Core.Infrastructure.Outbox.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Pagination\Myrtus.Clarity.Core.Infrastructure.Pagination.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.SignalR\Myrtus.Clarity.Core.Infrastructure.SignalR.csproj" />
 		<ProjectReference Include="..\Myrtus.CMS.Application\Myrtus.CMS.Application.csproj" />
 	</ItemGroup>
 

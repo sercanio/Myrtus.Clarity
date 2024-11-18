@@ -14,27 +14,27 @@ internal sealed class AuthorizationService
         _dbContext = dbContext;
         _cacheService = cacheService;
     }
-public async Task<UserRolesResponse> GetRolesForUserAsync(string identityId)
-{
-    string cacheKey = $"auth:roles-{identityId}";
-    UserRolesResponse? cachedRoles = await _cacheService.GetAsync<UserRolesResponse>(cacheKey);
-    if (cachedRoles is not null)
+    public async Task<UserRolesResponse> GetRolesForUserAsync(string identityId)
     {
-        return cachedRoles;
-    }
-
-    UserRolesResponse roles = await _dbContext.Set<User>()
-        .Where(u => u.IdentityId == identityId)
-        .Select(u => new UserRolesResponse
+        string cacheKey = $"auth:roles-{identityId}";
+        UserRolesResponse? cachedRoles = await _cacheService.GetAsync<UserRolesResponse>(cacheKey);
+        if (cachedRoles is not null)
         {
-            UserId = u.Id,
-            Roles = u.Roles.Where(r => r.DeletedOnUtc == null).ToList()
-        })
-        .FirstAsync();
+            return cachedRoles;
+        }
 
-    await _cacheService.SetAsync(cacheKey, roles);
-    return roles;
-}
+        UserRolesResponse roles = await _dbContext.Set<User>()
+            .Where(u => u.IdentityId == identityId)
+            .Select(u => new UserRolesResponse
+            {
+                UserId = u.Id,
+                Roles = u.Roles.Where(r => r.DeletedOnUtc == null).ToList()
+            })
+            .FirstAsync();
+
+        await _cacheService.SetAsync(cacheKey, roles);
+        return roles;
+    }
 
     public async Task<HashSet<string>> GetPermissionsForUserAsync(string identityId)
     {
