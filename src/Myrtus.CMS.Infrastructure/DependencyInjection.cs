@@ -29,6 +29,9 @@ using Myrtus.CMS.Application.Abstractions.Mailing;
 using Myrtus.CMS.Infrastructure.Mailing;
 using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
+using MongoDB.Driver;
+using Myrtus.CMS.Application.Repositories.NoSQL;
+using Myrtus.CMS.Infrastructure.Repositories.NoSQL;
 
 namespace Myrtus.CMS.Infrastructure;
 
@@ -84,6 +87,16 @@ public static class DependencyInjection
             new SqlConnectionFactory(connectionString));
 
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+        // MongoDB configuration
+        string mongoConnectionString = configuration.GetConnectionString("MongoDb") ??
+                                       throw new ArgumentNullException(nameof(configuration));
+        string mongoDatabaseName = configuration.GetSection("MongoDb:Database").Value ??
+                                   throw new ArgumentNullException(nameof(configuration));
+
+        services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoConnectionString));
+        services.AddSingleton(sp => sp.GetRequiredService<IMongoClient>().GetDatabase(mongoDatabaseName));
+        services.AddScoped<INoSqlRepository<AuditLog>, NoSQLRepository<AuditLog>>(sp =>
+            new NoSQLRepository<AuditLog>(sp.GetRequiredService<IMongoDatabase>(), "AuditLogs"));
     }
 
     private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)
