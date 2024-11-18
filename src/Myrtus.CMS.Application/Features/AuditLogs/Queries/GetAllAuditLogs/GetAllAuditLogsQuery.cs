@@ -2,7 +2,7 @@
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.CMS.Application.Features.Roles.Queries.GetAllRoles;
 
-namespace Myrtus.CMS.Application.Features.AuditLogs.Queries;
+namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogs;
 
 public sealed record GetAllAuditLogsQuery(
     int PageIndex,

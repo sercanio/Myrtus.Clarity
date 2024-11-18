@@ -5,7 +5,7 @@ using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.CMS.Application.Repositories.NoSQL;
 
-namespace Myrtus.CMS.Application.Features.AuditLogs.Queries;
+namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogs;
 
 public class GetAllAuditLogsQueryHandler : IRequestHandler<GetAllAuditLogsQuery, Result<IPaginatedList<GetAllAuditLogsQueryResponse>>>
 {

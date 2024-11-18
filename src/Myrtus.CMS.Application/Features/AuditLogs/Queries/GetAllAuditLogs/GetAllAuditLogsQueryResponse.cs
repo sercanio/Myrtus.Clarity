@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Myrtus.CMS.Application.Features.AuditLogs.Queries;
+namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogs;
 
 public sealed record GetAllAuditLogsQueryResponse(
     Guid Id,
