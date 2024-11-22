@@ -1,11 +1,9 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Clock;
+﻿using Microsoft.EntityFrameworkCore;
+using Myrtus.Clarity.Core.Application.Abstractions.Clock;
 using Myrtus.Clarity.Core.Application.Exceptions;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Myrtus.CMS.Infrastructure.Configurations;
-using Myrtus.Infrastructure.Configurations;
 
 namespace Myrtus.CMS.Infrastructure;
 

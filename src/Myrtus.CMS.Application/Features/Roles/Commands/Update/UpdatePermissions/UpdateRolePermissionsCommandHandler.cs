@@ -1,41 +1,41 @@
 ﻿using Ardalis.Result;
-using Microsoft.AspNetCore.Http;
-using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.Clarity.Core.Application.Abstractions.Commands;
+using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
+using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Enums;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions;
 
-public sealed class UpdateRolePermissionsCommandHandler : BaseCommandHandler<UpdateRolePermissionsCommand, UpdateRolePermissionsCommandResponse>
+public sealed class UpdateRolePermissionsCommandHandler : ICommandHandler<UpdateRolePermissionsCommand, UpdateRolePermissionsCommandResponse>
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
     private readonly IUserContext _userContext;
 
     public UpdateRolePermissionsCommandHandler(
         IRoleRepository roleRepository,
+        IPermissionRepository permissionRepository,
+        IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
-        IPermissionRepository permissionRepository,
-        IUserContext userContext,
-        IAuditLogService auditLogService,
-        IHttpContextAccessor httpContextAccessor)
-        : base(auditLogService, httpContextAccessor)
+        IUserContext userContext)
     {
         _roleRepository = roleRepository;
+        _permissionRepository = permissionRepository;
+        _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
-        _permissionRepository = permissionRepository;
         _userContext = userContext;
     }
 
-    public override async Task<Result<UpdateRolePermissionsCommandResponse>> Handle(UpdateRolePermissionsCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UpdateRolePermissionsCommandResponse>> Handle(UpdateRolePermissionsCommand request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.GetAsync(
             predicate: r => r.Id == request.RoleId,
@@ -57,16 +57,19 @@ public sealed class UpdateRolePermissionsCommandHandler : BaseCommandHandler<Upd
             if (permissionToAdd is null)
                 return Result.NotFound($"Permission with ID {request.PermissionId} not found.");
 
-            role.Permissions.Add(permissionToAdd);
+            role.AddPermission(permissionToAdd);
         }
         else if (request.Operation == OperationEnum.Remove && permission is not null)
         {
-            role.Permissions.Remove(permission);
+            role.RemovePermission(permission);
         }
         else
         {
             return Result.Invalid();
         }
+
+        var user = await _userRepository.GetUserByIdAsync(_userContext.UserId, cancellationToken);
+        role.UpdatedBy = user!.Email;
 
         _roleRepository.Update(role);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -74,13 +77,6 @@ public sealed class UpdateRolePermissionsCommandHandler : BaseCommandHandler<Upd
         await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
         await _cacheService.RemoveAsync($"auth:roles-{role.Id}", cancellationToken);
         await _cacheService.RemoveAsync($"auth:permissions-{_userContext.IdentityId}", cancellationToken);
-
-        _ = request.Operation switch
-        {
-            OperationEnum.Add => LogAuditAsync("AddRolePermission", "Role", role.Name, $"Permission '{permissionToAdd.Name}' added to role."),
-            OperationEnum.Remove => LogAuditAsync("RemoveRolePermission", "Role", role.Name, $"Permission '{permission.Name}' removed from role."),
-            _ => Task.CompletedTask
-        };
 
         return Result.Success(new UpdateRolePermissionsCommandResponse(role.Id, request.PermissionId));
     }

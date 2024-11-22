@@ -26,8 +26,8 @@ public static class SeedRoles
         AdminRoleId = adminRole.Id;
 
         const string sql = """
-            INSERT INTO roles (id, name, is_default, created_on_utc)
-            VALUES (@Id, @Name, @IsDefault, @CreatedOnUtc)
+            INSERT INTO roles (id, name, is_default, created_by, created_on_utc)
+            VALUES (@Id, @Name, @IsDefault, @CreatedBy, @CreatedOnUtc)
             ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
             """;
 
@@ -36,6 +36,7 @@ public static class SeedRoles
             Id = registeredRole.Id,
             Name = registeredRole.Name,
             IsDefault = true,
+            CreatedBy = registeredRole.CreatedBy,
             CreatedOnUtc = DateTime.UtcNow
         });
 
@@ -44,6 +45,7 @@ public static class SeedRoles
             Id = adminRole.Id,
             Name = adminRole.Name,
             IsDefault = false,
+            CreatedBy = adminRole.CreatedBy,
             CreatedOnUtc = DateTime.UtcNow
         });
     }

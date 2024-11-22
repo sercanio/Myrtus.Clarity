@@ -56,7 +56,7 @@ internal sealed class BlogRepository : Repository<Blog>, IBlogRepository
         if (isSoftDelete)
         {
 
-            blog.MarkDeleted();
+            //blog.MarkDeleted();
             DbContext.Update(blog);
         }
         else

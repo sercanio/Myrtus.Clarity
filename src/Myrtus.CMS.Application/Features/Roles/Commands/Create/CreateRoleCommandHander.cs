@@ -1,41 +1,43 @@
 ﻿using Ardalis.Result;
-using Microsoft.AspNetCore.Http;
-using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
+using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.Clarity.Core.Application.Abstractions.Commands;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
+using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
+using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Features.Roles.Commands.Create;
 
-public sealed class CreateRoleCommandHander : BaseCommandHandler<CreateRoleCommand, CreateRoleCommandResponse>
+public sealed class CreateRoleCommandHander : ICommandHandler<CreateRoleCommand, CreateRoleCommandResponse>
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
+    private readonly IUserRepository _userRepository;
+    private readonly IUserContext _userContext;
 
     public CreateRoleCommandHander(
         IRoleRepository roleRepository,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
-        IAuditLogService auditLogService,
-        IHttpContextAccessor httpContextAccessor
-        ) : base(auditLogService, httpContextAccessor)
+        IUserRepository userRepository,
+        IUserContext userContext)
     {
         _roleRepository = roleRepository;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
+        _userRepository = userRepository;
+        _userContext = userContext;
     }
 
-    public override async Task<Result<CreateRoleCommandResponse>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateRoleCommandResponse>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
 
         bool nameExists = await _roleRepository.ExistsAsync(
                 predicate: role => role.Name == request.Name,
                 cancellationToken: cancellationToken);
-
 
         if (nameExists)
         {
@@ -44,13 +46,20 @@ public sealed class CreateRoleCommandHander : BaseCommandHandler<CreateRoleComma
 
         var role = Role.Create(request.Name);
 
+        User? user = await _userRepository.GetUserByIdAsync(_userContext.UserId,
+            cancellationToken: cancellationToken);
+        if (user is not null)
+        {
+            role.CreatedBy = user.Email;
+        }
+
         await _roleRepository.AddAsync(role);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await LogAuditAsync("CreateRole", "Role", role.Name, $"Role '{role.Name}' created.");
+        await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
 
-        CreateRoleCommandResponse response = new CreateRoleCommandResponse(
+        CreateRoleCommandResponse response = new(
             role.Id,
             role.Name);
 

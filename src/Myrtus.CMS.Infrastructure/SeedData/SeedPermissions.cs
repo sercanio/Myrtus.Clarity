@@ -29,8 +29,8 @@ public static class SeedPermissions
         };
 
         const string sql = """
-            INSERT INTO permissions (id, feature, name, created_on_utc, updated_on_utc)
-            VALUES (@Id, @Feature, @Name, @CreatedOnUtc, @UpdatedOnUtc)
+            INSERT INTO permissions (id, feature, name, created_by, created_on_utc)
+            VALUES (@Id, @Feature, @Name, @CreatedBy, @CreatedOnUtc)
             ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
             """;
 

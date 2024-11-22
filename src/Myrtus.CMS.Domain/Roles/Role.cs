@@ -1,4 +1,5 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
+using Myrtus.CMS.Domain.Roles.Events;
 using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Domain.Roles;
@@ -11,10 +12,13 @@ public sealed class Role : Entity, IAggregateRoot
         isDefault: true);
     public static readonly Role Admin = Create(Guid.Parse("4b606d86-3537-475a-aa20-26aadd8f5cfd"), "Admin", isDefault: false);
 
+    private readonly List<User> _users = new();
+    private readonly List<Permission> _permissions = new();
     public string Name { get; set; }
     public bool IsDefault { get; private set; }
-    public ICollection<User> Users { get; set; } = new List<User>();
-    public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
+
+    public IReadOnlyCollection<User> Users => _users.AsReadOnly();
+    public IReadOnlyCollection<Permission> Permissions => _permissions.AsReadOnly();
 
     public Role(Guid id, string name, bool isDefault = false) : base(id)
     {
@@ -22,11 +26,11 @@ public sealed class Role : Entity, IAggregateRoot
         IsDefault = isDefault;
     }
 
-    // Parameterless constructor for EF and JSON deserialization
     public Role() : base(Guid.NewGuid())
     {
     }
 
+    // Used for data seeding for default roles
     private static Role Create(Guid Id, string Name, bool isDefault = false)
     {
         Role role = new(Id, Name, isDefault);
@@ -36,24 +40,33 @@ public sealed class Role : Entity, IAggregateRoot
     public static Role Create(string Name, bool isDefault = false)
     {
         Role role = new(Guid.NewGuid(), Name, isDefault);
+        role.RaiseDomainEvent(new RoleCreatedDomainEvent(role.Id));
         return role;
     }
 
-    public static Role ChangeName(Role role, string name)
+    public static Role Delete(Role role)
     {
-        role.Name = name;
+        role.RaiseDomainEvent(new RoleDeletedDomainEvent(role.Id));
+        role.MarkDeleted();
         return role;
     }
 
-    public static Role AddPermission(Role role, Permission permission)
+    public void ChangeName(string newName)
     {
-        role.Permissions.Add(permission);
-        return role;
+        string oldName = this.Name;
+        this.Name = newName;
+        this.RaiseDomainEvent(new RoleNameUpdatedDomainEvent(this.Id, oldName));
     }
 
-    public static Role RemovePermission(Role role, Permission permission)
+    public void AddPermission(Permission permission)
     {
-        _ = role.Permissions.Remove(permission);
-        return role;
+        this._permissions.Add(permission);
+        this.RaiseDomainEvent(new RolePermissionAddedDomainEvent(this.Id, permission.Id));
+    }
+
+    public void RemovePermission(Permission permission)
+    {
+        _ = this._permissions.Remove(permission);
+        this.RaiseDomainEvent(new RolePermissionRemovedDomainEvent(this.Id, permission.Id));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
+using Newtonsoft.Json;
 
 namespace Myrtus.CMS.Domain.Roles;
 
@@ -16,23 +17,19 @@ public sealed class Permission : Entity
 
     public static readonly Permission PermissionsRead = new(Guid.Parse("0eeb5f27-10fd-430a-9257-a8457107141a"), "permissions", "permissions:read");
 
-    public Permission(Guid id, string feature, string name)
+    public Permission(Guid id, string feature, string name) : base(id)
     {
         Id = id;
         Feature = feature;
         Name = name;
     }
 
-    public Permission(Guid id)
+    public Permission()
     {
-        Id = id;
     }
-
-    public Permission() { }
 
     public Guid Id { get; init; }
     public string Feature { get; set; }
     public string Name { get; init; }
-
     public IReadOnlyCollection<Role> Roles { get; set; }
 }

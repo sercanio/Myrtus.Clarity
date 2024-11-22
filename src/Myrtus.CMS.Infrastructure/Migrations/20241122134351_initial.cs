@@ -34,6 +34,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     feature = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    created_by = table.Column<string>(type: "text", nullable: false),
+                    updated_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -50,6 +52,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     is_default = table.Column<bool>(type: "boolean", nullable: false),
+                    created_by = table.Column<string>(type: "text", nullable: false),
+                    updated_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -68,6 +72,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     last_name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     identity_id = table.Column<string>(type: "text", nullable: false),
+                    created_by = table.Column<string>(type: "text", nullable: false),
+                    updated_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -113,6 +119,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     update_reason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     deleted_by_id = table.Column<Guid>(type: "uuid", nullable: true),
                     delete_reason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    created_by = table.Column<string>(type: "text", nullable: false),
+                    updated_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -178,6 +186,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     card_image = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     reviewed = table.Column<bool>(type: "boolean", nullable: false),
+                    created_by = table.Column<string>(type: "text", nullable: false),
+                    updated_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -201,6 +211,8 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                     content = table.Column<string>(type: "text", nullable: false),
                     post_id = table.Column<Guid>(type: "uuid", nullable: false),
                     post_id1 = table.Column<Guid>(type: "uuid", nullable: true),
+                    created_by = table.Column<string>(type: "text", nullable: false),
+                    updated_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)

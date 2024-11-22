@@ -5,6 +5,7 @@ using Myrtus.CMS.Domain.Blogs.Common;
 using Myrtus.CMS.Domain.Blogs.Posts.Events;
 using Myrtus.CMS.Domain.Users.Events;
 using Myrtus.CMS.Domain.Common;
+using Myrtus.CMS.Domain.Blogs.Events;
 
 namespace Myrtus.CMS.Domain.Blogs;
 
@@ -39,8 +40,8 @@ public sealed class Blog : Entity
     public IReadOnlyCollection<Post> Posts => _posts.AsReadOnly();
 
     public static Blog Create(
-        Title title, 
-        Slug slug, 
+        Title title,
+        Slug slug,
         User owner)
     {
         Blog blog = new Blog(
@@ -48,6 +49,8 @@ public sealed class Blog : Entity
             title,
             slug,
             owner);
+
+        blog.RaiseDomainEvent(new BlogCreatedEvent(blog.Id));
 
         return blog;
     }

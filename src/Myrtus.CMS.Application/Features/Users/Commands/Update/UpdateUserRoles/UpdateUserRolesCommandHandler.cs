@@ -1,9 +1,7 @@
 ﻿using Ardalis.Result;
-using Microsoft.AspNetCore.Http;
-using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.Clarity.Core.Application.Abstractions.Commands;
+using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Enums;
@@ -13,7 +11,7 @@ using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles;
 
-public sealed class UpdateUserRolesCommandHandler : BaseCommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
+public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
@@ -26,9 +24,7 @@ public sealed class UpdateUserRolesCommandHandler : BaseCommandHandler<UpdateUse
         IRoleRepository roleRepository,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
-        IUserContext userContext,
-        IAuditLogService auditLogService,
-        IHttpContextAccessor httpContextAccessor) : base(auditLogService, httpContextAccessor)
+        IUserContext userContext)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
@@ -37,7 +33,7 @@ public sealed class UpdateUserRolesCommandHandler : BaseCommandHandler<UpdateUse
         _userContext = userContext;
     }
 
-    public override async Task<Result<UpdateUserRolesCommandResponse>> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UpdateUserRolesCommandResponse>> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
     {
         User? user = await _userRepository.GetAsync(
             predicate: user => user.Id == request.UserId,
@@ -70,19 +66,15 @@ public sealed class UpdateUserRolesCommandHandler : BaseCommandHandler<UpdateUse
                 throw new ArgumentOutOfRangeException();
         }
 
+        User? modifierUser = await _userRepository.GetUserByIdAsync(_userContext.UserId, cancellationToken);
+        user.UpdatedBy = modifierUser!.Email ?? "System";
+
         _userRepository.Update(user);
         _ = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _cacheService.RemoveAsync($"users-{user.Id}", cancellationToken);
         await _cacheService.RemoveAsync($"auth:roles-{_userContext.IdentityId}", cancellationToken);
         await _cacheService.RemoveAsync($"auth:permissions-{_userContext.IdentityId}", cancellationToken);
-
-        _ = request.Operation switch
-        {
-            OperationEnum.Add => LogAuditAsync("AddRole", "User", user.Email, $"Role '{role.Name}' added to user '{user.Email}'."),
-            OperationEnum.Remove => LogAuditAsync("RemoveRole", "User", user.Email, $"Role '{role.Name}' removed from user '{user.Email}'."),
-            _ => Task.CompletedTask
-        };
 
         UpdateUserRolesCommandResponse response = new(role.Id, user.Id);
         return Result.Success(response);

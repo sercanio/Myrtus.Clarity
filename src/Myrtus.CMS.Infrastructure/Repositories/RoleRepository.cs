@@ -1,5 +1,6 @@
 ﻿using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
+using Myrtus.CMS.Domain.Roles.Events;
 
 namespace Myrtus.CMS.Infrastructure.Repositories;
 
@@ -18,22 +19,5 @@ internal sealed class RoleRepository : Repository<Role>, IRoleRepository
     public override void Update(Role role)
     {
         DbContext.Update(role);
-    }
-
-    public override void Delete(Role role, bool isSoftDelete = true)
-    {
-        if (role.IsDefault)
-        {
-            throw new InvalidOperationException("Cannot delete default role.");
-        }
-        if (isSoftDelete)
-        {
-            role.MarkDeleted();
-            DbContext.Update(role);
-        }
-        else
-        {
-            DbContext.Remove(role);
-        }
     }
 }

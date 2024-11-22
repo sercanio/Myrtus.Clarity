@@ -35,6 +35,7 @@ public sealed class User : Entity, IAggregateRoot
         User user = new(Guid.NewGuid(), firstName, lastName, email);
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
         user.AddRole(Role.DefaultRole);
+        user.UpdatedBy = "System";
         return user;
     }
 
@@ -45,20 +46,14 @@ public sealed class User : Entity, IAggregateRoot
 
     public void AddRole(Role role)
     {
-        if (_roles.Contains(role))
-        {
-            throw new InvalidOperationException("User already has this role.");
-        }
-        _roles.Add(role);
+        this._roles.Add(role);
+        this.RaiseDomainEvent(new UserRoleAddedDomainEvent(this.Id, role.Id));
     }
 
     public void RemoveRole(Role role)
     {
-        if (!_roles.Contains(role))
-        {
-            throw new InvalidOperationException("User does not have this role.");
-        }
-        _ = _roles.Remove(role);
+        _ = this._roles.Remove(role);
+        this.RaiseDomainEvent(new UserRoleRemovedDomainEvent(this.Id, role.Id));
     }
 
     public void AddBlog(Blog blog)

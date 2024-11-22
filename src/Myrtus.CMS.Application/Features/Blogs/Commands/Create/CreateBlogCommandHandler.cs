@@ -1,7 +1,4 @@
 ﻿using Ardalis.Result;
-using Microsoft.AspNetCore.Http;
-using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
-using Myrtus.Clarity.Core.Application.Abstractions.Commands;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
@@ -12,7 +9,7 @@ using Myrtus.CMS.Domain.Users;
 
 namespace Myrtus.CMS.Application.Features.Blogs.Commands.Create;
 
-public sealed class CreateBlogCommandHandler : BaseCommandHandler<CreateBlogCommand, CreateBlogCommandResponse>
+public sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogCommand, CreateBlogCommandResponse>
 {
     private readonly IBlogRepository _blogRepository;
     private readonly IUserRepository _userRepository;
@@ -21,16 +18,14 @@ public sealed class CreateBlogCommandHandler : BaseCommandHandler<CreateBlogComm
     public CreateBlogCommandHandler(
         IBlogRepository blogRepository,
         IUserRepository userRepository,
-        IUnitOfWork unitOfWork,
-        IAuditLogService auditLogService,
-        IHttpContextAccessor httpContextAccessor) : base(auditLogService, httpContextAccessor)
+        IUnitOfWork unitOfWork)
     {
         _blogRepository = blogRepository;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
     }
 
-    public override async Task<Result<CreateBlogCommandResponse>> Handle(CreateBlogCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateBlogCommandResponse>> Handle(CreateBlogCommand request, CancellationToken cancellationToken)
     {
         User? user = await _userRepository.GetUserByIdAsync(request.UserId, cancellationToken: cancellationToken);
 
@@ -59,9 +54,7 @@ public sealed class CreateBlogCommandHandler : BaseCommandHandler<CreateBlogComm
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await LogAuditAsync("CreateBlog", "Blog", blog.Title.Value, $"Blog '{blog.Title.Value}' created.");
-
-        CreateBlogCommandResponse response = new CreateBlogCommandResponse(
+        CreateBlogCommandResponse response = new(
             blog.Id,
             blog.Title.Value,
             blog.Slug.Value,

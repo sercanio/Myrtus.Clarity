@@ -33,12 +33,13 @@ public static class SeedUsers
             LastName = adminUser.LastName,
             Email = adminUser.Email,
             IdentityId = adminUser.IdentityId,
+            CreatedBy = adminUser.CreatedBy,
             CreatedOnUtc = DateTime.UtcNow
         };
 
         const string userSql = """
-            INSERT INTO users (id, first_name, last_name, email, identity_id, created_on_utc)
-            VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedOnUtc)
+            INSERT INTO users (id, first_name, last_name, email, identity_id, created_by, created_on_utc)
+            VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedBy, @CreatedOnUtc)
             ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
             """;
         connection.Execute(userSql, adminUserDto);
