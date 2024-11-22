@@ -1,8 +1,6 @@
-﻿using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Domain.Blogs;
+using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 
 namespace Myrtus.CMS.Application;
 
@@ -25,3 +23,4 @@ public static class DependencyInjection
         return services;
     }
 }
+
