@@ -108,47 +108,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "blogs",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    slug = table.Column<string>(type: "text", nullable: false),
-                    owner_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    last_updated_by_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    update_reason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    deleted_by_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    delete_reason = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    created_by = table.Column<string>(type: "text", nullable: false),
-                    updated_by = table.Column<string>(type: "text", nullable: true),
-                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_blogs", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_blogs_users_deleted_by_id",
-                        column: x => x.deleted_by_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_blogs_users_last_updated_by_id",
-                        column: x => x.last_updated_by_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_blogs_users_owner_id",
-                        column: x => x.owner_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "role_user",
                 columns: table => new
                 {
@@ -172,111 +131,10 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "posts",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    slug = table.Column<string>(type: "text", nullable: false),
-                    summary = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    content = table.Column<string>(type: "text", nullable: false),
-                    blog_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    cover_image = table.Column<string>(type: "text", nullable: false),
-                    card_image = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
-                    reviewed = table.Column<bool>(type: "boolean", nullable: false),
-                    created_by = table.Column<string>(type: "text", nullable: false),
-                    updated_by = table.Column<string>(type: "text", nullable: true),
-                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_posts", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_posts_blogs_blog_id",
-                        column: x => x.blog_id,
-                        principalTable: "blogs",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "comments",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    content = table.Column<string>(type: "text", nullable: false),
-                    post_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    post_id1 = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_by = table.Column<string>(type: "text", nullable: false),
-                    updated_by = table.Column<string>(type: "text", nullable: true),
-                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    deleted_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_comments", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_comments_post_post_id",
-                        column: x => x.post_id,
-                        principalTable: "posts",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_comments_post_post_id1",
-                        column: x => x.post_id1,
-                        principalTable: "posts",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "ix_blogs_deleted_by_id",
-                table: "blogs",
-                column: "deleted_by_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_blogs_id",
-                table: "blogs",
-                column: "id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_blogs_last_updated_by_id",
-                table: "blogs",
-                column: "last_updated_by_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_blogs_owner_id",
-                table: "blogs",
-                column: "owner_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_comments_id",
-                table: "comments",
-                column: "id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_comments_post_id",
-                table: "comments",
-                column: "post_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_comments_post_id1",
-                table: "comments",
-                column: "post_id1");
-
             migrationBuilder.CreateIndex(
                 name: "ix_permission_role_roles_id",
                 table: "permission_role",
                 column: "roles_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_posts_blog_id",
-                table: "posts",
-                column: "blog_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_role_user_users_id",
@@ -300,9 +158,6 @@ namespace Myrtus.CMS.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "comments");
-
-            migrationBuilder.DropTable(
                 name: "outbox_messages");
 
             migrationBuilder.DropTable(
@@ -312,16 +167,10 @@ namespace Myrtus.CMS.Infrastructure.Migrations
                 name: "role_user");
 
             migrationBuilder.DropTable(
-                name: "posts");
-
-            migrationBuilder.DropTable(
                 name: "permissions");
 
             migrationBuilder.DropTable(
                 name: "roles");
-
-            migrationBuilder.DropTable(
-                name: "blogs");
 
             migrationBuilder.DropTable(
                 name: "users");
