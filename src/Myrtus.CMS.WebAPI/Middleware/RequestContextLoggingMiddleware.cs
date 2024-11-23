@@ -1,26 +1,27 @@
 ﻿using Microsoft.Extensions.Primitives;
 using Serilog.Context;
 
-namespace Myrtus.CMS.WebAPI.Middleware;
-
-internal sealed class RequestContextLoggingMiddleware(RequestDelegate next)
+namespace Myrtus.CMS.WebAPI.Middleware
 {
-    private const string CorrelationIdHeaderName = "X-Correlation-Id";
-
-    public Task Invoke(HttpContext context)
+    internal sealed class RequestContextLoggingMiddleware(RequestDelegate next)
     {
-        using (LogContext.PushProperty("CorrelationId", GetCorrelationId(context)))
+        private const string CorrelationIdHeaderName = "X-Correlation-Id";
+
+        public Task Invoke(HttpContext context)
         {
-            return next.Invoke(context);
+            using (LogContext.PushProperty("CorrelationId", GetCorrelationId(context)))
+            {
+                return next.Invoke(context);
+            }
         }
-    }
 
-    private static string GetCorrelationId(HttpContext context)
-    {
-        context.Request.Headers.TryGetValue(
-            CorrelationIdHeaderName,
-            out StringValues correlationId);
+        private static string GetCorrelationId(HttpContext context)
+        {
+            context.Request.Headers.TryGetValue(
+                CorrelationIdHeaderName,
+                out StringValues correlationId);
 
-        return correlationId.FirstOrDefault() ?? context.TraceIdentifier;
+            return correlationId.FirstOrDefault() ?? context.TraceIdentifier;
+        }
     }
 }

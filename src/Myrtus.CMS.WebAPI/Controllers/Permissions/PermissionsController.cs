@@ -6,35 +6,27 @@ using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions;
+using Myrtus.CMS.WebAPI.Attributes;
 
-namespace Myrtus.CMS.WebAPI.Controllers.RolePermissions;
-
-[ApiController]
-[ApiVersion(ApiVersions.V1)]
-[Route("api/v{version:apiVersion}/permissions")]
-public class PermissionsController : BaseController
+namespace Myrtus.CMS.WebAPI.Controllers.PermissionsController
 {
-    public PermissionsController(ISender sender, IErrorHandlingService errorHandlingService)
-        : base(sender, errorHandlingService)
+    [ApiController]
+    [ApiVersion(ApiVersions.V1)]
+    [Route("api/v{version:apiVersion}/permissions")]
+    public class PermissionsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
-    }
-
-    [HttpGet]
-    [HasPermission(Permissions.PermissionsRead)]
-    public async Task<IActionResult> GetAllPermissions(
-        [FromQuery] int pageIndex = 0,
-        [FromQuery] int pageSize = 10,
-        CancellationToken cancellationToken = default)
-    {
-        var query = new GetAllPermissionsQuery(pageIndex, pageSize);
-
-        Result<IPaginatedList<GetAllPermissionsQueryResponse>> result = await _sender.Send(query, cancellationToken);
-
-        if (!result.IsSuccess)
+        [HttpGet]
+        [HasPermission(Permissions.PermissionsRead)]
+        public async Task<IActionResult> GetAllPermissions(
+            [FromQuery] int pageIndex = 0,
+            [FromQuery] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
+            GetAllPermissionsQuery query = new(pageIndex, pageSize);
 
-        return Ok(result.Value);
+            Result<IPaginatedList<GetAllPermissionsQueryResponse>> result = await _sender.Send(query, cancellationToken);
+
+            return !result.IsSuccess ? _errorHandlingService.HandleErrorResponse(result) : Ok(result.Value);
+        }
     }
 }

@@ -2,28 +2,29 @@
 using Myrtus.CMS.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Myrtus.WebAPI.Extensions;
-
-internal static class ApplicationBuilderExtensions
+namespace Myrtus.CMS.WebAPI.Extensions
 {
-    public static void ApplyMigrations(this IApplicationBuilder app)
+    internal static class ApplicationBuilderExtensions
     {
-        using IServiceScope scope = app.ApplicationServices.CreateScope();
+        public static void ApplyMigrations(this IApplicationBuilder app)
+        {
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        using ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            using ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        dbContext.Database.Migrate();
-    }
+            dbContext.Database.Migrate();
+        }
 
-    public static void UseCustomExceptionHandler(this IApplicationBuilder app)
-    {
-        app.UseMiddleware<ExceptionHandlingMiddleware>();
-    }
+        public static void UseCustomExceptionHandler(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+        }
 
-    public static IApplicationBuilder UseRequestContextLogging(this IApplicationBuilder app)
-    {
-        app.UseMiddleware<RequestContextLoggingMiddleware>();
+        public static IApplicationBuilder UseRequestContextLogging(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<RequestContextLoggingMiddleware>();
 
-        return app;
+            return app;
+        }
     }
 }

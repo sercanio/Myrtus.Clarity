@@ -8,61 +8,53 @@ using Myrtus.CMS.Application.Services.Users;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Delete;
-
-public sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleCommand, DeleteRoleCommandResponse>
+namespace Myrtus.CMS.Application.Features.Roles.Commands.Delete
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly IUserService _userService;
-    private readonly IUserContext _userContext;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICacheService _cacheService;
-
-    public DeleteRoleCommandHandler(
+    public sealed class DeleteRoleCommandHandler(
         IRoleRepository roleRepository,
         IUserService userRepository,
         IUserContext userContext,
         IUnitOfWork unitOfWork,
-        ICacheService cacheService)
+        ICacheService cacheService) : ICommandHandler<DeleteRoleCommand, DeleteRoleCommandResponse>
     {
-        _roleRepository = roleRepository;
-        _userService = userRepository;
-        _userContext = userContext;
-        _unitOfWork = unitOfWork;
-        _cacheService = cacheService;
-    }
+        private readonly IRoleRepository _roleRepository = roleRepository;
+        private readonly IUserService _userService = userRepository;
+        private readonly IUserContext _userContext = userContext;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly ICacheService _cacheService = cacheService;
 
-    public async Task<Result<DeleteRoleCommandResponse>> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
-    {
-        var role = await _roleRepository.GetAsync(
-            predicate: role => role.Id == request.RoleId,
-            cancellationToken: cancellationToken);
-
-        if (role is null)
+        public async Task<Result<DeleteRoleCommandResponse>> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
         {
-            return Result.NotFound(RoleErrors.NotFound.Name);
-        }
+            Role? role = await _roleRepository.GetAsync(
+                predicate: role => role.Id == request.RoleId,
+                cancellationToken: cancellationToken);
 
-        User? user = await _userService.GetUserByIdAsync(
-            _userContext.UserId,
-            cancellationToken: cancellationToken);
-        if (user is not null)
-        {
-            role.UpdatedBy = user.Email;
-        }
+            if (role is null)
+            {
+                return Result.NotFound(RoleErrors.NotFound.Name);
+            }
 
-        try
-        {
-            _ = Role.Delete(role);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-            await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
+            User? user = await _userService.GetUserByIdAsync(
+                _userContext.UserId,
+                cancellationToken: cancellationToken);
+            if (user is not null)
+            {
+                role.UpdatedBy = user.Email;
+            }
 
-            DeleteRoleCommandResponse response = new DeleteRoleCommandResponse(role.Id, role.Name);
-            return Result.Success(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Result.Forbidden(ex.Message);
+            try
+            {
+                _ = Role.Delete(role);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
+
+                DeleteRoleCommandResponse response = new(role.Id, role.Name);
+                return Result.Success(response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Result.Forbidden(ex.Message);
+            }
         }
     }
 }

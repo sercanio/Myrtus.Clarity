@@ -8,69 +8,50 @@ using Myrtus.CMS.Application.Features.Accounts.LogInUser;
 using Myrtus.CMS.Application.Features.Accounts.RegisterUser;
 using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
 
-namespace Myrtus.CMS.WebAPI.Controllers.Accounts;
-
-[ApiController]
-[ApiVersion(ApiVersions.V1)]
-[Route("api/v{version:apiVersion}/accounts")]
-public class AccountsController : BaseController
+namespace Myrtus.CMS.WebAPI.Controllers.Accounts
 {
-    public AccountsController(ISender sender, IErrorHandlingService errorHandlingService)
-        : base(sender, errorHandlingService)
+    [ApiController]
+    [ApiVersion(ApiVersions.V1)]
+    [Route("api/v{version:apiVersion}/accounts")]
+    public class AccountsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
-    }
-
-    [HttpGet("me")]
-    //[HasPermission(Permissions.UsersRead)]
-    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
-    {
-        var query = new GetLoggedInUserQuery();
-        Result<UserResponse> result = await _sender.Send(query, cancellationToken);
-
-        if (!result.IsSuccess)
+        [HttpGet("me")]
+        //[HasPermission(Permissions.UsersRead)]
+        public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
         {
-            return _errorHandlingService.HandleErrorResponse(result);
+            GetLoggedInUserQuery query = new();
+            Result<UserResponse> result = await _sender.Send(query, cancellationToken);
+
+            return !result.IsSuccess ? _errorHandlingService.HandleErrorResponse(result) : Ok(result.Value);
         }
 
-        return Ok(result.Value);
-    }
-
-    [AllowAnonymous]
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(
-        RegisterUserRequest request,
-        CancellationToken cancellationToken)
-    {
-        var command = new RegisterUserCommand(
-            request.Email,
-            request.FirstName,
-            request.LastName,
-            request.Password);
-
-        Result<Guid> result = await _sender.Send(command, cancellationToken);
-
-        if (!result.IsSuccess)
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(
+            RegisterUserRequest request,
+            CancellationToken cancellationToken)
         {
-            return _errorHandlingService.HandleErrorResponse(result);
+            RegisterUserCommand command = new(
+                request.Email,
+                request.FirstName,
+                request.LastName,
+                request.Password);
+
+            Result<Guid> result = await _sender.Send(command, cancellationToken);
+
+            return !result.IsSuccess ? _errorHandlingService.HandleErrorResponse(result) : Ok(result.Value);
         }
 
-        return Ok(result.Value);
-    }
-
-    [AllowAnonymous]
-    [HttpPost("login")]
-    public async Task<IActionResult> LogIn(
-        LogInUserRequest request,
-        CancellationToken cancellationToken)
-    {
-        var command = new LogInUserCommand(request.Email, request.Password);
-        Result<AccessTokenResponse> result = await _sender.Send(command, cancellationToken);
-
-        if (!result.IsSuccess)
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> LogIn(
+            LogInUserRequest request,
+            CancellationToken cancellationToken)
         {
-            return _errorHandlingService.HandleErrorResponse(result);
-        }
+            LogInUserCommand command = new(request.Email, request.Password);
+            Result<AccessTokenResponse> result = await _sender.Send(command, cancellationToken);
 
-        return Ok(result.Value);
+            return !result.IsSuccess ? _errorHandlingService.HandleErrorResponse(result) : Ok(result.Value);
+        }
     }
 }

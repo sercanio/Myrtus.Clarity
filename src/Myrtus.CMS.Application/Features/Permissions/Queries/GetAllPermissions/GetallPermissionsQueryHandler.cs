@@ -3,38 +3,35 @@ using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Domain.Roles;
 
-namespace Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions;
-
-public class GetallPermissionsQueryHandler
-    : IQueryHandler<GetAllPermissionsQuery, IPaginatedList<GetAllPermissionsQueryResponse>>
+namespace Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions
 {
-    private readonly IPermissionRepository _permissionRepository;
-
-    public GetallPermissionsQueryHandler(IPermissionRepository permissionRepository)
+    public class GetallPermissionsQueryHandler(IPermissionRepository permissionRepository)
+                : IQueryHandler<GetAllPermissionsQuery, IPaginatedList<GetAllPermissionsQueryResponse>>
     {
-        _permissionRepository = permissionRepository;
-    }
+        private readonly IPermissionRepository _permissionRepository = permissionRepository;
 
-    public async Task<Result<IPaginatedList<GetAllPermissionsQueryResponse>>> Handle(
-        GetAllPermissionsQuery request,
-        CancellationToken cancellationToken)
-    {
-        var permissions = await _permissionRepository.GetAllAsync(
-            pageIndex: request.PageIndex,
-            pageSize: request.PageSize,
-            cancellationToken: cancellationToken);
+        public async Task<Result<IPaginatedList<GetAllPermissionsQueryResponse>>> Handle(
+            GetAllPermissionsQuery request,
+            CancellationToken cancellationToken)
+        {
+            IPaginatedList<Permission> permissions = await _permissionRepository.GetAllAsync(
+                pageIndex: request.PageIndex,
+                pageSize: request.PageSize,
+                cancellationToken: cancellationToken);
 
-        var mappedPermissions = permissions.Items.Select(permission =>
-            new GetAllPermissionsQueryResponse(permission.Id, permission.Feature, permission.Name)).ToList();
+            List<GetAllPermissionsQueryResponse> mappedPermissions = permissions.Items.Select(permission =>
+                new GetAllPermissionsQueryResponse(permission.Id, permission.Feature, permission.Name)).ToList();
 
-        var paginatedList = new PaginatedList<GetAllPermissionsQueryResponse>(
-            mappedPermissions,
-            permissions.TotalCount,
-            request.PageIndex,
-            request.PageSize
-        );
+            PaginatedList<GetAllPermissionsQueryResponse> paginatedList = new(
+                mappedPermissions,
+                permissions.TotalCount,
+                request.PageIndex,
+                request.PageSize
+            );
 
-        return Result.Success<IPaginatedList<GetAllPermissionsQueryResponse>>(paginatedList);
+            return Result.Success<IPaginatedList<GetAllPermissionsQueryResponse>>(paginatedList);
+        }
     }
 }

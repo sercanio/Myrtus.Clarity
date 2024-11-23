@@ -1,6 +1,7 @@
-﻿namespace Myrtus.CMS.WebAPI.Controllers;
-
-internal static class ApiVersions
+﻿namespace Myrtus.CMS.WebAPI.Controllers
 {
-    public const string V1 = "1";
+    internal static class ApiVersions
+    {
+        public const string V1 = "1";
+    }
 }

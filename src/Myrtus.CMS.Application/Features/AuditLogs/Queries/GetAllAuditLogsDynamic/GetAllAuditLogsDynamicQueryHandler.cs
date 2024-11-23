@@ -8,23 +8,17 @@ using Myrtus.CMS.Application.Repositories.NoSQL;
 
 namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogsDynamic
 {
-    public class GetAllAuditLogsDynamicQueryHandler : IRequestHandler<GetAllAuditLogsDynamicQuery, Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>>
+    public class GetAllAuditLogsDynamicQueryHandler(INoSqlRepository<AuditLog> auditLogRepository) : IRequestHandler<GetAllAuditLogsDynamicQuery, Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>>
     {
-        private readonly INoSqlRepository<AuditLog> _auditLogRepository;
-
-        public GetAllAuditLogsDynamicQueryHandler(INoSqlRepository<AuditLog> auditLogRepository)
-        {
-            _auditLogRepository = auditLogRepository;
-        }
+        private readonly INoSqlRepository<AuditLog> _auditLogRepository = auditLogRepository;
 
         public async Task<Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>> Handle(GetAllAuditLogsDynamicQuery request, CancellationToken cancellationToken)
         {
-            var auditLogs = await _auditLogRepository.GetAllAsync(cancellationToken);
+            IEnumerable<AuditLog> auditLogs = await _auditLogRepository.GetAllAsync(cancellationToken);
 
-            // Apply dynamic query (filtering and sorting)
-            var filteredAuditLogs = auditLogs.AsQueryable().ToDynamic(request.DynamicQuery);
+            IQueryable<AuditLog> filteredAuditLogs = auditLogs.AsQueryable().ToDynamic(request.DynamicQuery);
 
-            var paginatedAuditLogs = filteredAuditLogs
+            List<GetAllAuditLogsDynamicQueryResponse> paginatedAuditLogs = [.. filteredAuditLogs
                 .Skip(request.PageIndex * request.PageSize)
                 .Take(request.PageSize)
                 .Select(auditLog => new GetAllAuditLogsDynamicQueryResponse(
@@ -35,10 +29,9 @@ namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogsDynam
                     auditLog.EntityId,
                     auditLog.Timestamp,
                     auditLog.Details
-                ))
-                .ToList();
+                ))];
 
-            var paginatedList = new PaginatedList<GetAllAuditLogsDynamicQueryResponse>(
+            PaginatedList<GetAllAuditLogsDynamicQueryResponse> paginatedList = new(
                 paginatedAuditLogs,
                 filteredAuditLogs.Count(),
                 request.PageIndex,

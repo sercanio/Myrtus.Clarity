@@ -4,34 +4,32 @@ using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Domain.Roles;
 
-namespace Myrtus.CMS.Application.Features.Roles.Queries.GetAllRoles;
-
-public sealed class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Result<IPaginatedList<GetAllRolesQueryResponse>>>
+namespace Myrtus.CMS.Application.Features.Roles.Queries.GetAllRoles
 {
-    private readonly IRoleRepository _roleRepository;
-    public GetAllRolesQueryHandler(IRoleRepository roleRepository)
+    public sealed class GetAllRolesQueryHandler(IRoleRepository roleRepository) : IRequestHandler<GetAllRolesQuery, Result<IPaginatedList<GetAllRolesQueryResponse>>>
     {
-        _roleRepository = roleRepository;
-    }
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
-    public async Task<Result<IPaginatedList<GetAllRolesQueryResponse>>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
-    {
-        var roles = await _roleRepository.GetAllAsync(
-            pageIndex: request.PageIndex,
-            pageSize: request.PageSize,
-            cancellationToken: cancellationToken);
+        public async Task<Result<IPaginatedList<GetAllRolesQueryResponse>>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
+        {
+            IPaginatedList<Role> roles = await _roleRepository.GetAllAsync(
+                pageIndex: request.PageIndex,
+                pageSize: request.PageSize,
+                cancellationToken: cancellationToken);
 
-        var mappedRoles = roles.Items.Select(role =>
-            new GetAllRolesQueryResponse(role.Id, role.Name, role.IsDefault)).ToList();
+            List<GetAllRolesQueryResponse> mappedRoles = roles.Items.Select(role =>
+                new GetAllRolesQueryResponse(role.Id, role.Name, role.IsDefault)).ToList();
 
-        var paginatedList = new PaginatedList<GetAllRolesQueryResponse>(
-            mappedRoles,
-            roles.TotalCount,
-            request.PageIndex,
-            request.PageSize
-        );
+            PaginatedList<GetAllRolesQueryResponse> paginatedList = new(
+                mappedRoles,
+                roles.TotalCount,
+                request.PageIndex,
+                request.PageSize
+            );
 
-        return Result.Success<IPaginatedList<GetAllRolesQueryResponse>>(paginatedList);
+            return Result.Success<IPaginatedList<GetAllRolesQueryResponse>>(paginatedList);
+        }
     }
 }

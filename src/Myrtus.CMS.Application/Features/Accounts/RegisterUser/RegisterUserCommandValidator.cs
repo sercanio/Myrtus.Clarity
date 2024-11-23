@@ -1,17 +1,18 @@
 ﻿using FluentValidation;
 
-namespace Myrtus.CMS.Application.Features.Accounts.RegisterUser;
-
-internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+namespace Myrtus.CMS.Application.Features.Accounts.RegisterUser
 {
-    public RegisterUserCommandValidator()
+    internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
-        RuleFor(c => c.FirstName).NotEmpty();
+        public RegisterUserCommandValidator()
+        {
+            RuleFor(c => c.FirstName).NotEmpty();
 
-        RuleFor(c => c.LastName).NotEmpty();
+            RuleFor(c => c.LastName).NotEmpty();
 
-        RuleFor(c => c.Email).EmailAddress();
+            RuleFor(c => c.Email).EmailAddress();
 
-        RuleFor(c => c.Password).NotEmpty().MinimumLength(5);
+            RuleFor(c => c.Password).NotEmpty().MinimumLength(5);
+        }
     }
 }

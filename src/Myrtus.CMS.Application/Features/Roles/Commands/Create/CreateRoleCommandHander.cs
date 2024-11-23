@@ -8,61 +8,53 @@ using Myrtus.CMS.Application.Services.Users;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Create;
-
-public sealed class CreateRoleCommandHander : ICommandHandler<CreateRoleCommand, CreateRoleCommandResponse>
+namespace Myrtus.CMS.Application.Features.Roles.Commands.Create
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICacheService _cacheService;
-    private readonly IUserService _userService;
-    private readonly IUserContext _userContext;
-
-    public CreateRoleCommandHander(
+    public sealed class CreateRoleCommandHander(
         IRoleRepository roleRepository,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
         IUserService userRepository,
-        IUserContext userContext)
+        IUserContext userContext) : ICommandHandler<CreateRoleCommand, CreateRoleCommandResponse>
     {
-        _roleRepository = roleRepository;
-        _unitOfWork = unitOfWork;
-        _cacheService = cacheService;
-        _userService = userRepository;
-        _userContext = userContext;
-    }
+        private readonly IRoleRepository _roleRepository = roleRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly ICacheService _cacheService = cacheService;
+        private readonly IUserService _userService = userRepository;
+        private readonly IUserContext _userContext = userContext;
 
-    public async Task<Result<CreateRoleCommandResponse>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
-    {
+        public async Task<Result<CreateRoleCommandResponse>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+        {
 
-        bool nameExists = await _roleRepository.ExistsAsync(
-                predicate: role => role.Name == request.Name,
+            bool nameExists = await _roleRepository.ExistsAsync(
+                    predicate: role => role.Name == request.Name,
+                    cancellationToken: cancellationToken);
+
+            if (nameExists)
+            {
+                return Result.Conflict(RoleErrors.Overlap.Name);
+            }
+
+            Role role = Role.Create(request.Name);
+
+            User? user = await _userService.GetUserByIdAsync(_userContext.UserId,
                 cancellationToken: cancellationToken);
+            if (user is not null)
+            {
+                role.CreatedBy = user.Email;
+            }
 
-        if (nameExists)
-        {
-            return Result.Conflict(RoleErrors.Overlap.Name);
+            await _roleRepository.AddAsync(role);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
+
+            CreateRoleCommandResponse response = new(
+                role.Id,
+                role.Name);
+
+            return Result.Success(response);
         }
-
-        var role = Role.Create(request.Name);
-
-        User? user = await _userService.GetUserByIdAsync(_userContext.UserId,
-            cancellationToken: cancellationToken);
-        if (user is not null)
-        {
-            role.CreatedBy = user.Email;
-        }
-
-        await _roleRepository.AddAsync(role);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
-
-        CreateRoleCommandResponse response = new(
-            role.Id,
-            role.Name);
-
-        return Result.Success(response);
     }
 }

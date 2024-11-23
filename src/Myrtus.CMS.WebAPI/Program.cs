@@ -1,20 +1,20 @@
 using Asp.Versioning.ApiExplorer;
-using Myrtus.WebAPI.Extensions;
-using Myrtus.WebAPI.OpenApi;
-using Myrtus.CMS.Application;
-using Myrtus.CMS.Infrastructure;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Myrtus.CMS.Domain;
-using Myrtus.CMS.WebAPI;
-using System.Text.Json.Serialization;
-using Myrtus.CMS.WebAPI.Extensions.SeedData;
-using Myrtus.Clarity.Core.Infrastructure.SignalR.Hubs;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using Myrtus.Clarity.Core.Infrastructure.SignalR.Hubs;
+using Myrtus.CMS.Application;
+using Myrtus.CMS.Domain;
+using Myrtus.CMS.Infrastructure;
+using Myrtus.CMS.WebAPI;
+using Myrtus.CMS.WebAPI.Extensions;
+using Myrtus.CMS.WebAPI.Extensions.SeedData;
+using Myrtus.CMS.WebAPI.OpenApi;
+using Serilog;
+using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,7 @@ builder.Host.UseSerilog((context, loggerConfig) =>
 // Configure MongoDB GuidRepresentation
 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
-var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+string[]? allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
 builder.Services.AddCors(options =>
 {
@@ -47,7 +47,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    var swaggerOAuthSettings = builder.Configuration.GetSection("Swagger:OAuth2");
+    IConfigurationSection swaggerOAuthSettings = builder.Configuration.GetSection("Swagger:OAuth2");
 
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
@@ -97,16 +97,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        foreach (ApiVersionDescription description in app.DescribeApiVersions())
+        foreach ((string url, string name) in from ApiVersionDescription description in app.DescribeApiVersions()
+                                              let url = $"/swagger/{description.GroupName}/swagger.json"
+                                              let name = description.GroupName.ToUpperInvariant()
+                                              select (url, name))
         {
-            string url = $"/swagger/{description.GroupName}/swagger.json";
-            string name = description.GroupName.ToUpperInvariant();
             options.SwaggerEndpoint(url, name);
         }
 
-        var clientId = builder.Configuration["Keycloak:AuthClientId"];
-        var clientSecret = builder.Configuration["Keycloak:AuthClientSecret"];
-        var redirectUri = builder.Configuration["Keycloak:RedirectUri"];
+        string? clientId = builder.Configuration["Keycloak:AuthClientId"];
+        string? clientSecret = builder.Configuration["Keycloak:AuthClientSecret"];
+        string? redirectUri = builder.Configuration["Keycloak:RedirectUri"];
 
         options.OAuthClientId(clientId);
         options.OAuthClientSecret(clientSecret);

@@ -1,4 +1,5 @@
-﻿namespace Myrtus.CMS.WebAPI.Controllers.UserRoles;
-
-public sealed record CreateRoleRequest(
-    string Name);
+﻿namespace Myrtus.CMS.WebAPI.Attributes.Roles
+{
+    public sealed record CreateRoleRequest(
+        string Name);
+}

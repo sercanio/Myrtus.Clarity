@@ -5,52 +5,48 @@ using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Application.Services.Users;
+using Myrtus.CMS.Domain.Roles;
+using Myrtus.CMS.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdateRoleName;
-
-public sealed class UpdateRoleNameCommandHandler : ICommandHandler<UpdateRoleNameCommand, UpdateRoleNameCommandResponse>
+namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdateRoleName
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly IUserService _userService;
-    private readonly IUserContext _userContext;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICacheService _cacheService;
-
-    public UpdateRoleNameCommandHandler(
+    public sealed class UpdateRoleNameCommandHandler(
        IRoleRepository roleRepository,
        IUserService userRepository,
        IUserContext userContext,
        IUnitOfWork unitOfWork,
-       ICacheService cacheService)
+       ICacheService cacheService) : ICommandHandler<UpdateRoleNameCommand, UpdateRoleNameCommandResponse>
     {
-        _roleRepository = roleRepository;
-        _userService = userRepository;
-        _userContext = userContext;
-        _unitOfWork = unitOfWork;
-        _cacheService = cacheService;
-    }
+        private readonly IRoleRepository _roleRepository = roleRepository;
+        private readonly IUserService _userService = userRepository;
+        private readonly IUserContext _userContext = userContext;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly ICacheService _cacheService = cacheService;
 
-    public async Task<Result<UpdateRoleNameCommandResponse>> Handle(UpdateRoleNameCommand request, CancellationToken cancellationToken)
-    {
-        var role = await _roleRepository.GetAsync(
-            predicate: r => r.Id == request.RoleId,
-            include: r => r.Permissions,
-            cancellationToken: cancellationToken);
+        public async Task<Result<UpdateRoleNameCommandResponse>> Handle(UpdateRoleNameCommand request, CancellationToken cancellationToken)
+        {
+            Role? role = await _roleRepository.GetAsync(
+                predicate: r => r.Id == request.RoleId,
+                include: r => r.Permissions,
+                cancellationToken: cancellationToken);
 
-        if (role is null)
-            return Result.NotFound();
+            if (role is null)
+            {
+                return Result.NotFound();
+            }
 
-        role.ChangeName(request.Name);
+            role.ChangeName(request.Name);
 
-        var user = await _userService.GetUserByIdAsync(_userContext.UserId, cancellationToken);
-        role.UpdatedBy = user.Email;
+            User user = await _userService.GetUserByIdAsync(_userContext.UserId, cancellationToken);
+            role.UpdatedBy = user.Email;
 
-        _roleRepository.Update(role);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+            _roleRepository.Update(role);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
-        await _cacheService.RemoveAsync($"auth:roles-{role.Id}", cancellationToken);
+            await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
+            await _cacheService.RemoveAsync($"auth:roles-{role.Id}", cancellationToken);
 
-        return Result.Success(new UpdateRoleNameCommandResponse(role.Name));
+            return Result.Success(new UpdateRoleNameCommandResponse(role.Name));
+        }
     }
 }

@@ -5,67 +5,60 @@ using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
 using Newtonsoft.Json;
 
-namespace Myrtus.CMS.Infrastructure;
-
-public sealed class ApplicationDbContext : DbContext, IUnitOfWork
+namespace Myrtus.CMS.Infrastructure
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
-    {
-        TypeNameHandling = TypeNameHandling.All
-    };
-
-    private readonly IDateTimeProvider _dateTimeProvider;
-
-    public ApplicationDbContext(
+    public sealed class ApplicationDbContext(
         DbContextOptions options,
-        IDateTimeProvider dateTimeProvider)
-        : base(options)
+        IDateTimeProvider dateTimeProvider) : DbContext(options), IUnitOfWork
     {
-        _dateTimeProvider = dateTimeProvider;
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        base.OnModelCreating(modelBuilder);
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        try
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new()
         {
-            AddDomainEventsAsOutboxMessages();
+            TypeNameHandling = TypeNameHandling.All
+        };
 
-            int result = await base.SaveChangesAsync(cancellationToken);
-
-            return result;
-        }
-        catch (DbUpdateConcurrencyException ex)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            throw new ConcurrencyException("Concurrency exception occurred.", ex);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            base.OnModelCreating(modelBuilder);
         }
-    }
 
-    private void AddDomainEventsAsOutboxMessages()
-    {
-        var outboxMessages = ChangeTracker
-            .Entries<Entity>()
-            .Select(entry => entry.Entity)
-            .SelectMany(entity =>
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            try
             {
-                IReadOnlyList<IDomainEvent> domainEvents = entity.GetDomainEvents();
+                AddDomainEventsAsOutboxMessages();
 
-                entity.ClearDomainEvents();
+                int result = await base.SaveChangesAsync(cancellationToken);
 
-                return domainEvents;
-            })
-            .Select(domainEvent => new OutboxMessage(
-                Guid.NewGuid(),
-                _dateTimeProvider.UtcNow,
-                domainEvent.GetType().Name,
-                JsonConvert.SerializeObject(domainEvent, JsonSerializerSettings)))
-            .ToList();
+                return result;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new ConcurrencyException("Concurrency exception occurred.", ex);
+            }
+        }
 
-        AddRange(outboxMessages);
+        private void AddDomainEventsAsOutboxMessages()
+        {
+            List<OutboxMessage> outboxMessages = ChangeTracker
+                .Entries<Entity>()
+                .Select(entry => entry.Entity)
+                .SelectMany(entity =>
+                {
+                    IReadOnlyList<IDomainEvent> domainEvents = entity.GetDomainEvents();
+
+                    entity.ClearDomainEvents();
+
+                    return domainEvents;
+                })
+                .Select(domainEvent => new OutboxMessage(
+                    Guid.NewGuid(),
+                    dateTimeProvider.UtcNow,
+                    domainEvent.GetType().Name,
+                    JsonConvert.SerializeObject(domainEvent, JsonSerializerSettings)))
+                .ToList();
+
+            AddRange(outboxMessages);
+        }
     }
 }

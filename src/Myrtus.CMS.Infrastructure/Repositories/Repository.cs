@@ -1,24 +1,19 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.Clarity.Core.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.Application.Repositories;
+using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Dynamic;
+using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using System.Linq.Dynamic.Core;
-using Myrtus.CMS.Domain.Users;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Myrtus.CMS.Infrastructure.Repositories
 {
-    internal abstract class Repository<T> : IRepository<T>
+    internal abstract class Repository<T>(ApplicationDbContext dbContext) : IRepository<T>
         where T : Entity
     {
-        protected readonly ApplicationDbContext DbContext;
-
-        protected Repository(ApplicationDbContext dbContext)
-        {
-            DbContext = dbContext;
-        }
+        protected readonly ApplicationDbContext DbContext = dbContext;
 
         public async Task<T?> GetAsync(
             Expression<Func<T, bool>> predicate,
@@ -26,19 +21,19 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             CancellationToken cancellationToken = default,
             params Expression<Func<T, object>>[] include)
         {
-            var query = DbContext.Set<T>().AsQueryable();
+            IQueryable<T> query = DbContext.Set<T>().AsQueryable();
 
             if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
             {
-                var parameter = Expression.Parameter(typeof(T), "entity");
-                var property = Expression.Property(parameter, "DeletedOnUtc");
-                var comparison = Expression.Equal(property, Expression.Constant(null));
-                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+                ParameterExpression parameter = Expression.Parameter(typeof(T), "entity");
+                MemberExpression property = Expression.Property(parameter, "DeletedOnUtc");
+                BinaryExpression comparison = Expression.Equal(property, Expression.Constant(null));
+                Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
 
                 query = query.Where(lambda);
             }
 
-            foreach (var item in include)
+            foreach (Expression<Func<T, object>> item in include)
             {
                 query = query.Include(item);
             }
@@ -54,35 +49,30 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             CancellationToken cancellationToken = default,
             params Expression<Func<T, object>>[] include)
         {
-            var query = DbContext.Set<T>().AsQueryable();
+            IQueryable<T> query = DbContext.Set<T>().AsQueryable();
 
-            // Handle soft delete filtering
             if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
             {
-                var parameter = Expression.Parameter(typeof(T), "entity");
-                var property = Expression.Property(parameter, "DeletedOnUtc");
-                var comparison = Expression.Equal(property, Expression.Constant(null));
-                var softDeleteFilter = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+                ParameterExpression parameter = Expression.Parameter(typeof(T), "entity");
+                MemberExpression property = Expression.Property(parameter, "DeletedOnUtc");
+                BinaryExpression comparison = Expression.Equal(property, Expression.Constant(null));
+                Expression<Func<T, bool>> softDeleteFilter = Expression.Lambda<Func<T, bool>>(comparison, parameter);
                 query = query.Where(softDeleteFilter);
             }
 
-            // Apply additional filtering from the predicate if provided
             if (predicate != null)
             {
                 query = query.Where(predicate);
             }
 
-            // Include related entities
-            foreach (var includeExpression in include)
+            foreach (Expression<Func<T, object>> includeExpression in include)
             {
                 query = query.Include(includeExpression);
             }
 
-            // Get total count before pagination
-            var count = await query.CountAsync(cancellationToken);
+            int count = await query.CountAsync(cancellationToken);
 
-            // Apply pagination
-            var items = await query
+            List<T> items = await query
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
@@ -98,32 +88,27 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             CancellationToken cancellationToken = default,
             params Expression<Func<T, object>>[] include)
         {
-            var query = DbContext.Set<T>().AsQueryable();
+            IQueryable<T> query = DbContext.Set<T>().AsQueryable();
 
-            // Handle soft delete filtering
             if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
             {
-                var parameter = Expression.Parameter(typeof(T), "entity");
-                var property = Expression.Property(parameter, "DeletedOnUtc");
-                var comparison = Expression.Equal(property, Expression.Constant(null));
-                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+                ParameterExpression parameter = Expression.Parameter(typeof(T), "entity");
+                MemberExpression property = Expression.Property(parameter, "DeletedOnUtc");
+                BinaryExpression comparison = Expression.Equal(property, Expression.Constant(null));
+                Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
                 query = query.Where(lambda);
             }
 
-            // Include related entities
-            foreach (var includeExpression in include)
+            foreach (Expression<Func<T, object>> includeExpression in include)
             {
                 query = query.Include(includeExpression);
             }
 
-            // Apply dynamic query (filtering and sorting)
             query = query.ToDynamic(dynamicQuery);
 
-            // Get total count before pagination
-            var totalCount = await query.CountAsync(cancellationToken);
+            int totalCount = await query.CountAsync(cancellationToken);
 
-            // Apply pagination
-            var items = await query
+            List<T> items = await query
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
@@ -136,14 +121,14 @@ namespace Myrtus.CMS.Infrastructure.Repositories
             bool includeSoftDeleted = false,
             CancellationToken cancellationToken = default)
         {
-            var query = DbContext.Set<T>().AsQueryable();
+            IQueryable<T> query = DbContext.Set<T>().AsQueryable();
 
             if (!includeSoftDeleted && typeof(T).GetProperty("DeletedOnUtc") != null)
             {
-                var parameter = Expression.Parameter(typeof(T), "entity");
-                var property = Expression.Property(parameter, "DeletedOnUtc");
-                var comparison = Expression.Equal(property, Expression.Constant(null));
-                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+                ParameterExpression parameter = Expression.Parameter(typeof(T), "entity");
+                MemberExpression property = Expression.Property(parameter, "DeletedOnUtc");
+                BinaryExpression comparison = Expression.Equal(property, Expression.Constant(null));
+                Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
 
                 query = query.Where(lambda);
             }
@@ -163,11 +148,8 @@ namespace Myrtus.CMS.Infrastructure.Repositories
 
         public virtual void Delete(T entity, bool isSoftDelete = true)
         {
-            var property = typeof(T).GetProperty("MarkDeleted");
-            if (property != null)
-            {
-                property.SetValue(entity, null);
-            }
+            PropertyInfo? property = typeof(T).GetProperty("MarkDeleted");
+            property?.SetValue(entity, null);
 
             DbContext.Update(entity);
         }

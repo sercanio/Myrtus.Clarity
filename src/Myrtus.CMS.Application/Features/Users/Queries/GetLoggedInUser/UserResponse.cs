@@ -1,21 +1,29 @@
-﻿namespace Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
+﻿using System.Collections.ObjectModel;
 
-public sealed record UserResponse
+namespace Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser
 {
-    public Guid Id { get; set; }
-    public string Email { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public List<LoggedInUserRolesDto> Roles { get; set; }
-
-    public UserResponse(Guid id, string email, string firstName, string lastName, List<LoggedInUserRolesDto> roles)
+    public sealed record UserResponse
     {
-        Id = id;
-        Email = email;
-        FirstName = firstName;
-        LastName = lastName;
-        Roles = roles;
-    }
+        public Guid Id { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public ICollection<LoggedInUserRolesDto> Roles { get; set; } = [];
 
-    internal UserResponse() { }
+        public UserResponse(
+            Guid id,
+            string email,
+            string firstName,
+            string lastName,
+            Collection<LoggedInUserRolesDto> roles)
+        {
+            Id = id;
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            Roles = roles;
+        }
+
+        internal UserResponse() { }
+    }
 }

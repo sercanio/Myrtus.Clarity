@@ -1,57 +1,52 @@
-﻿using System.Net.Http.Json;
-using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.Models;
-using Myrtus.CMS.Application.Abstractions.Auth;
+﻿using Myrtus.CMS.Application.Services.Auth;
 using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Infrastructure.Authentication.Keycloak.Models;
+using Myrtus.CMS.Infrastructure.Authentication.Models;
+using System.Net.Http.Json;
 
-namespace Myrtus.CMS.Infrastructure.Authentication.Keycloak;
-
-public sealed class AuthService : IAuthService
+namespace Myrtus.CMS.Infrastructure.Authentication
 {
-    private const string PasswordCredentialType = "password";
-    private readonly HttpClient _httpClient;
-
-    public AuthService(HttpClient httpClient)
+    public sealed class AuthService(HttpClient httpClient) : IAuthService
     {
-        _httpClient = httpClient;
-    }
+        private const string PasswordCredentialType = "password";
+        private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<string> RegisterAsync(
-        User user,
-        string password,
-        CancellationToken cancellationToken = default)
-    {
-        var userRepresentationModel = UserRepresentationModel.FromUser(user);
-
-        userRepresentationModel.Credentials = new CredentialRepresentationModel[]
+        public async Task<string> RegisterAsync(
+            User user,
+            string password,
+            CancellationToken cancellationToken = default)
         {
-            new()
-            {
-                Value = password,
-                Temporary = false,
-                Type = PasswordCredentialType
-            }
-        };
+            UserRepresentationModel userRepresentationModel = UserRepresentationModel.FromUser(user);
 
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-            "users",
-            userRepresentationModel,
-            cancellationToken);
+            userRepresentationModel.Credentials =
+            [
+                new()
+                {
+                    Value = password,
+                    Temporary = false,
+                    Type = PasswordCredentialType
+                }
+            ];
 
-        return ExtractIdentityIdFromLocationHeader(response);
-    }
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                "users",
+                userRepresentationModel,
+                cancellationToken);
 
-    private static string ExtractIdentityIdFromLocationHeader(HttpResponseMessage httpResponseMessage)
-    {
-        const string usersSegmentName = "users/";
+            return ExtractIdentityIdFromLocationHeader(response);
+        }
 
-        string? locationHeader = (httpResponseMessage.Headers.Location?.PathAndQuery)
-                                 ?? throw new InvalidOperationException("Location header can't be null");
+        private static string ExtractIdentityIdFromLocationHeader(HttpResponseMessage httpResponseMessage)
+        {
+            const string usersSegmentName = "users/";
 
-        int userSegmentValueIndex = locationHeader.IndexOf(usersSegmentName, StringComparison.InvariantCultureIgnoreCase);
+            string? locationHeader = (httpResponseMessage.Headers.Location?.PathAndQuery)
+                                     ?? throw new InvalidOperationException("Location header can't be null");
 
-        string userIdentityId = locationHeader.Substring(userSegmentValueIndex + usersSegmentName.Length);
+            int userSegmentValueIndex = locationHeader.IndexOf(usersSegmentName, StringComparison.InvariantCultureIgnoreCase);
 
-        return userIdentityId;
+            string userIdentityId = locationHeader[(userSegmentValueIndex + usersSegmentName.Length)..];
+
+            return userIdentityId;
+        }
     }
 }

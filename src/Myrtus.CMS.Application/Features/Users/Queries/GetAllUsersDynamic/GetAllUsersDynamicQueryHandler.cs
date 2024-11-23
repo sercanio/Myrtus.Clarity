@@ -2,25 +2,21 @@
 using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
+using Myrtus.CMS.Application.Repositories;
+using System.Collections.ObjectModel;
 
 namespace Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersDynamic
 {
-    public sealed class GetAllUsersDynamicQueryHandler : IRequestHandler<GetAllUsersDynamicQuery, Result<IPaginatedList<GetAllUsersDynamicQueryResponse>>>
+    public sealed class GetAllUsersDynamicQueryHandler(IUserRepository userRepository) : IRequestHandler<GetAllUsersDynamicQuery, Result<IPaginatedList<GetAllUsersDynamicQueryResponse>>>
     {
-        private readonly IUserRepository _userRepository;
-
-        public GetAllUsersDynamicQueryHandler(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        private readonly IUserRepository _userRepository = userRepository;
 
         public async Task<Result<IPaginatedList<GetAllUsersDynamicQueryResponse>>> Handle(GetAllUsersDynamicQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var users = await _userRepository.GetAllDynamicAsync(
+                IPaginatedList<Domain.Users.User> users = await _userRepository.GetAllDynamicAsync(
                     request.DynamicQuery,
                     request.PageIndex,
                     request.PageSize,
@@ -28,18 +24,20 @@ namespace Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersDynamic
                     cancellationToken,
                     user => user.Roles);
 
-                var mappedUsers = users.Items.Select(user => new GetAllUsersDynamicQueryResponse(
+                List<GetAllUsersDynamicQueryResponse> mappedUsers = users.Items.Select(user => new GetAllUsersDynamicQueryResponse(
                     user.Id,
                     user.Email,
                     user.FirstName,
                     user.LastName,
-                    user.Roles
-                        .Where(role => role.DeletedOnUtc == null)
-                        .Select(role => new LoggedInUserRolesDto(role.Id, role.Name))
-                        .ToList()
+                    new Collection<LoggedInUserRolesDto>(
+                        user.Roles
+                            .Where(role => role.DeletedOnUtc == null)
+                            .Select(role => new LoggedInUserRolesDto(role.Id, role.Name))
+                            .ToList()
+                    )
                 )).ToList();
 
-                var paginatedList = new PaginatedList<GetAllUsersDynamicQueryResponse>(
+                PaginatedList<GetAllUsersDynamicQueryResponse> paginatedList = new(
                     mappedUsers,
                     users.TotalCount,
                     request.PageIndex,

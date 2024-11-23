@@ -5,42 +5,37 @@ using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Roles.Events;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions;
-
-internal class AddRolePermissionEventHandler : INotificationHandler<RolePermissionAddedDomainEvent>
+namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly IPermissionRepository _permissionRepository;
-    private readonly IAuditLogService _auditLogService;
-
-    public AddRolePermissionEventHandler(
+    internal class AddRolePermissionEventHandler(
         IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
-        IAuditLogService auditLogService)
+        IAuditLogService auditLogService) : INotificationHandler<RolePermissionAddedDomainEvent>
     {
-        _auditLogService = auditLogService;
-        _permissionRepository = permissionRepository;
-        _roleRepository = roleRepository;
-    }
-    public async Task Handle(RolePermissionAddedDomainEvent notification, CancellationToken cancellationToken)
-    {
-        Role? role = await _roleRepository.GetAsync(
-            predicate: role => role.Id == notification.RoleId,
-            cancellationToken: cancellationToken);
+        private readonly IRoleRepository _roleRepository = roleRepository;
+        private readonly IPermissionRepository _permissionRepository = permissionRepository;
+        private readonly IAuditLogService _auditLogService = auditLogService;
 
-        Permission? permission = await _permissionRepository.GetAsync(
-            predicate: permission => permission.Id == notification.PermissionId,
-            cancellationToken: cancellationToken);
-
-        AuditLog log = new()
+        public async Task Handle(RolePermissionAddedDomainEvent notification, CancellationToken cancellationToken)
         {
-            User = role!.UpdatedBy!,
-            Action = RoleDomainEvents.AddedPermission,
-            Entity = role.GetType().Name,
-            EntityId = role.Id.ToString(),
-            Details = $"{role.GetType().Name} '{role.Name}' has been granted permission '{permission!.Name}'."
-        };
-        await _auditLogService.LogAsync(log);
-    }
-}
+            Role? role = await _roleRepository.GetAsync(
+                predicate: role => role.Id == notification.RoleId,
+                cancellationToken: cancellationToken);
 
+            Permission? permission = await _permissionRepository.GetAsync(
+                predicate: permission => permission.Id == notification.PermissionId,
+                cancellationToken: cancellationToken);
+
+            AuditLog log = new()
+            {
+                User = role!.UpdatedBy!,
+                Action = RoleDomainEvents.AddedPermission,
+                Entity = role.GetType().Name,
+                EntityId = role.Id.ToString(),
+                Details = $"{role.GetType().Name} '{role.Name}' has been granted permission '{permission!.Name}'."
+            };
+            await _auditLogService.LogAsync(log);
+        }
+    }
+
+}

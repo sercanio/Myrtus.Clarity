@@ -20,182 +20,179 @@ using Myrtus.Clarity.Core.Infrastructure.Clock;
 using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
 using Myrtus.CMS.Infrastructure.Repositories;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
-using Myrtus.CMS.Infrastructure.Authentication.Keycloak;
-using Myrtus.CMS.Application.Abstractions.Auth;
 using Myrtus.CMS.Infrastructure.Authorization;
 using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Application.Abstractionss.Repositories;
-using Myrtus.CMS.Application.Abstractions.Mailing;
 using Myrtus.CMS.Infrastructure.Mailing;
 using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using MongoDB.Driver;
 using Myrtus.CMS.Application.Repositories.NoSQL;
 using Myrtus.CMS.Infrastructure.Repositories.NoSQL;
+using Myrtus.CMS.Application.Services.Auth;
+using Myrtus.CMS.Application.Services.Mailing;
+using Myrtus.CMS.Infrastructure.Authentication;
 
-namespace Myrtus.CMS.Infrastructure;
-
-public static class DependencyInjection
+namespace Myrtus.CMS.Infrastructure
 {
-    public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static class DependencyInjection
     {
-        if (configuration == null)
-            throw new ArgumentNullException(nameof(configuration), "Configuration cannot be null in AddInfrastructure.");
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration), "Configuration cannot be null in AddInfrastructure.");
+            }
 
-        services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>()
+                    .AddTransient<IEmailService, EmailService>();
 
-        services.AddTransient<IEmailService, EmailService>();
+            AddPersistence(services, configuration);
 
-        AddPersistence(services, configuration);
+            AddCaching(services, configuration);
 
-        AddCaching(services, configuration);
+            AddAuthentication(services, configuration);
 
-        AddAuthentication(services, configuration);
+            AddAuthorization(services);
 
-        AddAuthorization(services);
+            AddHealthChecks(services, configuration);
 
-        AddHealthChecks(services, configuration);
+            AddApiVersioning(services);
 
-        AddApiVersioning(services);
+            AddBackgroundJobs(services, configuration);
 
-        AddBackgroundJobs(services, configuration);
+            AddAuditing(services);
 
-        AddAuditing(services);
+            AddSignalR(services);
 
-        AddSignalR(services);
+            return services;
+        }
 
-        return services;
-    }
+        private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
+        {
+            string connectionString = configuration.GetConnectionString("Database") ??
+                                      throw new ArgumentNullException(nameof(configuration));
 
-    private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
-    {
-        string connectionString = configuration.GetConnectionString("Database") ??
-                                  throw new ArgumentNullException(nameof(configuration));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
+            services.AddScoped<IPermissionRepository, PermissionRepository>()
+                    .AddScoped<IUserRepository, UserRepository>()
+                    .AddScoped<IRoleRepository, RoleRepository>()
+                    .AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+            services.AddSingleton<ISqlConnectionFactory>(_ =>
+                new SqlConnectionFactory(connectionString));
 
-        services.AddSingleton<ISqlConnectionFactory>(_ =>
-            new SqlConnectionFactory(connectionString));
+            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
-        SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
-        // MongoDB configuration
-        string mongoConnectionString = configuration.GetConnectionString("MongoDb") ??
+            // MongoDB configuration
+            string mongoConnectionString = configuration.GetConnectionString("MongoDb") ??
+                                           throw new ArgumentNullException(nameof(configuration));
+            string mongoDatabaseName = configuration.GetSection("MongoDb:Database").Value ??
                                        throw new ArgumentNullException(nameof(configuration));
-        string mongoDatabaseName = configuration.GetSection("MongoDb:Database").Value ??
-                                   throw new ArgumentNullException(nameof(configuration));
 
-        services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoConnectionString));
-        services.AddSingleton(sp => sp.GetRequiredService<IMongoClient>().GetDatabase(mongoDatabaseName));
-        services.AddScoped<INoSqlRepository<AuditLog>, NoSQLRepository<AuditLog>>(sp =>
-            new NoSQLRepository<AuditLog>(sp.GetRequiredService<IMongoDatabase>(), "AuditLogs"));
-    }
+            services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoConnectionString))
+                    .AddSingleton(sp => sp.GetRequiredService<IMongoClient>().GetDatabase(mongoDatabaseName))
+                    .AddScoped<INoSqlRepository<AuditLog>, NoSqlRepository<AuditLog>>(sp =>
+                        new NoSqlRepository<AuditLog>(sp.GetRequiredService<IMongoDatabase>(), "AuditLogs"));
+        }
 
-    private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)
-    {
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
-
-        services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
-
-        services.ConfigureOptions<JwtBearerOptionsSetup>();
-
-        services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
-
-        services.AddTransient<AdminAuthorizationDelegatingHandler>();
-
-        services.AddHttpClient<IAuthService, AuthService>((serviceProvider, httpClient) =>
+        private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-            KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer();
 
-            httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
-        })
-        .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
+            services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
 
-        services.AddHttpClient<IJwtService, JwtService>((serviceProvider, httpClient) =>
-        {
-            KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            services.ConfigureOptions<JwtBearerOptionsSetup>();
 
-            httpClient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
-        });
+            services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
 
-        services.AddHttpContextAccessor();
+            services.AddTransient<AdminAuthorizationDelegatingHandler>();
 
-        services.AddScoped<IUserContext, UserContext>();
-    }
-
-    private static void AddAuthorization(IServiceCollection services)
-    {
-        services.AddScoped<AuthorizationService>();
-
-        services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
-
-        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
-
-        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-    }
-
-    private static void AddCaching(IServiceCollection services, IConfiguration configuration)
-    {
-        string connectionString = configuration.GetConnectionString("Cache") ??
-                                  throw new ArgumentNullException(nameof(configuration));
-
-        services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
-
-        services.AddSingleton<ICacheService, CacheService>();
-    }
-
-    private static void AddHealthChecks(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddHealthChecks()
-            .AddNpgSql(configuration.GetConnectionString("Database")!)
-            .AddRedis(configuration.GetConnectionString("Cache")!)
-            .AddUrlGroup(new Uri(configuration["KeyCloak:BaseUrl"]!), HttpMethod.Get, "keycloak");
-    }
-
-    private static void AddApiVersioning(IServiceCollection services)
-    {
-        services
-            .AddApiVersioning(options =>
+            services.AddHttpClient<IAuthService, AuthService>((serviceProvider, httpClient) =>
             {
-                options.DefaultApiVersion = new ApiVersion(1);
-                options.ReportApiVersions = true;
-                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+
+                httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
             })
-            .AddMvc()
-            .AddApiExplorer(options =>
+            .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
+
+            services.AddHttpClient<IJwtService, JwtService>((serviceProvider, httpClient) =>
             {
-                options.GroupNameFormat = "'v'V";
-                options.SubstituteApiVersionInUrl = true;
+                KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+
+                httpClient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
             });
-    }
 
-    private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
+            services.AddHttpContextAccessor();
 
-        services.AddQuartz();
+            services.AddScoped<IUserContext, UserContext>();
+        }
 
-        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+        private static void AddAuthorization(IServiceCollection services)
+        {
+            services.AddScoped<AuthorizationService>();
 
-        services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
-    }
+            services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>()
+                    .AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>()
+                    .AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+        }
 
-    private static void AddAuditing(IServiceCollection services)
-    {
-        services.AddTransient<IAuditLogService, AuditLogService>();
-    }
+        private static void AddCaching(IServiceCollection services, IConfiguration configuration)
+        {
+            string connectionString = configuration.GetConnectionString("Cache") ??
+                                      throw new ArgumentNullException(nameof(configuration));
 
-    private static void AddSignalR(IServiceCollection services)
-    {
-        services.AddSignalR();
+            services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
+
+            services.AddSingleton<ICacheService, CacheService>();
+        }
+
+        private static void AddHealthChecks(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHealthChecks()
+                    .AddNpgSql(configuration.GetConnectionString("Database")!)
+                    .AddRedis(configuration.GetConnectionString("Cache")!)
+                    .AddUrlGroup(new Uri(configuration["KeyCloak:BaseUrl"]!), HttpMethod.Get, "keycloak");
+        }
+
+        private static void AddApiVersioning(IServiceCollection services)
+        {
+            services
+                .AddApiVersioning(options =>
+                {
+                    options.DefaultApiVersion = new ApiVersion(1);
+                    options.ReportApiVersions = true;
+                    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                })
+                .AddMvc()
+                .AddApiExplorer(options =>
+                {
+                    options.GroupNameFormat = "'v'V";
+                    options.SubstituteApiVersionInUrl = true;
+                });
+        }
+
+        private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<OutboxOptions>(configuration.GetSection("Outbox"))
+                    .AddQuartz()
+                    .AddQuartzHostedService(options => options.WaitForJobsToComplete = true)
+                    .ConfigureOptions<ProcessOutboxMessagesJobSetup>();
+        }
+
+        private static void AddAuditing(IServiceCollection services)
+        {
+            services.AddTransient<IAuditLogService, AuditLogService>();
+        }
+
+        private static void AddSignalR(IServiceCollection services)
+        {
+            services.AddSignalR();
+        }
     }
 }

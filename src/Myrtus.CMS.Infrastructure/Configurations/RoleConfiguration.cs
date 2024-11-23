@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Myrtus.CMS.Domain.Roles;
 
-namespace Myrtus.CMS.Infrastructure.Configurations;
-
-internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
+namespace Myrtus.CMS.Infrastructure.Configurations
 {
-    public void Configure(EntityTypeBuilder<Role> builder)
+    internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
-        builder.ToTable("roles");
-
-        builder.HasKey(role => role.Id);
+        public void Configure(EntityTypeBuilder<Role> builder)
+        {
+            builder.ToTable("roles");
+            builder.HasKey(role => role.Id);
+        }
     }
 }

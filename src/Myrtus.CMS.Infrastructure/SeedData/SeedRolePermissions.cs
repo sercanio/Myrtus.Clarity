@@ -5,36 +5,39 @@ using Dapper;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 
-namespace Myrtus.CMS.Infrastructure.SeedData;
-
-public static class SeedRolePermissions
+namespace Myrtus.CMS.Infrastructure.SeedData
 {
-    public static async Task SeedRolePermissionsDataAsync(this IApplicationBuilder app)
+    public static class SeedRolePermissions
     {
-        using var scope = app.ApplicationServices.CreateScope();
-        var sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
-        using IDbConnection connection = sqlConnectionFactory.CreateConnection();
-
-        var rolePermissions = new List<object>
+        public static async Task SeedRolePermissionsDataAsync(this IApplicationBuilder app)
         {
-            new { RoleId = Role.DefaultRole.Id, PermissionId = Permission.UsersRead.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersRead.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersCreate.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersUpdate.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersDelete.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesRead.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesCreate.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesUpdate.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesDelete.Id },
-            new { RoleId = Role.Admin.Id, PermissionId = Permission.PermissionsRead.Id }
-        };
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
+            ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
+            using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
-        const string sql = """
-            INSERT INTO permission_role (roles_id, permissions_id)
-            VALUES (@RoleId, @PermissionId)
-            ON CONFLICT (roles_id, permissions_id) DO NOTHING; -- Avoid duplicate entries
-        """;
+            List<object> rolePermissions =
+                [
+                    new { RoleId = Role.DefaultRole.Id, PermissionId = Permission.UsersRead.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersRead.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersCreate.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersUpdate.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersDelete.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesRead.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesCreate.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesUpdate.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesDelete.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.PermissionsRead.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.AuditLogsRead.Id }
+                ];
 
-        connection.Execute(sql, rolePermissions);
+            const string sql =
+                    """
+                    INSERT INTO permission_role (roles_id, permissions_id)
+                    VALUES (@RoleId, @PermissionId)
+                    ON CONFLICT (roles_id, permissions_id) DO NOTHING; -- Avoid duplicate entries
+                    """;
+
+            await connection.ExecuteAsync(sql, rolePermissions);
+        }
     }
 }

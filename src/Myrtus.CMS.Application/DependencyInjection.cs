@@ -1,39 +1,38 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
-using Myrtus.CMS.Application.Abstractions.Auth;
 using Myrtus.CMS.Application.Services.Roles;
 using Myrtus.CMS.Application.Services.Users;
 
-namespace Myrtus.CMS.Application;
-
-public static class DependencyInjection
+namespace Myrtus.CMS.Application
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static class DependencyInjection
     {
-        AddMediatRBehaviors(services);
-        AddApplicationServices(services);
-
-        return services;
-    }
-
-    private static void AddMediatRBehaviors(this IServiceCollection services)
-    {
-        services.AddMediatR(configuration =>
+        public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+            AddMediatRBehaviors(services);
+            AddApplicationServices(services);
 
-            configuration.AddOpenBehavior(typeof(LoggingBehavior<,>));
+            return services;
+        }
 
-            configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        private static void AddMediatRBehaviors(this IServiceCollection services)
+        {
+            services.AddMediatR(configuration =>
+            {
+                configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
 
-            configuration.AddOpenBehavior(typeof(QueryCachingBehavior<,>));
-        });
-    }
+                configuration.AddOpenBehavior(typeof(LoggingBehavior<,>));
 
-    private static void AddApplicationServices(this IServiceCollection services)
-    {
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IUserService, UserService>();
+                configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+
+                configuration.AddOpenBehavior(typeof(QueryCachingBehavior<,>));
+            });
+        }
+
+        private static void AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddScoped<IRoleService, RoleService>()
+                    .AddScoped<IUserService, UserService>();
+        }
     }
 }
-

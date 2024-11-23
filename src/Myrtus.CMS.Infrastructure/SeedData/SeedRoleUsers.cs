@@ -5,37 +5,39 @@ using Dapper;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 using Myrtus.CMS.Domain.Roles;
 
-namespace Myrtus.CMS.Infrastructure.SeedData;
-
-public static class SeedRoleUser
+namespace Myrtus.CMS.Infrastructure.SeedData
 {
-    public static async Task SeedRoleUserDataAsync(this IApplicationBuilder app, Guid adminId)
+    public static class SeedRoleUser
     {
-        using IServiceScope scope = app.ApplicationServices.CreateScope();
-
-        ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
-        using IDbConnection connection = sqlConnectionFactory.CreateConnection();
-
-        List<object> roleUsers = new()
+        public static async Task SeedRoleUserDataAsync(this IApplicationBuilder app, Guid adminId)
         {
-            new
-            {
-                RoleId = Role.DefaultRole.Id,
-                UserId = adminId
-            },
-            new
-            {
-                RoleId = Role.Admin.Id,
-                UserId = adminId
-            }
-        };
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        const string sql = """
-            INSERT INTO role_user (roles_id, users_id)
-            VALUES(@RoleId, @UserId)
-            ON CONFLICT (roles_id, users_id) DO NOTHING;
-            """;
+            ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
+            using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
-        connection.Execute(sql, roleUsers);
+            List<object> roleUsers =
+                [
+                    new
+                    {
+                        RoleId = Role.DefaultRole.Id,
+                        UserId = adminId
+                    },
+                    new
+                    {
+                        RoleId = Role.Admin.Id,
+                        UserId = adminId
+                    }
+                ];
+
+            const string sql =
+                """
+                INSERT INTO role_user (roles_id, users_id)
+                VALUES(@RoleId, @UserId)
+                ON CONFLICT (roles_id, users_id) DO NOTHING;
+                """;
+
+            await connection.ExecuteAsync(sql, roleUsers);
+        }
     }
 }

@@ -1,15 +1,16 @@
-﻿namespace Myrtus.CMS.Application.Features.Roles.Commands.Create;
-
-public sealed record CreateRoleCommandResponse
+﻿namespace Myrtus.CMS.Application.Features.Roles.Commands.Create
 {
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-
-    public CreateRoleCommandResponse(Guid id, string name)
+    public sealed record CreateRoleCommandResponse
     {
-        Id = id;
-        Name = name;
-    }
+        public Guid Id { get; init; }
+        public string Name { get; init; } = string.Empty;
 
-    private CreateRoleCommandResponse() { }
+        public CreateRoleCommandResponse(Guid id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        private CreateRoleCommandResponse() { }
+    }
 }

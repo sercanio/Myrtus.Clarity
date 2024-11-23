@@ -1,3 +1,4 @@
-﻿namespace Myrtus.CMS.WebAPI.Controllers.UserRoles;
-
-public sealed record UpdateRoleNameRequest(string Name);
+﻿namespace Myrtus.CMS.WebAPI.Attributes.Roles
+{
+    public sealed record UpdateRoleNameRequest(string Name);
+}

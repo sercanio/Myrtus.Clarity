@@ -1,15 +1,21 @@
-﻿using Myrtus.CMS.Infrastructure.SeedData;
+﻿// This file is used by Code Analysis to maintain SuppressMessage
+// attributes that are applied to this project.
+// Project-level suppressions either have no target or are given
+// a specific target and scoped to a namespace, type, member, etc.
 
-namespace Myrtus.CMS.WebAPI.Extensions.SeedData;
+using Myrtus.CMS.Infrastructure.SeedData;
 
-public static class SeedDataExtensions
+namespace Myrtus.CMS.WebAPI.Extensions.SeedData
 {
-    public static async Task SeedDataAsync(this IApplicationBuilder app)
+    internal static class SeedDataExtensions
     {
-        await app.SeedPermissionsDataAsync();
-        await app.SeedRolesDataAsync();
-        await app.SeedRolePermissionsDataAsync();
-        var adminId = await app.SeedUsersDataAsync();
-        await app.SeedRoleUserDataAsync(adminId);
+        public static async Task SeedDataAsync(this IApplicationBuilder app)
+        {
+            await app.SeedPermissionsDataAsync();
+            await app.SeedRolesDataAsync();
+            await app.SeedRolePermissionsDataAsync();
+            Guid adminId = await app.SeedUsersDataAsync();
+            await app.SeedRoleUserDataAsync(adminId);
+        }
     }
 }

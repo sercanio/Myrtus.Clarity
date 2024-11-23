@@ -1,13 +1,14 @@
-﻿namespace Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
-
-public sealed record LoggedInUserRolesDto
+﻿namespace Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-
-    public LoggedInUserRolesDto(Guid id, string name)
+    public sealed record LoggedInUserRolesDto
     {
-        Id = id;
-        Name = name;
-    }
-};
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+
+        public LoggedInUserRolesDto(Guid id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+    };
+}

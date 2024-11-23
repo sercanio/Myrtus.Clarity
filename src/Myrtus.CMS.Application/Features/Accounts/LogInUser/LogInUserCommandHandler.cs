@@ -3,31 +3,22 @@ using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.CMS.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Accounts.LogInUser;
-
-internal sealed class LogInUserCommandHandler : ICommandHandler<LogInUserCommand, AccessTokenResponse>
+namespace Myrtus.CMS.Application.Features.Accounts.LogInUser
 {
-    private readonly IJwtService _jwtService;
-
-    public LogInUserCommandHandler(IJwtService jwtService)
+    internal sealed class LogInUserCommandHandler(IJwtService jwtService) : ICommandHandler<LogInUserCommand, AccessTokenResponse>
     {
-        _jwtService = jwtService;
-    }
+        private readonly IJwtService _jwtService = jwtService;
 
-    public async Task<Result<AccessTokenResponse>> Handle(
-        LogInUserCommand request,
-        CancellationToken cancellationToken)
-    {
-        Result<string> result = await _jwtService.GetAccessTokenAsync(
-            request.Email,
-            request.Password,
-            cancellationToken);
-
-        if (!result.IsSuccess)
+        public async Task<Result<AccessTokenResponse>> Handle(
+            LogInUserCommand request,
+            CancellationToken cancellationToken)
         {
-            return Result.NotFound(UserErrors.InvalidCredentials.Name);
-        }
+            Result<string> result = await _jwtService.GetAccessTokenAsync(
+                request.Email,
+                request.Password,
+                cancellationToken);
 
-        return new AccessTokenResponse(result.Value);
+            return !result.IsSuccess ? (Result<AccessTokenResponse>)Result.NotFound(UserErrors.InvalidCredentials.Name) : (Result<AccessTokenResponse>)new AccessTokenResponse(result.Value);
+        }
     }
 }

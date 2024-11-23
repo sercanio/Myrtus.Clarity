@@ -3,37 +3,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 
-namespace Myrtus.CMS.Infrastructure.Authorization;
-
-internal sealed class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
+namespace Myrtus.CMS.Infrastructure.Authorization
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public PermissionAuthorizationHandler(IServiceProvider serviceProvider)
+    internal sealed class PermissionAuthorizationHandler(IServiceProvider serviceProvider) : AuthorizationHandler<PermissionRequirement>
     {
-        _serviceProvider = serviceProvider;
-    }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    protected override async Task HandleRequirementAsync(
-        AuthorizationHandlerContext context,
-        PermissionRequirement requirement)
-    {
-        if (context.User.Identity is not { IsAuthenticated: true })
+        protected override async Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            PermissionRequirement requirement)
         {
-            return;
-        }
+            if (context.User.Identity is not { IsAuthenticated: true })
+            {
+                return;
+            }
 
-        using IServiceScope scope = _serviceProvider.CreateScope();
+            using IServiceScope scope = _serviceProvider.CreateScope();
 
-        AuthorizationService authorizationService = scope.ServiceProvider.GetRequiredService<AuthorizationService>();
+            AuthorizationService authorizationService = scope.ServiceProvider.GetRequiredService<AuthorizationService>();
 
-        string identityId = context.User.GetIdentityId();
+            string identityId = context.User.GetIdentityId();
 
-        HashSet<string> permissions = await authorizationService.GetPermissionsForUserAsync(identityId);
+            HashSet<string> permissions = await authorizationService.GetPermissionsForUserAsync(identityId);
 
-        if (permissions.Contains(requirement.Permission))
-        {
-            context.Succeed(requirement);
+            if (permissions.Contains(requirement.Permission))
+            {
+                context.Succeed(requirement);
+            }
         }
     }
 }

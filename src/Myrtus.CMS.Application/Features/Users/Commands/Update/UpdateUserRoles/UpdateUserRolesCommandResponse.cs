@@ -1,15 +1,16 @@
-﻿namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles;
-
-public sealed record UpdateUserRolesCommandResponse
+﻿namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles
 {
-    public Guid RoleId { get; init; }
-    public Guid UserId { get; init; }
-
-    public UpdateUserRolesCommandResponse(Guid roleId, Guid userId)
+    public sealed record UpdateUserRolesCommandResponse
     {
-        RoleId = roleId;
-        UserId = userId;
-    }
+        public Guid RoleId { get; init; }
+        public Guid UserId { get; init; }
 
-    private UpdateUserRolesCommandResponse() { }
+        public UpdateUserRolesCommandResponse(Guid roleId, Guid userId)
+        {
+            RoleId = roleId;
+            UserId = userId;
+        }
+
+        private UpdateUserRolesCommandResponse() { }
+    }
 }

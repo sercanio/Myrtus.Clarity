@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById;
-
-public class GetRoleByIdQueryValidator : AbstractValidator<GetRoleByIdQuery>
+namespace Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById
 {
-    public GetRoleByIdQueryValidator()
+    public class GetRoleByIdQueryValidator : AbstractValidator<GetRoleByIdQuery>
     {
-        RuleFor(r => r.RoleId).NotEmpty();
+        public GetRoleByIdQueryValidator()
+        {
+            RuleFor(r => r.RoleId).NotEmpty();
+        }
     }
 }

@@ -1,23 +1,18 @@
 ﻿using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
-using Myrtus.CMS.Domain.Roles.Events;
 
-namespace Myrtus.CMS.Infrastructure.Repositories;
-
-internal sealed class RoleRepository : Repository<Role>, IRoleRepository
+namespace Myrtus.CMS.Infrastructure.Repositories
 {
-    public RoleRepository(ApplicationDbContext dbContext)
-        : base(dbContext)
+    internal sealed class RoleRepository(ApplicationDbContext dbContext) : Repository<Role>(dbContext), IRoleRepository
     {
-    }
+        public override async Task AddAsync(Role role)
+        {
+            await DbContext.AddAsync(role);
+        }
 
-    public override async Task AddAsync(Role role)
-    {
-        await DbContext.AddAsync(role);
-    }
-
-    public override void Update(Role role)
-    {
-        DbContext.Update(role);
+        public override void Update(Role role)
+        {
+            DbContext.Update(role);
+        }
     }
 }

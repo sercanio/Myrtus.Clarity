@@ -5,36 +5,39 @@ using Dapper;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 
-namespace Myrtus.CMS.Infrastructure.SeedData;
-
-public static class SeedPermissions
+namespace Myrtus.CMS.Infrastructure.SeedData
 {
-    public static async Task SeedPermissionsDataAsync(this IApplicationBuilder app)
+    public static class SeedPermissions
     {
-        using IServiceScope scope = app.ApplicationServices.CreateScope();
-        ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
-        using IDbConnection connection = sqlConnectionFactory.CreateConnection();
-
-        var permissions = new List<object>
+        public static async Task SeedPermissionsDataAsync(this IApplicationBuilder app)
         {
-            Permission.UsersRead,
-            Permission.UsersCreate,
-            Permission.UsersUpdate,
-            Permission.UsersDelete,
-            Permission.RolesRead,
-            Permission.RolesCreate,
-            Permission.RolesUpdate,
-            Permission.RolesDelete,
-            Permission.PermissionsRead
-        };
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
+            ISqlConnectionFactory sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
+            using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
-        const string sql = """
-            INSERT INTO permissions (id, feature, name, created_by, created_on_utc)
-            VALUES (@Id, @Feature, @Name, @CreatedBy, @CreatedOnUtc)
-            ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
-            """;
+            List<object> permissions =
+            [
+                Permission.UsersRead,
+                    Permission.UsersCreate,
+                    Permission.UsersUpdate,
+                    Permission.UsersDelete,
+                    Permission.RolesRead,
+                    Permission.RolesCreate,
+                    Permission.RolesUpdate,
+                    Permission.RolesDelete,
+                    Permission.PermissionsRead,
+                    Permission.AuditLogsRead
+            ];
 
-        connection.Execute(sql, permissions);
+            const string sql =
+                """
+                INSERT INTO permissions (id, feature, name, created_by, created_on_utc)
+                VALUES (@Id, @Feature, @Name, @CreatedBy, @CreatedOnUtc)
+                ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
+                """;
+
+            await connection.ExecuteAsync(sql, permissions);
+        }
     }
-}
 
+}

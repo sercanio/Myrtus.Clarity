@@ -17,6 +17,8 @@ namespace Myrtus.CMS.Domain.Roles
 
         public static readonly Permission PermissionsRead = new(Guid.Parse("0eeb5f27-10fd-430a-9257-a8457107141a"), "permissions", "permissions:read");
 
+        public static readonly Permission AuditLogsRead = new(Guid.Parse("3050d953-5dcf-4eb0-a18d-a3ce62a0dd3c"), "auditlogs", "auditlogs:read");
+
         public Permission(Guid id, string feature, string name) : base(id)
         {
             Feature = feature;

@@ -1,12 +1,9 @@
 ﻿using Myrtus.CMS.Application.Repositories;
 using Myrtus.CMS.Domain.Roles;
 
-namespace Myrtus.CMS.Infrastructure.Repositories;
-
-internal sealed class PermissionRepository : Repository<Permission>, IPermissionRepository
+namespace Myrtus.CMS.Infrastructure.Repositories
 {
-    public PermissionRepository(ApplicationDbContext dbContext)
-        : base(dbContext)
+    internal sealed class PermissionRepository(ApplicationDbContext dbContext) : Repository<Permission>(dbContext), IPermissionRepository
     {
     }
 }

@@ -1,20 +1,24 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions;
-
-public sealed class UpdateRolePermissionsDto : Entity
+namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions
 {
-
-    public Guid Id { get; init; }
-    public string Feature { get; init; }
-    public string Name { get; init; }
-
-    public UpdateRolePermissionsDto(Guid id, string feature, string name)
+    public sealed class UpdateRolePermissionsDto : Entity
     {
-        Id = id;
-        Feature = feature;
-        Name = name;
-    }
+        public Guid Id { get; init; }
+        public string Feature { get; init; }
+        public string Name { get; init; }
 
-    private UpdateRolePermissionsDto() { }
+        public UpdateRolePermissionsDto(Guid id, string feature, string name)
+        {
+            Id = id;
+            Feature = feature;
+            Name = name;
+        }
+
+        private UpdateRolePermissionsDto()
+        {
+            Feature = string.Empty;
+            Name = string.Empty;
+        }
+    }
 }
