@@ -6,7 +6,7 @@ services:
     container_name: MyrtusCMS.WebAPI
     build:
       context: .
-      dockerfile: src/Myrtus.CMS.WebAPI/Dockerfile
+      dockerfile: src/Myrtus.Clarity.WebAPI/Dockerfile
     depends_on:
       - myrtuscms-db
 

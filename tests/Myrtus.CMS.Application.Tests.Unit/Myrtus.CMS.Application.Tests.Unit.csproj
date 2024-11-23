@@ -25,11 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myrtus.CMS.Application\Myrtus.CMS.Application.csproj" />
-    <ProjectReference Include="..\..\src\Myrtus.CMS.Domain\Myrtus.CMS.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
