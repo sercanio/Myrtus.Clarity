@@ -2,7 +2,7 @@
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
-using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Application.Services.Roles;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;
 using Myrtus.CMS.Domain.Users.Events;
@@ -12,16 +12,16 @@ namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles;
 internal class AddUserRoleEventHandler : INotificationHandler<UserRoleAddedDomainEvent>
 {
     private readonly IUserRepository _userRepository;
-    private readonly IRoleRepository _roleRepository;
+    private readonly IRoleService _roleService;
     private readonly IAuditLogService _auditLogService;
 
     public AddUserRoleEventHandler(
         IUserRepository userRepository,
-        IRoleRepository roleRepository,
+        IRoleService roleService,
         IAuditLogService auditLogService)
     {
         _userRepository = userRepository;
-        _roleRepository = roleRepository;
+        _roleService = roleService;
         _auditLogService = auditLogService;
     }
 
@@ -29,7 +29,7 @@ internal class AddUserRoleEventHandler : INotificationHandler<UserRoleAddedDomai
     {
         User? user = await _userRepository.GetUserByIdAsync(notification.UserId, cancellationToken);
 
-        Role? role = await _roleRepository.GetAsync(
+        Role? role = await _roleService.GetAsync(
             predicate: role => role.Id == notification.RoleId,
             cancellationToken: cancellationToken);
 

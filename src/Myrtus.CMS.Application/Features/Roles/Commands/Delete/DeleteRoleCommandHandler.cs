@@ -3,8 +3,8 @@ using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Application.Services.Users;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;
 
@@ -13,20 +13,20 @@ namespace Myrtus.CMS.Application.Features.Roles.Commands.Delete;
 public sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleCommand, DeleteRoleCommandResponse>
 {
     private readonly IRoleRepository _roleRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
     private readonly IUserContext _userContext;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
 
     public DeleteRoleCommandHandler(
         IRoleRepository roleRepository,
-        IUserRepository userRepository,
+        IUserService userRepository,
         IUserContext userContext,
         IUnitOfWork unitOfWork,
         ICacheService cacheService)
     {
         _roleRepository = roleRepository;
-        _userRepository = userRepository;
+        _userService = userRepository;
         _userContext = userContext;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
@@ -43,7 +43,7 @@ public sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleCommand
             return Result.NotFound(RoleErrors.NotFound.Name);
         }
 
-        User? user = await _userRepository.GetUserByIdAsync(
+        User? user = await _userService.GetUserByIdAsync(
             _userContext.UserId,
             cancellationToken: cancellationToken);
         if (user is not null)

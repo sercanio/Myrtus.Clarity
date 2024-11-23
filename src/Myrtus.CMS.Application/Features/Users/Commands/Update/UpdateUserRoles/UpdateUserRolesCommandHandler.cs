@@ -5,7 +5,7 @@ using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Enums;
-using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Application.Services.Roles;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;
 
@@ -14,20 +14,20 @@ namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles;
 public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
 {
     private readonly IUserRepository _userRepository;
-    private readonly IRoleRepository _roleRepository;
+    private readonly IRoleService _roleService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
     private readonly IUserContext _userContext;
 
     public UpdateUserRolesCommandHandler(
         IUserRepository userRepository,
-        IRoleRepository roleRepository,
+        IRoleService roleService,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
         IUserContext userContext)
     {
         _userRepository = userRepository;
-        _roleRepository = roleRepository;
+        _roleService = roleService;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
         _userContext = userContext;
@@ -45,7 +45,7 @@ public sealed class UpdateUserRolesCommandHandler : ICommandHandler<UpdateUserRo
             return Result.NotFound(UserErrors.NotFound.Name);
         }
 
-        Role? role = await _roleRepository.GetAsync(
+        Role? role = await _roleService.GetAsync(
             predicate: role => role.Id == request.RoleId,
             cancellationToken: cancellationToken);
 

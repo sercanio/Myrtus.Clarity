@@ -3,8 +3,8 @@ using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Repositories;
+using Myrtus.CMS.Application.Services.Users;
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users;
 
@@ -15,20 +15,20 @@ public sealed class CreateRoleCommandHander : ICommandHandler<CreateRoleCommand,
     private readonly IRoleRepository _roleRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
     private readonly IUserContext _userContext;
 
     public CreateRoleCommandHander(
         IRoleRepository roleRepository,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
-        IUserRepository userRepository,
+        IUserService userRepository,
         IUserContext userContext)
     {
         _roleRepository = roleRepository;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
-        _userRepository = userRepository;
+        _userService = userRepository;
         _userContext = userContext;
     }
 
@@ -46,7 +46,7 @@ public sealed class CreateRoleCommandHander : ICommandHandler<CreateRoleCommand,
 
         var role = Role.Create(request.Name);
 
-        User? user = await _userRepository.GetUserByIdAsync(_userContext.UserId,
+        User? user = await _userService.GetUserByIdAsync(_userContext.UserId,
             cancellationToken: cancellationToken);
         if (user is not null)
         {

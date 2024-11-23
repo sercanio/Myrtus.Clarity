@@ -2,7 +2,7 @@
 
 namespace Myrtus.CMS.Application.Abstractions.Auth;
 
-public interface IUserService
+public interface IAuthService
 {
     Task<string> RegisterAsync(
         User user,

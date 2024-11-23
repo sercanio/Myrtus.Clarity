@@ -3,10 +3,9 @@ using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Abstractionss.Repositories;
 using Myrtus.CMS.Application.Enums;
 using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.CMS.Application.Services.Users;
 
 namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions;
 
@@ -14,7 +13,7 @@ public sealed class UpdateRolePermissionsCommandHandler : ICommandHandler<Update
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
     private readonly IUserContext _userContext;
@@ -22,14 +21,14 @@ public sealed class UpdateRolePermissionsCommandHandler : ICommandHandler<Update
     public UpdateRolePermissionsCommandHandler(
         IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
-        IUserRepository userRepository,
+        IUserService userRepository,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
         IUserContext userContext)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
-        _userRepository = userRepository;
+        _userService = userRepository;
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
         _userContext = userContext;
@@ -68,7 +67,7 @@ public sealed class UpdateRolePermissionsCommandHandler : ICommandHandler<Update
             return Result.Invalid();
         }
 
-        var user = await _userRepository.GetUserByIdAsync(_userContext.UserId, cancellationToken);
+        var user = await _userService.GetUserByIdAsync(_userContext.UserId, cancellationToken);
         role.UpdatedBy = user!.Email;
 
         _roleRepository.Update(role);

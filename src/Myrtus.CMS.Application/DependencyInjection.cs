@@ -1,12 +1,22 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
+using Myrtus.CMS.Application.Abstractions.Auth;
+using Myrtus.CMS.Application.Services.Roles;
+using Myrtus.CMS.Application.Services.Users;
 
 namespace Myrtus.CMS.Application;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        AddMediatRBehaviors(services);
+        AddApplicationServices(services);
+
+        return services;
+    }
+
+    private static void AddMediatRBehaviors(this IServiceCollection services)
     {
         services.AddMediatR(configuration =>
         {
@@ -18,9 +28,12 @@ public static class DependencyInjection
 
             configuration.AddOpenBehavior(typeof(QueryCachingBehavior<,>));
         });
+    }
 
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
-        return services;
+    private static void AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IUserService, UserService>();
     }
 }
 

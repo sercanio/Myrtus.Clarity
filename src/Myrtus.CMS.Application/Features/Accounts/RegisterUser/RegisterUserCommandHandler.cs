@@ -9,12 +9,12 @@ namespace Myrtus.CMS.Application.Features.Accounts.RegisterUser;
 
 public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
 {
-    private readonly IUserService _authenticationService;
+    private readonly IAuthService _authenticationService;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public RegisterUserCommandHandler(
-        IUserService authenticationService,
+        IAuthService authenticationService,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {

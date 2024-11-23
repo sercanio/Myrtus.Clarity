@@ -6,12 +6,12 @@ using Myrtus.CMS.Infrastructure.Authentication.Keycloak.Models;
 
 namespace Myrtus.CMS.Infrastructure.Authentication.Keycloak;
 
-public sealed class UserService : IUserService
+public sealed class AuthService : IAuthService
 {
     private const string PasswordCredentialType = "password";
     private readonly HttpClient _httpClient;
 
-    public UserService(HttpClient httpClient)
+    public AuthService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
