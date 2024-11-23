@@ -2,58 +2,67 @@
 using Myrtus.CMS.Domain.Roles;
 using Myrtus.CMS.Domain.Users.Events;
 
-namespace Myrtus.CMS.Domain.Users;
-
-public sealed class User : Entity, IAggregateRoot
+namespace Myrtus.CMS.Domain.Users
 {
-    private readonly List<Role> _roles = new();
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
-    public string Email { get; private set; }
-    public string IdentityId { get; private set; } = string.Empty;
-
-    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
-
-    private User(Guid id, string firstName, string lastName, string email)
-        : base(id)
+    public sealed class User : Entity, IAggregateRoot
     {
-        FirstName = firstName;
-        LastName = lastName;
-        Email = email;
-    }
+        private readonly List<Role> _roles = [];
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Email { get; private set; }
+        public string IdentityId { get; private set; } = string.Empty;
 
-    private User()
-    {
-    }
+        public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
 
-    public static User Create(string firstName, string lastName, string email)
-    {
-        User user = new(Guid.NewGuid(), firstName, lastName, email);
-        user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
-        user.AddRole(Role.DefaultRole);
-        user.UpdatedBy = "System";
-        return user;
-    }
+        private User(Guid id, string firstName, string lastName, string email)
+            : base(id)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+        }
 
-    public static User CreateWithoutRolesForSeeding(string firstName, string lastName, string email)
-    {
-        return new User(Guid.NewGuid(), firstName, lastName, email);
-    }
+        private User()
+        {
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            Email = string.Empty;
+        }
 
-    public void AddRole(Role role)
-    {
-        this._roles.Add(role);
-        this.RaiseDomainEvent(new UserRoleAddedDomainEvent(this.Id, role.Id));
-    }
+        public static User Create(string firstName,
+            string lastName,
+            string email)
+        {
+            User user = new(Guid.NewGuid(), firstName, lastName, email);
+            user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
+            user.AddRole(Role.DefaultRole);
+            user.UpdatedBy = "System";
+            return user;
+        }
 
-    public void RemoveRole(Role role)
-    {
-        _ = this._roles.Remove(role);
-        this.RaiseDomainEvent(new UserRoleRemovedDomainEvent(this.Id, role.Id));
-    }
+        public static User CreateWithoutRolesForSeeding(
+            string firstName,
+            string lastName,
+            string email)
+        {
+            return new User(Guid.NewGuid(), firstName, lastName, email);
+        }
 
-    public void SetIdentityId(string identityId)
-    {
-        IdentityId = identityId;
+        public void AddRole(Role role)
+        {
+            this._roles.Add(role);
+            this.RaiseDomainEvent(new UserRoleAddedDomainEvent(this.Id, role.Id));
+        }
+
+        public void RemoveRole(Role role)
+        {
+            _ = this._roles.Remove(role);
+            this.RaiseDomainEvent(new UserRoleRemovedDomainEvent(this.Id, role.Id));
+        }
+
+        public void SetIdentityId(string identityId)
+        {
+            IdentityId = identityId;
+        }
     }
 }

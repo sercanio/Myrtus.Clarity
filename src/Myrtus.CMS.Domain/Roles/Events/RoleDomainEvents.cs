@@ -1,10 +1,11 @@
-﻿namespace Myrtus.CMS.Domain.Roles.Events;
-
-public sealed record RoleDomainEvents
+﻿namespace Myrtus.CMS.Domain.Roles.Events
 {
-    public static readonly string Created = "RoleCreated";
-    public static readonly string Deleted = "RoleDeleted";
-    public static readonly string UpdatedName = "RoleNameUpdated";
-    public static readonly string AddedPermission = "RolePermissionAdded";
-    public static readonly string RemovedPermission = "RolePermissionRemoved";
+    public sealed record RoleDomainEvents
+    {
+        public static readonly string Created = "RoleCreated";
+        public static readonly string Deleted = "RoleDeleted";
+        public static readonly string UpdatedName = "RoleNameUpdated";
+        public static readonly string AddedPermission = "RolePermissionAdded";
+        public static readonly string RemovedPermission = "RolePermissionRemoved";
+    }
 }
