@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
-using Myrtus.CMS.Application.Services.Roles;
-using Myrtus.CMS.Application.Services.Users;
+using Myrtus.Clarity.Application.Services.Roles;
+using Myrtus.Clarity.Application.Services.Users;
 
-namespace Myrtus.CMS.Application
+namespace Myrtus.Clarity.Application
 {
     public static class DependencyInjection
     {

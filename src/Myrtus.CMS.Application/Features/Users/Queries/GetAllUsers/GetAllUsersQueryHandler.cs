@@ -2,12 +2,12 @@
 using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
-using Myrtus.CMS.Application.Repositories;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
+using Myrtus.Clarity.Application.Repositories;
 using System.Collections.ObjectModel;
 using System.Data;
 
-namespace Myrtus.CMS.Application.Features.Users.Queries.GetAllUsers
+namespace Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsers
 {
     public sealed class GetAllUsersQueryHandler(IUserRepository userRepository) : IRequestHandler<GetAllUsersQuery, Result<IPaginatedList<GetAllUsersQueryResponse>>>
     {

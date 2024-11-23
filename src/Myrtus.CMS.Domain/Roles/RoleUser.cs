@@ -1,6 +1,6 @@
-﻿using Myrtus.CMS.Domain.Users;
+﻿using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Domain.Roles
+namespace Myrtus.Clarity.Domain.Roles
 {
     public sealed class RoleUser
     {

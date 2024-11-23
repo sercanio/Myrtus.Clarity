@@ -18,21 +18,21 @@ using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
 using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
-using Myrtus.CMS.Infrastructure.Repositories;
+using Myrtus.Clarity.Infrastructure.Repositories;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
-using Myrtus.CMS.Infrastructure.Authorization;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Infrastructure.Mailing;
+using Myrtus.Clarity.Infrastructure.Authorization;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Infrastructure.Mailing;
 using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using MongoDB.Driver;
-using Myrtus.CMS.Application.Repositories.NoSQL;
-using Myrtus.CMS.Infrastructure.Repositories.NoSQL;
-using Myrtus.CMS.Application.Services.Auth;
-using Myrtus.CMS.Application.Services.Mailing;
-using Myrtus.CMS.Infrastructure.Authentication;
+using Myrtus.Clarity.Application.Repositories.NoSQL;
+using Myrtus.Clarity.Infrastructure.Repositories.NoSQL;
+using Myrtus.Clarity.Application.Services.Auth;
+using Myrtus.Clarity.Application.Services.Mailing;
+using Myrtus.Clarity.Infrastructure.Authentication;
 
-namespace Myrtus.CMS.Infrastructure
+namespace Myrtus.Clarity.Infrastructure
 {
     public static class DependencyInjection
     {

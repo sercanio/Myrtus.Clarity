@@ -1,10 +1,10 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Users;
 using System.Linq.Expressions;
 
-namespace Myrtus.CMS.Application.Services.Users
+namespace Myrtus.Clarity.Application.Services.Users
 {
     public class UserService(IUserRepository userRepository) : IUserService
     {

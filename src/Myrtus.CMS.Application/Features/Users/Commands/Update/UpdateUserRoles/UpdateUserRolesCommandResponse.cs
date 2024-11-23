@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles
+﻿namespace Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles
 {
     public sealed record UpdateUserRolesCommandResponse
     {

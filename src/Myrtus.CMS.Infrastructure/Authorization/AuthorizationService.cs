@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Infrastructure.Authorization
+namespace Myrtus.Clarity.Infrastructure.Authorization
 {
     internal sealed class AuthorizationService(ApplicationDbContext dbContext, ICacheService cacheService)
     {

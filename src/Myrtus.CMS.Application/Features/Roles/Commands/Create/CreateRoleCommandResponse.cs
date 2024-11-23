@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Application.Features.Roles.Commands.Create
+﻿namespace Myrtus.Clarity.Application.Features.Roles.Commands.Create
 {
     public sealed record CreateRoleCommandResponse
     {

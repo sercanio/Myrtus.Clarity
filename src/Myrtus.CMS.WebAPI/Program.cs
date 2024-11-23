@@ -6,13 +6,13 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using Myrtus.Clarity.Core.Infrastructure.SignalR.Hubs;
-using Myrtus.CMS.Application;
-using Myrtus.CMS.Domain;
-using Myrtus.CMS.Infrastructure;
-using Myrtus.CMS.WebAPI;
-using Myrtus.CMS.WebAPI.Extensions;
-using Myrtus.CMS.WebAPI.Extensions.SeedData;
-using Myrtus.CMS.WebAPI.OpenApi;
+using Myrtus.Clarity.Application;
+using Myrtus.Clarity.Domain;
+using Myrtus.Clarity.Infrastructure;
+using Myrtus.Clarity.WebAPI;
+using Myrtus.Clarity.WebAPI.Extensions;
+using Myrtus.Clarity.WebAPI.Extensions.SeedData;
+using Myrtus.Clarity.WebAPI.OpenApi;
 using Serilog;
 using System.Text.Json.Serialization;
 
@@ -111,7 +111,7 @@ if (app.Environment.IsDevelopment())
 
         options.OAuthClientId(clientId);
         options.OAuthClientSecret(clientSecret);
-        options.OAuthAppName("Myrtus CMS Swagger UI");
+        options.OAuthAppName("Myrtus Clarity Swagger UI");
         options.OAuthUsePkce();
 
         options.OAuth2RedirectUrl(redirectUri);

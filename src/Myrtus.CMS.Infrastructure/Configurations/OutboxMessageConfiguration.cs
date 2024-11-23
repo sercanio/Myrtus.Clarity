@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Myrtus.CMS.Infrastructure.Configurations
+namespace Myrtus.Clarity.Infrastructure.Configurations
 {
     internal sealed class OutboxMessageConfiguration : IEntityTypeConfiguration<OutboxMessage>
     {

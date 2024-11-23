@@ -1,8 +1,8 @@
 ﻿using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Domain.Users;
 using System.Linq.Expressions;
 
-namespace Myrtus.CMS.Application.Services.Users
+namespace Myrtus.Clarity.Application.Services.Users
 {
     public interface IUserService
     {

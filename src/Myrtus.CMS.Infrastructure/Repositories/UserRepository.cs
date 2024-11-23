@@ -1,8 +1,8 @@
-﻿using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Domain.Roles;
-using Myrtus.CMS.Application.Repositories;
+﻿using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Domain.Roles;
+using Myrtus.Clarity.Application.Repositories;
 
-namespace Myrtus.CMS.Infrastructure.Repositories
+namespace Myrtus.Clarity.Infrastructure.Repositories
 {
     internal sealed class UserRepository(ApplicationDbContext dbContext) : Repository<User>(dbContext), IUserRepository
     {

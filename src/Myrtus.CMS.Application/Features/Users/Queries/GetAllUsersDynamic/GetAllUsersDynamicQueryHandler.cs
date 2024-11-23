@@ -2,11 +2,11 @@
 using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
-using Myrtus.CMS.Application.Repositories;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
+using Myrtus.Clarity.Application.Repositories;
 using System.Collections.ObjectModel;
 
-namespace Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersDynamic
+namespace Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsersDynamic
 {
     public sealed class GetAllUsersDynamicQueryHandler(IUserRepository userRepository) : IRequestHandler<GetAllUsersDynamicQuery, Result<IPaginatedList<GetAllUsersDynamicQueryResponse>>>
     {

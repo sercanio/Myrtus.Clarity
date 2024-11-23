@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Domain.Users.Events;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Domain.Users.Events;
 
-namespace Myrtus.CMS.Application.Features.Accounts.RegisterUser
+namespace Myrtus.Clarity.Application.Features.Accounts.RegisterUser
 {
     internal class RegisterUserEventHandler(
         IUserRepository userRepository,

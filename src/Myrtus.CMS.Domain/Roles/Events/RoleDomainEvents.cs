@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Domain.Roles.Events
+﻿namespace Myrtus.Clarity.Domain.Roles.Events
 {
     public sealed record RoleDomainEvents
     {

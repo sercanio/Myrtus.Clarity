@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 using System.Collections.ObjectModel;
 
-namespace Myrtus.CMS.Domain.Roles
+namespace Myrtus.Clarity.Domain.Roles
 {
     public sealed class Permission : Entity
     {

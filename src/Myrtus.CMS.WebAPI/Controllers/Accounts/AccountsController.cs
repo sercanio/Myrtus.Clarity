@@ -4,11 +4,11 @@ using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Features.Accounts.LogInUser;
-using Myrtus.CMS.Application.Features.Accounts.RegisterUser;
-using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
+using Myrtus.Clarity.Application.Features.Accounts.LogInUser;
+using Myrtus.Clarity.Application.Features.Accounts.RegisterUser;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
 
-namespace Myrtus.CMS.WebAPI.Controllers.Accounts
+namespace Myrtus.Clarity.WebAPI.Controllers.Accounts
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]

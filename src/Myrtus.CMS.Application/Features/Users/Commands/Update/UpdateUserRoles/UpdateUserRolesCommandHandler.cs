@@ -3,13 +3,13 @@ using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Enums;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Application.Services.Roles;
-using Myrtus.CMS.Domain.Roles;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Application.Enums;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Application.Services.Roles;
+using Myrtus.Clarity.Domain.Roles;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles
+namespace Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles
 {
     public sealed class UpdateUserRolesCommandHandler(
         IUserRepository userRepository,

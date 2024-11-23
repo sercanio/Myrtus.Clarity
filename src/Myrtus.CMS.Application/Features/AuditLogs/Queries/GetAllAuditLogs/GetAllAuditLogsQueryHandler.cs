@@ -3,9 +3,9 @@ using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Repositories.NoSQL;
+using Myrtus.Clarity.Application.Repositories.NoSQL;
 
-namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogs
+namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
 {
     public class GetAllAuditLogsQueryHandler(INoSqlRepository<AuditLog> auditLogRepository) : IRequestHandler<GetAllAuditLogsQuery, Result<IPaginatedList<GetAllAuditLogsQueryResponse>>>
     {

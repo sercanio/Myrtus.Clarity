@@ -1,6 +1,6 @@
-﻿using Myrtus.CMS.Domain.Roles;
+﻿using Myrtus.Clarity.Domain.Roles;
 
-namespace Myrtus.CMS.Infrastructure.Authorization
+namespace Myrtus.Clarity.Infrastructure.Authorization
 {
     internal sealed class UserRolesResponse
     {

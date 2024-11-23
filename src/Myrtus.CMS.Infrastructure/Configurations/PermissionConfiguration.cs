@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.Clarity.Domain.Roles;
 
-namespace Myrtus.CMS.Infrastructure.Configurations
+namespace Myrtus.Clarity.Infrastructure.Configurations
 {
     internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permission>
     {

@@ -2,11 +2,11 @@
 using System.Data;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.Clarity.Application.Features.Permissions.Queries.GetAllPermissions;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Roles;
 
-namespace Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById
+namespace Myrtus.Clarity.Application.Features.Roles.Queries.GetRoleById
 {
     public sealed class GetRoleByIdQueryHandler(IRoleRepository roleRepository) : IQueryHandler<GetRoleByIdQuery, GetRoleByIdQueryResponse>
     {

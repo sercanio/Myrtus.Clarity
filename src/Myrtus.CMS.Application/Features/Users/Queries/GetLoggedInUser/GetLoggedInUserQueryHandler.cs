@@ -1,10 +1,10 @@
 ﻿using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser
+namespace Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser
 {
     internal sealed class GetLoggedInUserQueryHandler(IUserRepository userRepository, IUserContext userContext) : IQueryHandler<GetLoggedInUserQuery, UserResponse>
     {

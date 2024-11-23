@@ -1,6 +1,6 @@
-﻿using Myrtus.CMS.Application.Services.Mailing;
+﻿using Myrtus.Clarity.Application.Services.Mailing;
 
-namespace Myrtus.CMS.Infrastructure.Mailing
+namespace Myrtus.Clarity.Infrastructure.Mailing
 {
     internal sealed class EmailService : IEmailService
     {

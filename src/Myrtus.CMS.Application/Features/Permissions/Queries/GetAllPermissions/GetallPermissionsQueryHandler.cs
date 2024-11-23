@@ -2,10 +2,10 @@
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Roles;
 
-namespace Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions
+namespace Myrtus.Clarity.Application.Features.Permissions.Queries.GetAllPermissions
 {
     public class GetallPermissionsQueryHandler(IPermissionRepository permissionRepository)
                 : IQueryHandler<GetAllPermissionsQuery, IPaginatedList<GetAllPermissionsQueryResponse>>

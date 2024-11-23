@@ -1,9 +1,9 @@
 ﻿using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Accounts.LogInUser
+namespace Myrtus.Clarity.Application.Features.Accounts.LogInUser
 {
     internal sealed class LogInUserCommandHandler(IJwtService jwtService) : ICommandHandler<LogInUserCommand, AccessTokenResponse>
     {

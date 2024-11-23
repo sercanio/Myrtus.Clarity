@@ -1,11 +1,11 @@
 ﻿using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Application.Services.Auth;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Application.Services.Auth;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Application.Features.Accounts.RegisterUser
+namespace Myrtus.Clarity.Application.Features.Accounts.RegisterUser
 {
     public sealed class RegisterUserCommandHandler(
         IAuthService authenticationService,

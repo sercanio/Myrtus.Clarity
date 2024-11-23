@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser
+﻿namespace Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser
 {
     public sealed record LoggedInUserRolesDto
     {

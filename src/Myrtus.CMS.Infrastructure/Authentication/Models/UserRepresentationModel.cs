@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.Models;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Infrastructure.Authentication.Models
+namespace Myrtus.Clarity.Infrastructure.Authentication.Models
 {
     internal sealed class UserRepresentationModel
     {

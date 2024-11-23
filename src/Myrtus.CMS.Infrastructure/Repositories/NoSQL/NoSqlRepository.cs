@@ -1,8 +1,8 @@
 ﻿using MongoDB.Driver;
-using Myrtus.CMS.Application.Repositories.NoSQL;
+using Myrtus.Clarity.Application.Repositories.NoSQL;
 using System.Linq.Expressions;
 
-namespace Myrtus.CMS.Infrastructure.Repositories.NoSQL
+namespace Myrtus.Clarity.Infrastructure.Repositories.NoSQL
 {
     public class NoSqlRepository<T>(IMongoDatabase database, string collectionName) : INoSqlRepository<T>
     {

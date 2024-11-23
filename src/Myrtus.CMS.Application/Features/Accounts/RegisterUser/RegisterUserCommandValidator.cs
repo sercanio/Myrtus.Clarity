@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Myrtus.CMS.Application.Features.Accounts.RegisterUser
+namespace Myrtus.Clarity.Application.Features.Accounts.RegisterUser
 {
     internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {

@@ -1,5 +1,5 @@
-﻿using Myrtus.CMS.Application.Enums;
+﻿using Myrtus.Clarity.Application.Enums;
 
-namespace Myrtus.CMS.WebAPI.Controllers.Users;
+namespace Myrtus.Clarity.WebAPI.Controllers.Users;
 
 public sealed record UpdateUserRolesRequest(Operation Operation, Guid RoleId);

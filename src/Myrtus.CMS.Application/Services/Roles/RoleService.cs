@@ -1,10 +1,10 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Roles;
 using System.Linq.Expressions;
 
-namespace Myrtus.CMS.Application.Services.Roles
+namespace Myrtus.Clarity.Application.Services.Roles
 {
     public sealed class RoleService(IRoleRepository roleRepository) : IRoleService
     {

@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Domain.Users.Events
+﻿namespace Myrtus.Clarity.Domain.Users.Events
 {
     public sealed record UserDomainEvents
     {

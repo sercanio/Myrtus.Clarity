@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Dapper;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.Clarity.Domain.Roles;
 
-namespace Myrtus.CMS.Infrastructure.SeedData
+namespace Myrtus.Clarity.Infrastructure.SeedData
 {
     public static class SeedRoles
     {

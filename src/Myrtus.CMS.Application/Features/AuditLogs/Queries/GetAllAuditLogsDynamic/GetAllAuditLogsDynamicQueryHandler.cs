@@ -4,9 +4,9 @@ using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Dynamic;
 using Myrtus.Clarity.Core.Infrastructure.Pagination;
-using Myrtus.CMS.Application.Repositories.NoSQL;
+using Myrtus.Clarity.Application.Repositories.NoSQL;
 
-namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogsDynamic
+namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogsDynamic
 {
     public class GetAllAuditLogsDynamicQueryHandler(INoSqlRepository<AuditLog> auditLogRepository) : IRequestHandler<GetAllAuditLogsDynamicQuery, Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>>
     {

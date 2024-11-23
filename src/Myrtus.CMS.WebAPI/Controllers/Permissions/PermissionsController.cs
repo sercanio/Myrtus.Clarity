@@ -5,10 +5,10 @@ using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
-using Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions;
-using Myrtus.CMS.WebAPI.Attributes;
+using Myrtus.Clarity.Application.Features.Permissions.Queries.GetAllPermissions;
+using Myrtus.Clarity.WebAPI.Attributes;
 
-namespace Myrtus.CMS.WebAPI.Controllers.PermissionsController
+namespace Myrtus.Clarity.WebAPI.Controllers.PermissionsController
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]

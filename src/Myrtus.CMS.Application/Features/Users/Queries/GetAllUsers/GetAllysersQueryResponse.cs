@@ -1,7 +1,7 @@
-﻿using Myrtus.CMS.Application.Features.Users.Queries.GetLoggedInUser;
+﻿using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
 using System.Collections.ObjectModel;
 
-namespace Myrtus.CMS.Application.Features.Users.Queries.GetAllUsers
+namespace Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsers
 {
     public sealed record GetAllUsersQueryResponse
     {

@@ -1,7 +1,7 @@
-﻿using Myrtus.CMS.Application.Features.Permissions.Queries.GetAllPermissions;
+﻿using Myrtus.Clarity.Application.Features.Permissions.Queries.GetAllPermissions;
 using System.Collections.ObjectModel;
 
-namespace Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById
+namespace Myrtus.Clarity.Application.Features.Roles.Queries.GetRoleById
 {
     public sealed record GetRoleByIdQueryResponse
     {

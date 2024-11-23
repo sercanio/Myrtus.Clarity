@@ -1,6 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 
-namespace Myrtus.CMS.Domain.Roles
+namespace Myrtus.Clarity.Domain.Roles
 {
     public static class RoleErrors
     {

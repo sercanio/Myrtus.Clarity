@@ -8,7 +8,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Myrtus.CMS.Infrastructure.Repositories
+namespace Myrtus.Clarity.Infrastructure.Repositories
 {
     internal abstract class Repository<T>(ApplicationDbContext dbContext) : IRepository<T>
         where T : Entity

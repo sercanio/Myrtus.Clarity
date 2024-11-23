@@ -1,6 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 
-namespace Myrtus.CMS.Domain.Users
+namespace Myrtus.Clarity.Domain.Users
 {
     public static class UserErrors
     {

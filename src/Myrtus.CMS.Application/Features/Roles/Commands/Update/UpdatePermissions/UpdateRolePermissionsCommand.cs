@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
-using Myrtus.CMS.Application.Enums;
+using Myrtus.Clarity.Application.Enums;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Update.UpdatePermissions
+namespace Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdatePermissions
 {
     public sealed record UpdateRolePermissionsCommand(
         Guid RoleId,

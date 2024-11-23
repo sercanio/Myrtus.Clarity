@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Repositories;
-using Myrtus.CMS.Domain.Roles;
+using Myrtus.Clarity.Domain.Roles;
 
-namespace Myrtus.CMS.Application.Repositories
+namespace Myrtus.Clarity.Application.Repositories
 {
     public interface IPermissionRepository : IRepository<Permission>
     {

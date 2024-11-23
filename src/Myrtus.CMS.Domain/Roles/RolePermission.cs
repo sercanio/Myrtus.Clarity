@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Domain.Roles
+﻿namespace Myrtus.Clarity.Domain.Roles
 {
     public sealed class RolePermission
     {

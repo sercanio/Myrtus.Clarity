@@ -3,9 +3,9 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-using Myrtus.CMS.Infrastructure.SeedData;
+using Myrtus.Clarity.Infrastructure.SeedData;
 
-namespace Myrtus.CMS.WebAPI.Extensions.SeedData
+namespace Myrtus.Clarity.WebAPI.Extensions.SeedData
 {
     internal static class SeedDataExtensions
     {

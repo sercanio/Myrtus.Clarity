@@ -1,8 +1,8 @@
-﻿using Myrtus.CMS.Domain.Users;
+﻿using Myrtus.Clarity.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Myrtus.CMS.Infrastructure.Configurations
+namespace Myrtus.Clarity.Infrastructure.Configurations
 {
     internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {

@@ -1,6 +1,6 @@
 ﻿using Myrtus.Clarity.Core.WebApi;
 
-namespace Myrtus.CMS.WebAPI;
+namespace Myrtus.Clarity.WebAPI;
 
 public static class DependencyInjection
 {

@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Application.Enums
+﻿namespace Myrtus.Clarity.Application.Enums
 {
     public enum Operation
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 
-namespace Myrtus.CMS.WebAPI.Middleware
+namespace Myrtus.Clarity.WebAPI.Middleware
 {
     internal sealed class ExceptionHandlingMiddleware(
             RequestDelegate next,

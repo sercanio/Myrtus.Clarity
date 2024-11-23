@@ -1,9 +1,9 @@
-﻿using Myrtus.CMS.Application.Services.Auth;
-using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Infrastructure.Authentication.Models;
+﻿using Myrtus.Clarity.Application.Services.Auth;
+using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Infrastructure.Authentication.Models;
 using System.Net.Http.Json;
 
-namespace Myrtus.CMS.Infrastructure.Authentication
+namespace Myrtus.Clarity.Infrastructure.Authentication
 {
     public sealed class AuthService(HttpClient httpClient) : IAuthService
     {

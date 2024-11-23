@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Myrtus.CMS.Application\Myrtus.CMS.Application.csproj" />
-    <ProjectReference Include="..\..\src\Myrtus.CMS.Domain\Myrtus.CMS.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Myrtus.CMS.Application\Myrtus.Clarity.Application.csproj" />
+    <ProjectReference Include="..\..\src\Myrtus.CMS.Domain\Myrtus.Clarity.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

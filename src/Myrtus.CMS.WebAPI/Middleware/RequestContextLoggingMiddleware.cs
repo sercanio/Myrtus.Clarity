@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Primitives;
 using Serilog.Context;
 
-namespace Myrtus.CMS.WebAPI.Middleware
+namespace Myrtus.Clarity.WebAPI.Middleware
 {
     internal sealed class RequestContextLoggingMiddleware(RequestDelegate next)
     {

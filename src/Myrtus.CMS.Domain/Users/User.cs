@@ -1,8 +1,8 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Domain.Roles;
-using Myrtus.CMS.Domain.Users.Events;
+using Myrtus.Clarity.Domain.Roles;
+using Myrtus.Clarity.Domain.Users.Events;
 
-namespace Myrtus.CMS.Domain.Users
+namespace Myrtus.Clarity.Domain.Users
 {
     public sealed class User : Entity, IAggregateRoot
     {

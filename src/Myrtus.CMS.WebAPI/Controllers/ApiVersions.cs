@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.WebAPI.Controllers
+﻿namespace Myrtus.Clarity.WebAPI.Controllers
 {
     internal static class ApiVersions
     {

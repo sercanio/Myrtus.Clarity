@@ -1,8 +1,8 @@
-﻿using Myrtus.CMS.WebAPI.Middleware;
-using Myrtus.CMS.Infrastructure;
+﻿using Myrtus.Clarity.WebAPI.Middleware;
+using Myrtus.Clarity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Myrtus.CMS.WebAPI.Extensions
+namespace Myrtus.Clarity.WebAPI.Extensions
 {
     internal static class ApplicationBuilderExtensions
     {

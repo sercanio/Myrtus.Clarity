@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Application.Services.Roles;
-using Myrtus.CMS.Domain.Roles;
-using Myrtus.CMS.Domain.Users;
-using Myrtus.CMS.Domain.Users.Events;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Application.Services.Roles;
+using Myrtus.Clarity.Domain.Roles;
+using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Domain.Users.Events;
 
 namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles
 {

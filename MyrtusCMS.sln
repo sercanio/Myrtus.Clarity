@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4736657B-5DD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Domain.Abstractions", "core\Myrtus.Clarity.Core.Domain.Abstractions\Myrtus.Clarity.Core.Domain.Abstractions.csproj", "{8BC2528A-A6EA-426E-873B-81D864549121}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.CMS.Domain", "src\Myrtus.CMS.Domain\Myrtus.CMS.Domain.csproj", "{4AF8662C-F4E1-4225-A266-711CE16F3A54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Domain", "src\Myrtus.CMS.Domain\Myrtus.Clarity.Domain.csproj", "{4AF8662C-F4E1-4225-A266-711CE16F3A54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.CMS.Infrastructure", "src\Myrtus.CMS.Infrastructure\Myrtus.CMS.Infrastructure.csproj", "{2B086B07-68BA-4E8F-A730-594C90C754F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Infrastructure", "src\Myrtus.CMS.Infrastructure\Myrtus.Clarity.Infrastructure.csproj", "{2B086B07-68BA-4E8F-A730-594C90C754F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.CMS.Application", "src\Myrtus.CMS.Application\Myrtus.CMS.Application.csproj", "{A8BA5618-E44D-44BD-B840-3A7EED28C43C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Application", "src\Myrtus.CMS.Application\Myrtus.Clarity.Application.csproj", "{A8BA5618-E44D-44BD-B840-3A7EED28C43C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Exceptions", "core\Myrtus.Clarity.Core.Application.Exceptions\Myrtus.Clarity.Core.Application.Exceptions.csproj", "{DED4C320-974F-4BC4-9BDA-FDE009D692E3}"
 EndProject
@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Behaviours", "core\Myrtus.Clarity.Core.Application.Abstractions.Behaviours\Myrtus.Clarity.Core.Application.Abstractions.Behaviours.csproj", "{715F7132-E1A3-45BE-9F6F-694488D03C32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.CMS.WebAPI", "src\Myrtus.CMS.WebAPI\Myrtus.CMS.WebAPI.csproj", "{B6CBEAC6-CCA9-4A98-9555-AC779E698734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.WebAPI", "src\Myrtus.CMS.WebAPI\Myrtus.Clarity.WebAPI.csproj", "{B6CBEAC6-CCA9-4A98-9555-AC779E698734}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}"
 EndProject

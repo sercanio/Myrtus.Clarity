@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 
-namespace Myrtus.CMS.Infrastructure.Authorization
+namespace Myrtus.Clarity.Infrastructure.Authorization
 {
     internal sealed class PermissionAuthorizationHandler(IServiceProvider serviceProvider) : AuthorizationHandler<PermissionRequirement>
     {

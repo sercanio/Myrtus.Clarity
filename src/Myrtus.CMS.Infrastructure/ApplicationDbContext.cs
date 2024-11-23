@@ -5,7 +5,7 @@ using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
 using Newtonsoft.Json;
 
-namespace Myrtus.CMS.Infrastructure
+namespace Myrtus.Clarity.Infrastructure
 {
     public sealed class ApplicationDbContext(
         DbContextOptions options,

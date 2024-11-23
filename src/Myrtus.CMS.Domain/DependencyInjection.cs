@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Myrtus.CMS.Domain
+namespace Myrtus.Clarity.Domain
 {
     public static class DependencyInjection
     {

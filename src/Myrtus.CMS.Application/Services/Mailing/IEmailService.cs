@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Application.Services.Mailing
+﻿namespace Myrtus.Clarity.Application.Services.Mailing
 {
     public interface IEmailService
     {

@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.Application.Features.AuditLogs.Queries.GetAllAuditLogs
+﻿namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
 {
     public sealed record GetAllAuditLogsQueryResponse(
         Guid Id,

@@ -1,6 +1,6 @@
-﻿using Myrtus.CMS.Domain.Users;
+﻿using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Application.Services.Auth
+namespace Myrtus.Clarity.Application.Services.Auth
 {
     public interface IAuthService
     {

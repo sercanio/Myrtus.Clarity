@@ -6,14 +6,14 @@ using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Dynamic;
-using Myrtus.CMS.Application.Features.Users.Queries.GetAllUsers;
-using Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersByRoleId;
-using Myrtus.CMS.Application.Features.Users.Queries.GetAllUsersDynamic;
-using Myrtus.CMS.Application.Features.Users.Queries.GetUser;
-using Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles;
-using Myrtus.CMS.WebAPI.Attributes;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsers;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsersByRoleId;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsersDynamic;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetUser;
+using Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles;
+using Myrtus.Clarity.WebAPI.Attributes;
 
-namespace Myrtus.CMS.WebAPI.Controllers.Users
+namespace Myrtus.Clarity.WebAPI.Controllers.Users
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]

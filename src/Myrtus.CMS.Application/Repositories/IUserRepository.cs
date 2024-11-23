@@ -1,7 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Application.Repositories;
-using Myrtus.CMS.Domain.Users;
+using Myrtus.Clarity.Domain.Users;
 
-namespace Myrtus.CMS.Application.Repositories
+namespace Myrtus.Clarity.Application.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {

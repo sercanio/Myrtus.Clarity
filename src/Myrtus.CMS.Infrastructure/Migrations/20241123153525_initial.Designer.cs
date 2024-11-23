@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Myrtus.Clarity.Infrastructure;
 using Myrtus.CMS.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 

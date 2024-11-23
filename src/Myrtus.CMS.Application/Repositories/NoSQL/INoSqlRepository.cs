@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Myrtus.CMS.Application.Repositories.NoSQL
+namespace Myrtus.Clarity.Application.Repositories.NoSQL
 {
     public interface INoSqlRepository<T>
     {

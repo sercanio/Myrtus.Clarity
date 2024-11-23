@@ -1,4 +1,4 @@
-﻿namespace Myrtus.CMS.WebAPI.Attributes
+﻿namespace Myrtus.Clarity.WebAPI.Attributes
 {
     internal static class Permissions
     {

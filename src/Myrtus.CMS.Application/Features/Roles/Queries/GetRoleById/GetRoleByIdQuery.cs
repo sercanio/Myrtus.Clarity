@@ -1,6 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 
-namespace Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById
+namespace Myrtus.Clarity.Application.Features.Roles.Queries.GetRoleById
 {
     public sealed record GetRoleByIdQuery(Guid RoleId) : ICachedQuery<GetRoleByIdQueryResponse>
     {

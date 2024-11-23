@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Myrtus.CMS.Application.Features.Roles.Queries.GetRoleById
+namespace Myrtus.Clarity.Application.Features.Roles.Queries.GetRoleById
 {
     public class GetRoleByIdQueryValidator : AbstractValidator<GetRoleByIdQuery>
     {

@@ -32,8 +32,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Domain.Abstractions\Myrtus.Clarity.Core.Domain.Abstractions.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.WebApi\Myrtus.Clarity.Core.WebApi.csproj" />
-		<ProjectReference Include="..\Myrtus.CMS.Application\Myrtus.CMS.Application.csproj" />
-		<ProjectReference Include="..\Myrtus.CMS.Infrastructure\Myrtus.CMS.Infrastructure.csproj" />
+		<ProjectReference Include="..\Myrtus.CMS.Application\Myrtus.Clarity.Application.csproj" />
+		<ProjectReference Include="..\Myrtus.CMS.Infrastructure\Myrtus.Clarity.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

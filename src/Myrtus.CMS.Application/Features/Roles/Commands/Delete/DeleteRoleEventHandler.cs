@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.CMS.Application.Repositories;
-using Myrtus.CMS.Domain.Roles;
-using Myrtus.CMS.Domain.Roles.Events;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Domain.Roles;
+using Myrtus.Clarity.Domain.Roles.Events;
 
-namespace Myrtus.CMS.Application.Features.Roles.Commands.Delete
+namespace Myrtus.Clarity.Application.Features.Roles.Commands.Delete
 {
     internal class DeleteRoleEventHandler(IRoleRepository roleRepository, IAuditLogService auditLogService) : INotificationHandler<RoleDeletedDomainEvent>
     {
