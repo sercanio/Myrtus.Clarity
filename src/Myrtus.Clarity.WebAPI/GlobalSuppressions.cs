@@ -17,3 +17,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Myrtus.Clarity.WebAPI.Controllers.Accounts.AccountsController")]
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Myrtus.Clarity.WebAPI.Controllers.Accounts.LogInUserRequest")]
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Myrtus.Clarity.WebAPI.Controllers.Accounts.RegisterUserRequest")]
+[assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Myrtus.Clarity.WebAPI.Controllers.Users.UpdateUserRolesRequest")]
