@@ -29,7 +29,7 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
                 "Admin",
                 "admin@email.com");
 
-            adminUser.SetIdentityId("d81eefe5-aa20-4d5c-9a22-6476d2774b1a");
+            adminUser.SetIdentityId("7fb87d8f-b488-41f2-8248-47da1cc9e776");
             AdminId = adminUser.Id;
 
             var adminUserDto = new
@@ -45,10 +45,10 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
 
             const string userSql =
                 """
-                            INSERT INTO users (id, first_name, last_name, email, identity_id, created_by, created_on_utc)
-                            VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedBy, @CreatedOnUtc)
-                            ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
-                            """;
+                INSERT INTO users (id, first_name, last_name, email, identity_id, created_by, created_on_utc)
+                VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedBy, @CreatedOnUtc)
+                ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
+                """;
             await connection.ExecuteAsync(userSql, adminUserDto);
 
             List<object> roleUsers =
@@ -59,10 +59,10 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
 
             const string roleSql =
                 """
-                            INSERT INTO role_user (roles_id, users_id)
-                            VALUES(@RoleId, @UserId)
-                            ON CONFLICT (roles_id, users_id) DO NOTHING;
-                            """;
+                INSERT INTO role_user (roles_id, users_id)
+                VALUES(@RoleId, @UserId)
+                ON CONFLICT (roles_id, users_id) DO NOTHING;
+                """;
             await connection.ExecuteAsync(roleSql, roleUsers);
 
             return AdminId;

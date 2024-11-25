@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.Clarity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241123201748_initial")]
+    [Migration("20241125100501_initial")]
     partial class initial
     {
         /// <inheritdoc />

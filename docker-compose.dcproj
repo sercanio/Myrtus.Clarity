@@ -6,7 +6,7 @@
 	  <ProjectGuid>3e7b8d9c-8f1a-4e5b-9a7d-2c6f0e4f7b3d</ProjectGuid>
 	  <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>myrtuscms-api</DockerServiceName>
+    <DockerServiceName>Myrtus-api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

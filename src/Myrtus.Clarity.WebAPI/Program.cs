@@ -120,7 +120,7 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 
     // Uncomment for seed admin user, roles and permissions
-    app.SeedDataAsync().GetAwaiter().GetResult();
+    //app.SeedDataAsync().GetAwaiter().GetResult();
 }
 
 app.UseHttpsRedirection();
