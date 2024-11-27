@@ -31,6 +31,9 @@ using Myrtus.Clarity.Infrastructure.Repositories.NoSQL;
 using Myrtus.Clarity.Application.Services.Auth;
 using Myrtus.Clarity.Application.Services.Mailing;
 using Myrtus.Clarity.Infrastructure.Authentication;
+using Myrtus.Clarity.Core.Domain.Abstractions.Mailing;
+using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
+using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
 
 namespace Myrtus.Clarity.Infrastructure
 {
@@ -45,8 +48,9 @@ namespace Myrtus.Clarity.Infrastructure
                 throw new ArgumentNullException(nameof(configuration), "Configuration cannot be null in AddInfrastructure.");
             }
 
-            services.AddTransient<IDateTimeProvider, DateTimeProvider>()
-                    .AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+
+            AddMailing(services, configuration);
 
             AddPersistence(services, configuration);
 
@@ -59,6 +63,7 @@ namespace Myrtus.Clarity.Infrastructure
             AddHealthChecks(services, configuration);
 
             AddApiVersioning(services);
+
 
             AddBackgroundJobs(services, configuration);
 
@@ -175,6 +180,13 @@ namespace Myrtus.Clarity.Infrastructure
                     options.GroupNameFormat = "'v'V";
                     options.SubstituteApiVersionInUrl = true;
                 });
+        }
+
+        private static void AddMailing(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailKitMailService>();
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)

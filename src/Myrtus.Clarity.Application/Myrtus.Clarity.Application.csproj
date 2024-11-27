@@ -20,6 +20,7 @@
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper\Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Messaging\Myrtus.Clarity.Core.Application.Abstractions.Messaging.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Repositories\Myrtus.Clarity.Core.Application.Abstractions.Repositories.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit\Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Pagination\Myrtus.Clarity.Core.Infrastructure.Pagination.csproj" />
 		<ProjectReference Include="..\Myrtus.Clarity.Domain\Myrtus.Clarity.Domain.csproj" />
 	</ItemGroup>
