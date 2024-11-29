@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />
+		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
+		<PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Auditing\Myrtus.Clarity.Core.Application.Abstractions.Auditing.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Caching\Myrtus.Clarity.Core.Application.Abstractions.Caching.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Mailing\Myrtus.Clarity.Core.Application.Abstractions.Mailing.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Repositories\Myrtus.Clarity.Core.Application.Abstractions.Repositories.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Exceptions\Myrtus.Clarity.Core.Application.Exceptions.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Auditing\Myrtus.Clarity.Core.Infrastructure.Auditing.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Authorization\Myrtus.Clarity.Core.Infrastructure.Authorization.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Caching\Myrtus.Clarity.Core.Infrastructure.Caching.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Clock\Myrtus.Clarity.Core.Infrastructure.Clock.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Data.Dapper\Myrtus.Clarity.Core.Infrastructure.Data.Dapper.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.DynamicQuery\Myrtus.Clarity.Core.Infrastructure.DynamicQuery.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit\Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Outbox\Myrtus.Clarity.Core.Infrastructure.Outbox.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Pagination\Myrtus.Clarity.Core.Infrastructure.Pagination.csproj" />
+		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.SignalR\Myrtus.Clarity.Core.Infrastructure.SignalR.csproj" />
+		<ProjectReference Include="..\Myrtus.Clarity.Application\Myrtus.Clarity.Application.csproj" />
+		<ProjectReference Include="..\Myrtus.Clarity.Domain\Myrtus.Clarity.Domain.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <PackageReference Update="SonarAnalyzer.CSharp" Version="9.32.0.97167">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+</Project>

@@ -1,20 +1,20 @@
 version: '3.4'
 
 services:
-  myrtuscms-api:
+  Myrtus-api:
     image: ${DOCKER_REGISTRY-}myrtuscmsapi
-    container_name: MyrtusCMS.WebAPI
+    container_name: Myrtus.WebAPI
     build:
       context: .
-      dockerfile: src/Myrtus.CMS.WebAPI/Dockerfile
+      dockerfile: src/Myrtus.Clarity.WebAPI/Dockerfile
     depends_on:
-      - myrtuscms-db
+      - Myrtus-db
 
-  myrtuscms-db:
+  Myrtus-db:
     image: postgres:latest
-    container_name: MyrtusCMS.Db
+    container_name: Myrtus.Db
     environment:
-      - POSTGRES_DB=myrtusCMS
+      - POSTGRES_DB=Myrtus
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
@@ -22,31 +22,58 @@ services:
     ports:
       - 5432:5432
 
-  myrtuscms-idp:
+  Myrtus-idp:
     image: quay.io/keycloak/keycloak:latest
-    container_name: MyrtusCMS.Identity
+    container_name: Myrtus.Identity
     command: start-dev --import-realm
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
     volumes:
       - ./.containers/identity:/opt/keycloak/data
-      - ./.files:/opt/keycloak/data/import
+      - ./.containers/keycloak/data:/opt/keycloak/data/import
     ports:
       - 18080:8080
 
-  myrtuscms-seq:
+  Myrtus-seq:
     image: datalust/seq:latest
-    container_name: MyrtusCMS.Seq
+    container_name: Myrtus.Seq
     environment:
       - ACCEPT_EULA=Y
     ports:
       - 5341:5341
       - 8081:80
+    volumes:
+      - ./.containers/logging/seq/data:/data
 
-  myrtuscms-redis:
+  Myrtus-redis:
     image: redis:latest
-    container_name: MyrtusCMS.Redis
+    container_name: Myrtus.Redis
     restart: always
     ports:
       - 6379:6379
+
+  Myrtus-redis-insight:
+    image: redis/redisinsight:latest
+    container_name: Myrtus.RedisInsight
+    restart: always
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
+    environment:
+      - RIHOST=redis://Myrtus-redis:6379
+
+  Myrtus-mongodb:
+    image: mongo:latest
+    container_name: Myrtus.MongoDb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+    volumes:
+      - ./.containers/mongodb:/data/db
+    ports:
+      - 27017:27017
+       
+volumes:
+  redis-insight:
