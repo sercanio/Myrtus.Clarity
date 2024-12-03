@@ -3,8 +3,8 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-	  <ProjectGuid>3e7b8d9c-8f1a-4e5b-9a7d-2c6f0e4f7b3d</ProjectGuid>
-	  <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <ProjectGuid>3e7b8d9c-8f1a-4e5b-9a7d-2c6f0e4f7b3d</ProjectGuid>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>Myrtus-api</DockerServiceName>
   </PropertyGroup>

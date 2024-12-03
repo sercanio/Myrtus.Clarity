@@ -15,6 +15,8 @@ using Myrtus.Clarity.WebAPI.Extensions.SeedData;
 using Myrtus.Clarity.WebAPI.OpenApi;
 using Serilog;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -145,6 +147,8 @@ app.MapHealthChecks("health", new HealthCheckOptions
 });
 
 app.MapHub<AuditLogHub>("/auditLogHub");
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
 

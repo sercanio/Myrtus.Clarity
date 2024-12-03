@@ -23,7 +23,7 @@ services:
       - 5432:5432
 
   Myrtus-idp:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.0.5
     container_name: Myrtus.Identity
     command: start-dev --import-realm
     environment:

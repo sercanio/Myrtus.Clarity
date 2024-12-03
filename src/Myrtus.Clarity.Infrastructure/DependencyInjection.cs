@@ -34,6 +34,9 @@ using Myrtus.Clarity.Infrastructure.Authentication;
 using Myrtus.Clarity.Core.Domain.Abstractions.Mailing;
 using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
 using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
+using Myrtus.Clarity.Core.Infrastructure.Notification.Services;
+using Myrtus.Clarity.Core.Application.Abstractions.Notification;
+using Myrtus.Clarity.Core.Infrastructure.Auditing.Services;
 
 namespace Myrtus.Clarity.Infrastructure
 {
@@ -64,10 +67,11 @@ namespace Myrtus.Clarity.Infrastructure
 
             AddApiVersioning(services);
 
-
             AddBackgroundJobs(services, configuration);
 
             AddAuditing(services);
+
+            AddNotification(services);
 
             AddSignalR(services);
 
@@ -200,6 +204,11 @@ namespace Myrtus.Clarity.Infrastructure
         private static void AddAuditing(IServiceCollection services)
         {
             services.AddTransient<IAuditLogService, AuditLogService>();
+        }
+
+        private static void AddNotification(IServiceCollection services)
+        {
+            services.AddTransient<INotificationService, NotificationService>();
         }
 
         private static void AddSignalR(IServiceCollection services)
