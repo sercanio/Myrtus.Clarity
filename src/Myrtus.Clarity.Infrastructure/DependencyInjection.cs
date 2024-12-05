@@ -1,42 +1,41 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Asp.Versioning;
+using Dapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Asp.Versioning;
-using Dapper;
-using Quartz;
-using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
+using MongoDB.Driver;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Application.Repositories.NoSQL;
+using Myrtus.Clarity.Application.Services.Auth;
+using Myrtus.Clarity.Application.Services.Mailing;
+using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
+using Myrtus.Clarity.Core.Application.Abstractions.Authentication;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Clock;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
+using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
+using Myrtus.Clarity.Core.Application.Abstractions.Notification;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
+using Myrtus.Clarity.Core.Domain.Abstractions.Mailing;
+using Myrtus.Clarity.Core.Infrastructure.Auditing.Services;
+using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
+using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
 using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
-using Myrtus.Clarity.Infrastructure.Repositories;
-using Myrtus.Clarity.Core.Infrastructure.Outbox;
-using Myrtus.Clarity.Infrastructure.Authorization;
-using Myrtus.Clarity.Application.Repositories;
-using Myrtus.Clarity.Infrastructure.Mailing;
-using AuthenticationOptions = Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.AuthenticationOptions;
-using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
-using MongoDB.Driver;
-using Myrtus.Clarity.Application.Repositories.NoSQL;
-using Myrtus.Clarity.Infrastructure.Repositories.NoSQL;
-using Myrtus.Clarity.Application.Services.Auth;
-using Myrtus.Clarity.Application.Services.Mailing;
-using Myrtus.Clarity.Infrastructure.Authentication;
-using Myrtus.Clarity.Core.Domain.Abstractions.Mailing;
-using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
 using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
 using Myrtus.Clarity.Core.Infrastructure.Notification.Services;
-using Myrtus.Clarity.Core.Application.Abstractions.Notification;
-using Myrtus.Clarity.Core.Infrastructure.Auditing.Services;
+using Myrtus.Clarity.Core.Infrastructure.Outbox;
+using Myrtus.Clarity.Infrastructure.Authentication;
+using Myrtus.Clarity.Infrastructure.Authorization;
+using Myrtus.Clarity.Infrastructure.Mailing;
+using Myrtus.Clarity.Infrastructure.Repositories;
+using Myrtus.Clarity.Infrastructure.Repositories.NoSQL;
+using Quartz;
 
 namespace Myrtus.Clarity.Infrastructure
 {
@@ -59,7 +58,7 @@ namespace Myrtus.Clarity.Infrastructure
 
             AddCaching(services, configuration);
 
-            AddAuthentication(services, configuration);
+            AddAzureAuthentication(services, configuration);
 
             AddAuthorization(services);
 
@@ -108,38 +107,26 @@ namespace Myrtus.Clarity.Infrastructure
                         new NoSqlRepository<AuditLog>(sp.GetRequiredService<IMongoDatabase>(), "AuditLogs"));
         }
 
-        private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)
+        private static void AddAzureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer();
-
-            services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
-
-            services.ConfigureOptions<JwtBearerOptionsSetup>();
-
-            services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
-
-            services.AddTransient<AdminAuthorizationDelegatingHandler>();
-
-            services.AddHttpClient<IAuthService, AuthService>((serviceProvider, httpClient) =>
-            {
-                KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
-
-                httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
-            })
-            .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
-
-            services.AddHttpClient<IJwtService, JwtService>((serviceProvider, httpClient) =>
-            {
-                KeycloakOptions keycloakOptions = serviceProvider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
-
-                httpClient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
-            });
-
             services.AddHttpContextAccessor();
 
             services.AddScoped<IUserContext, UserContext>();
+
+            services.Configure<AzureAdB2COptions>(configuration.GetSection("AzureAdB2C"));
+
+            services.AddTransient<AdminAuthorizationDelegatingHandler>();
+
+            services.AddHttpClient<IAuthService, AuthService>();
+
+            services.AddHttpClient<IJwtService, AzureAdB2CJwtService>((serviceProvider, httpClient) =>
+            {
+                AzureAdB2COptions azureOptions = serviceProvider.GetRequiredService<IOptions<AzureAdB2COptions>>().Value;
+
+                httpClient.BaseAddress = new Uri(azureOptions.Instance);
+            });
+
+            services.AddTransient<AzureAdB2CJwtService>();
         }
 
         private static void AddAuthorization(IServiceCollection services)
@@ -166,7 +153,7 @@ namespace Myrtus.Clarity.Infrastructure
             services.AddHealthChecks()
                     .AddNpgSql(configuration.GetConnectionString("Database")!)
                     .AddRedis(configuration.GetConnectionString("Cache")!)
-                    .AddUrlGroup(new Uri(configuration["KeyCloak:BaseUrl"]!), HttpMethod.Get, "keycloak");
+                    .AddUrlGroup(new Uri(configuration["AzureAdB2C:Instance"]!), HttpMethod.Get, "AzureAdB2C");
         }
 
         private static void AddApiVersioning(IServiceCollection services)

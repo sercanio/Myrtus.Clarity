@@ -1,13 +1,13 @@
 ﻿using Ardalis.Result;
-using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
+using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
 using Myrtus.Clarity.Domain.Users;
 
 namespace Myrtus.Clarity.Application.Features.Accounts.LogInUser
 {
-    internal sealed class LogInUserCommandHandler(IJwtService jwtService) : ICommandHandler<LogInUserCommand, AccessTokenResponse>
+    internal sealed class LogInUserCommandHandler(AzureAdB2CJwtService jwtService) : ICommandHandler<LogInUserCommand, AccessTokenResponse>
     {
-        private readonly IJwtService _jwtService = jwtService;
+        private readonly AzureAdB2CJwtService _jwtService = jwtService;
 
         public async Task<Result<AccessTokenResponse>> Handle(
             LogInUserCommand request,

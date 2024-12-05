@@ -1,4 +1,4 @@
-﻿using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.Models;
+﻿using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure.Models;
 using Myrtus.Clarity.Domain.Users;
 
 namespace Myrtus.Clarity.Infrastructure.Authentication.Models

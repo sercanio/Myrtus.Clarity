@@ -1,15 +1,21 @@
 ﻿using Ardalis.Result;
-using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
+using Myrtus.Clarity.Core.Application.Abstractions.Authentication;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Application.Repositories;
 using Myrtus.Clarity.Domain.Users;
 
 namespace Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser
 {
-    internal sealed class GetLoggedInUserQueryHandler(IUserRepository userRepository, IUserContext userContext) : IQueryHandler<GetLoggedInUserQuery, UserResponse>
+    internal sealed class GetLoggedInUserQueryHandler : IQueryHandler<GetLoggedInUserQuery, UserResponse>
     {
-        private readonly IUserRepository _userRepository = userRepository;
-        private readonly IUserContext _userContext = userContext;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserContext _userContext;
+
+        public GetLoggedInUserQueryHandler(IUserRepository userRepository, IUserContext userContext)
+        {
+            _userRepository = userRepository;
+            _userContext = userContext;
+        }
 
         public async Task<Result<UserResponse>> Handle(GetLoggedInUserQuery request, CancellationToken cancellationToken)
         {

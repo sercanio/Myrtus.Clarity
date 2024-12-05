@@ -29,7 +29,7 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
                 "Admin",
                 "admin@email.com");
 
-            adminUser.SetIdentityId("e0eeb978-5339-424e-a95f-7024b10c4379");
+            adminUser.SetIdentityId("5a7e3a65-0515-45a7-8c4c-f17a03efd851");
             AdminId = adminUser.Id;
 
             var adminUserDto = new

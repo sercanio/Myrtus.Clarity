@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   Myrtus-api:
-    image: ${DOCKER_REGISTRY-}myrtuscmsapi
+    image: ${DOCKER_REGISTRY-}myrtusapi
     container_name: Myrtus.WebAPI
     build:
       context: .
@@ -21,19 +21,6 @@ services:
       - ./.containers/database:/var/lib/postgresql/data
     ports:
       - 5432:5432
-
-  Myrtus-idp:
-    image: quay.io/keycloak/keycloak:26.0.5
-    container_name: Myrtus.Identity
-    command: start-dev --import-realm
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-    volumes:
-      - ./.containers/identity:/opt/keycloak/data
-      - ./.containers/keycloak/data:/opt/keycloak/data/import
-    ports:
-      - 18080:8080
 
   Myrtus-seq:
     image: datalust/seq:latest

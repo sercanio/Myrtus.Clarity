@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak;
+using Myrtus.Clarity.Core.Application.Abstractions.Authentication;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;

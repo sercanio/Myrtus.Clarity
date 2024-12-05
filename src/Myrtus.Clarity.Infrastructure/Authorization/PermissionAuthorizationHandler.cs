@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak;
+using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 
 namespace Myrtus.Clarity.Infrastructure.Authorization

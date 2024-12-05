@@ -86,6 +86,22 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Add Azure AD B2C authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = $"{builder.Configuration["AzureAdB2C:Instance"]}/{builder.Configuration["AzureAdB2C:TenantId"]}/{builder.Configuration["AzureAdB2C:SignUpSignInPolicyId"]}/v2.0/";
+        options.Audience = builder.Configuration["AzureAdB2C:ClientId"];
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Authentication:ValidIssuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AzureAdB2C:ClientId"],
+            ValidateLifetime = true
+        };
+    });
+
 builder.Services.AddDomain(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

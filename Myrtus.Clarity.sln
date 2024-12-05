@@ -31,10 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrastructure.Outbox", "core\Myrtus.Clarity.Core.Infrastructure.Outbox\Myrtus.Clarity.Core.Infrastructure.Outbox.csproj", "{A74DA57C-5D51-4425-8379-19C4CAEC8A0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak", "core\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak\Myrtus.Clarity.Core.Infrastructure.Authentication.Keycloak.csproj", "{D3BC2AE2-3EE3-4B1A-ABAE-C16F347AAA01}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak", "core\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak\Myrtus.Clarity.Core.Application.Abstractions.Authentication.Keycloak.csproj", "{5158639C-9EBA-4E3C-9E09-8D561D175E6B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Behaviours", "core\Myrtus.Clarity.Core.Application.Abstractions.Behaviours\Myrtus.Clarity.Core.Application.Abstractions.Behaviours.csproj", "{715F7132-E1A3-45BE-9F6F-694488D03C32}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}"
@@ -75,6 +71,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtus.Clarity.Core.Infrastructure.Notification", "core\Myrtus.Clarity.Core.Infrastructure.Notification\Myrtus.Clarity.Core.Infrastructure.Notification.csproj", "{25DC1C30-5F9A-47B7-A189-614143EE5C3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtus.Clarity.Core.Application.Abstractions.Notification", "core\Myrtus.Clarity.Core.Application.Abstractions.Notification\Myrtus.Clarity.Core.Application.Abstractions.Notification.csproj", "{35F51872-C4F3-49E9-97EA-1F068D20D175}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtus.Clarity.Core.Infrastructure.Authentication.Azure", "core\Myrtus.Clarity.Core.Infrastructure.Authentication.Azure\Myrtus.Clarity.Core.Infrastructure.Authentication.Azure.csproj", "{3C986F15-31D7-49BF-B62B-45B42C817BC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtus.Clarity.Core.Application.Abstractions.Authentication", "core\Myrtus.Clarity.Core.Application.Abstractions.Authentication\Myrtus.Clarity.Core.Application.Abstractions.Authentication.csproj", "{116366DC-6E1B-4075-BE48-27E2BA798403}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -126,14 +126,6 @@ Global
 		{A74DA57C-5D51-4425-8379-19C4CAEC8A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A74DA57C-5D51-4425-8379-19C4CAEC8A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A74DA57C-5D51-4425-8379-19C4CAEC8A0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3BC2AE2-3EE3-4B1A-ABAE-C16F347AAA01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3BC2AE2-3EE3-4B1A-ABAE-C16F347AAA01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3BC2AE2-3EE3-4B1A-ABAE-C16F347AAA01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3BC2AE2-3EE3-4B1A-ABAE-C16F347AAA01}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5158639C-9EBA-4E3C-9E09-8D561D175E6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5158639C-9EBA-4E3C-9E09-8D561D175E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5158639C-9EBA-4E3C-9E09-8D561D175E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5158639C-9EBA-4E3C-9E09-8D561D175E6B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{715F7132-E1A3-45BE-9F6F-694488D03C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{715F7132-E1A3-45BE-9F6F-694488D03C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{715F7132-E1A3-45BE-9F6F-694488D03C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -206,6 +198,14 @@ Global
 		{35F51872-C4F3-49E9-97EA-1F068D20D175}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35F51872-C4F3-49E9-97EA-1F068D20D175}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35F51872-C4F3-49E9-97EA-1F068D20D175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C986F15-31D7-49BF-B62B-45B42C817BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C986F15-31D7-49BF-B62B-45B42C817BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C986F15-31D7-49BF-B62B-45B42C817BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C986F15-31D7-49BF-B62B-45B42C817BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116366DC-6E1B-4075-BE48-27E2BA798403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116366DC-6E1B-4075-BE48-27E2BA798403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116366DC-6E1B-4075-BE48-27E2BA798403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116366DC-6E1B-4075-BE48-27E2BA798403}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,8 +222,6 @@ Global
 		{9B382AE2-245F-4302-821F-4B7E7E48F6F9} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{5DA83044-BE10-4377-9B72-67F22327944A} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{A74DA57C-5D51-4425-8379-19C4CAEC8A0F} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
-		{D3BC2AE2-3EE3-4B1A-ABAE-C16F347AAA01} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
-		{5158639C-9EBA-4E3C-9E09-8D561D175E6B} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{715F7132-E1A3-45BE-9F6F-694488D03C32} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{32EFB480-650C-4B84-8FFB-D3A0921C034C} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{810180F5-8283-4CD7-AE55-DEBC786041A1} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
@@ -241,6 +239,8 @@ Global
 		{67D1C6EF-BE47-4AB8-BD46-421DEC04E6AD} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{25DC1C30-5F9A-47B7-A189-614143EE5C3F} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 		{35F51872-C4F3-49E9-97EA-1F068D20D175} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
+		{3C986F15-31D7-49BF-B62B-45B42C817BC2} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
+		{116366DC-6E1B-4075-BE48-27E2BA798403} = {ED5CDE04-7D40-4CC8-BB06-B2949158F655}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7949CCE5-84CB-4073-9DF1-B959B76413D5}
