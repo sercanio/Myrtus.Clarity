@@ -22,7 +22,6 @@ using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Core.Domain.Abstractions.Mailing;
 using Myrtus.Clarity.Core.Infrastructure.Auditing.Services;
 using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
-using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
@@ -117,7 +116,7 @@ namespace Myrtus.Clarity.Infrastructure
 
             services.AddTransient<AdminAuthorizationDelegatingHandler>();
 
-            services.AddHttpClient<IAuthService, AuthService>();
+            services.AddHttpClient<IAuthService, AzureAuthService>();
 
             services.AddHttpClient<IJwtService, AzureAdB2CJwtService>((serviceProvider, httpClient) =>
             {
@@ -127,6 +126,7 @@ namespace Myrtus.Clarity.Infrastructure
             });
 
             services.AddTransient<AzureAdB2CJwtService>();
+            services.AddScoped<IAuthService, AzureAuthService>();
         }
 
         private static void AddAuthorization(IServiceCollection services)

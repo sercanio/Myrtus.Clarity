@@ -7,15 +7,16 @@ using Myrtus.Clarity.Application.Repositories;
 using Myrtus.Clarity.Application.Services.Users;
 using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Core.Infrastructure.Pagination;
 
 namespace Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdateRoleName
 {
     public sealed class UpdateRoleNameCommandHandler(
-       IRoleRepository roleRepository,
-       IUserService userRepository,
-       IUserContext userContext,
-       IUnitOfWork unitOfWork,
-       ICacheService cacheService) : ICommandHandler<UpdateRoleNameCommand, UpdateRoleNameCommandResponse>
+           IRoleRepository roleRepository,
+           IUserService userRepository,
+           IUserContext userContext,
+           IUnitOfWork unitOfWork,
+           ICacheService cacheService) : ICommandHandler<UpdateRoleNameCommand, UpdateRoleNameCommandResponse>
     {
         private readonly IRoleRepository _roleRepository = roleRepository;
         private readonly IUserService _userService = userRepository;
@@ -43,10 +44,38 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdateRoleNa
             _roleRepository.Update(role);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
-            await _cacheService.RemoveAsync($"auth:roles-{role.Id}", cancellationToken);
+            await InvalidateRoleCacheAsync(role.Id, cancellationToken);
 
             return Result.Success(new UpdateRoleNameCommandResponse(role.Name));
+        }
+
+        private async Task InvalidateRoleCacheAsync(Guid roleId, CancellationToken cancellationToken)
+        {
+            await _cacheService.RemoveAsync($"roles-{roleId}", cancellationToken);
+
+            const int batchSize = 1000;
+            int pageIndex = 0;
+            PaginatedList<User> usersBatch;
+
+            do
+            {
+                usersBatch = await _userService.GetAllAsync(
+                    index: pageIndex,
+                    size: batchSize,
+                    includeSoftDeleted: false,
+                    predicate: u => u.Roles.Any(r => r.Id == roleId),
+                    cancellationToken);
+
+                var tasks = usersBatch.Items.Select(async u =>
+                {
+                    await _cacheService.RemoveAsync($"auth:roles-{u.IdentityId}", cancellationToken);
+                    await _cacheService.RemoveAsync($"auth:permissions-{u.IdentityId}", cancellationToken);
+                });
+
+                await Task.WhenAll(tasks);
+
+                pageIndex++;
+            } while (usersBatch.Items.Count > 0);
         }
     }
 }

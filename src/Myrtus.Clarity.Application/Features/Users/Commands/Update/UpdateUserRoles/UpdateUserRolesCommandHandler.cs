@@ -8,15 +8,16 @@ using Myrtus.Clarity.Application.Repositories;
 using Myrtus.Clarity.Application.Services.Roles;
 using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles
 {
     public sealed class UpdateUserRolesCommandHandler(
-        IUserRepository userRepository,
-        IRoleService roleService,
-        IUnitOfWork unitOfWork,
-        ICacheService cacheService,
-        IUserContext userContext) : ICommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
+            IUserRepository userRepository,
+            IRoleService roleService,
+            IUnitOfWork unitOfWork,
+            ICacheService cacheService,
+            IUserContext userContext) : ICommandHandler<UpdateUserRolesCommand, UpdateUserRolesCommandResponse>
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IRoleService _roleService = roleService;
@@ -63,12 +64,17 @@ namespace Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRo
             _userRepository.Update(user);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _cacheService.RemoveAsync($"users-{user.Id}", cancellationToken);
-            await _cacheService.RemoveAsync($"auth:roles-{_userContext.IdentityId}", cancellationToken);
-            await _cacheService.RemoveAsync($"auth:permissions-{_userContext.IdentityId}", cancellationToken);
+            await InvalidateUserCacheAsync(user, cancellationToken);
 
             UpdateUserRolesCommandResponse response = new(role.Id, user.Id);
             return Result.Success(response);
+        }
+
+        private async Task InvalidateUserCacheAsync(User user, CancellationToken cancellationToken)
+        {
+            await _cacheService.RemoveAsync($"users-{user.Id}", cancellationToken);
+            await _cacheService.RemoveAsync($"auth:roles-{user.IdentityId}", cancellationToken);
+            await _cacheService.RemoveAsync($"auth:permissions-{user.IdentityId}", cancellationToken);
         }
     }
 }

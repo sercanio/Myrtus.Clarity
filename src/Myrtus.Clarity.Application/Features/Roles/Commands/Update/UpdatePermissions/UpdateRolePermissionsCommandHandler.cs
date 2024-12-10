@@ -8,20 +8,22 @@ using Myrtus.Clarity.Application.Repositories;
 using Myrtus.Clarity.Application.Services.Users;
 using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Core.Infrastructure.Pagination;
+using System.Data;
 
 namespace Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdatePermissions
 {
     public sealed class UpdateRolePermissionsCommandHandler(
         IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
-        IUserService userRepository,
+        IUserService userService,
         IUnitOfWork unitOfWork,
         ICacheService cacheService,
         IUserContext userContext) : ICommandHandler<UpdateRolePermissionsCommand, UpdateRolePermissionsCommandResponse>
     {
         private readonly IRoleRepository _roleRepository = roleRepository;
         private readonly IPermissionRepository _permissionRepository = permissionRepository;
-        private readonly IUserService _userService = userRepository;
+        private readonly IUserService _userService = userService;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ICacheService _cacheService = cacheService;
         private readonly IUserContext _userContext = userContext;
@@ -69,11 +71,38 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdatePermis
             _roleRepository.Update(role);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _cacheService.RemoveAsync($"roles-{role.Id}", cancellationToken);
-            await _cacheService.RemoveAsync($"auth:roles-{role.Id}", cancellationToken);
-            await _cacheService.RemoveAsync($"auth:permissions-{_userContext.IdentityId}", cancellationToken);
+            await InvalidateCachesAsync(role.Id, cancellationToken);
 
             return Result.Success(new UpdateRolePermissionsCommandResponse(role.Id, request.PermissionId));
+        }
+
+        private async Task InvalidateCachesAsync(Guid roleId, CancellationToken cancellationToken)
+        {
+            await _cacheService.RemoveAsync($"roles-{roleId}", cancellationToken);
+
+            const int batchSize = 1000;
+            int pageIndex = 0;
+            PaginatedList<User> usersBatch;
+
+            do
+            {
+                usersBatch = await _userService.GetAllAsync(
+                    index: pageIndex,
+                    size: batchSize,
+                    includeSoftDeleted: false,
+                    predicate: u => u.Roles.Any(r => r.Id == roleId),
+                    cancellationToken);
+
+                var tasks = usersBatch.Items.Select(async u =>
+                {
+                    await _cacheService.RemoveAsync($"auth:roles-{u.IdentityId}", cancellationToken);
+                    await _cacheService.RemoveAsync($"auth:permissions-{u.IdentityId}", cancellationToken);
+                });
+
+                await Task.WhenAll(tasks);
+
+                pageIndex++;
+            } while (usersBatch.Items.Count > 0);
         }
     }
 }
