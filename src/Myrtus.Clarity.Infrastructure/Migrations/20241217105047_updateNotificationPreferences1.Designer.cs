@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Myrtus.Clarity.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.Clarity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241217105047_updateNotificationPreferences1")]
+    partial class updateNotificationPreferences1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,11 +255,11 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                                 .HasColumnType("uuid")
                                 .HasColumnName("id");
 
-                            b1.Property<bool>("IsEmailNotificationEnabled")
+                            b1.Property<bool>("IsEmailEnabled")
                                 .HasColumnType("boolean")
                                 .HasColumnName("email_notification");
 
-                            b1.Property<bool>("IsInAppNotificationEnabled")
+                            b1.Property<bool>("IsInAppEnabled")
                                 .HasColumnType("boolean")
                                 .HasColumnName("in_app_notification");
 

@@ -1,14 +1,13 @@
 ﻿using Ardalis.Result;
+using Myrtus.Clarity.Application.Enums;
+using Myrtus.Clarity.Application.Repositories;
+using Myrtus.Clarity.Application.Services.Roles;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Messaging;
 using Myrtus.Clarity.Core.Domain.Abstractions;
-using Myrtus.Clarity.Application.Enums;
-using Myrtus.Clarity.Application.Repositories;
-using Myrtus.Clarity.Application.Services.Roles;
 using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users;
-using Microsoft.EntityFrameworkCore;
 
 namespace Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles
 {

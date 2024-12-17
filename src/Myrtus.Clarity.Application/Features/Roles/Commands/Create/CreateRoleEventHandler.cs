@@ -38,8 +38,6 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Create
             };
             await _auditLogService.LogAsync(log);
 
-            //await _notificationService.SendNotificationAsync($"Role '{role.Name}' has been created.");
-
             await _notificationService.SendNotificationToUserAsync(
                 message: $"Role '{role.Name}' has been created.",
                 userId: "af2b6718-99a0-4d0c-8597-5ba3c3e20a5e");

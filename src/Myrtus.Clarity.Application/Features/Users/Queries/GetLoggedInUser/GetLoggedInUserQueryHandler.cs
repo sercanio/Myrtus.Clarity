@@ -38,7 +38,8 @@ namespace Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Roles = mappedRoles
+                Roles = mappedRoles,
+                NotificationPreference = user.NotificationPreference
             };
 
             return Result.Success(userResponse);

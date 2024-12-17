@@ -7,9 +7,9 @@ using Microsoft.Identity.Client;
 using Microsoft.Kiota.Abstractions.Authentication;
 using MimeKit;
 using Myrtus.Clarity.Application.Services.Auth;
-using Myrtus.Clarity.Application.Services.Mailing;
 using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
 using Myrtus.Clarity.Core.Domain.Abstractions.Mailing;
+using System.Security.Cryptography;
 using System.Text;
 using User = Myrtus.Clarity.Domain.Users.User;
 
@@ -109,6 +109,9 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
 
         private async Task SendPasswordResetEmailAsync(User user, CancellationToken cancellationToken)
         {
+            var codeVerifier = GenerateCodeVerifier();
+            var codeChallenge = GenerateCodeChallenge(codeVerifier);
+
             // Construct the password reset link
             var passwordResetPolicyId = _configuration["AzureAdB2C:PasswordResetPolicyId"];
             var clientId = _configuration["AzureAdB2C:ClientId"];
@@ -123,9 +126,11 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
                     {"nonce", "defaultNonce"},
                     {"redirect_uri", redirectUri},
                     {"scope", "openid"},
-                    {"response_type", "id_token"},
+                    {"response_type", "code"},
                     {"prompt", "login"},
-                    {"login_hint", user.Email}
+                    {"login_hint", user.Email},
+                    {"code_challenge", codeChallenge},
+                    {"code_challenge_method", "S256"}
                 };
 
             var passwordResetLink = QueryHelpers.AddQueryString($"{instance}/{tenantDomain}/oauth2/v2.0/authorize", queryParams);
@@ -159,6 +164,30 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
 
             // Send the email using IMailService
             await _emailService.SendEmailAsync(mail);
+        }
+
+        private string GenerateCodeVerifier()
+        {
+            const int length = 128;
+            byte[] bytes = new byte[length];
+            RandomNumberGenerator.Fill(bytes);
+            return Base64UrlEncode(bytes);
+        }
+
+        private string GenerateCodeChallenge(string codeVerifier)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.ASCII.GetBytes(codeVerifier);
+            var hash = sha256.ComputeHash(bytes);
+            return Base64UrlEncode(hash);
+        }
+
+        private string Base64UrlEncode(byte[] bytes)
+        {
+            return Convert.ToBase64String(bytes)
+                .TrimEnd('=')
+                .Replace('+', '-')
+                .Replace('/', '_');
         }
     }
 }

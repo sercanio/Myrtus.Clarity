@@ -1,6 +1,7 @@
 ﻿using Myrtus.Clarity.Core.Domain.Abstractions;
 using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users.Events;
+using Myrtus.Clarity.Domain.Users.ValueObjects;
 
 namespace Myrtus.Clarity.Domain.Users
 {
@@ -11,15 +12,21 @@ namespace Myrtus.Clarity.Domain.Users
         public string LastName { get; private set; }
         public string Email { get; private set; }
         public string IdentityId { get; private set; } = string.Empty;
+        public NotificationPreference NotificationPreference { get; private set; }
 
         public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
 
-        private User(Guid id, string firstName, string lastName, string email)
-            : base(id)
+        private User(
+            Guid id,
+            string firstName,
+            string lastName,
+            string email,
+            NotificationPreference notificationPreference) : base(id)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
+            NotificationPreference = notificationPreference;
         }
 
         private User()
@@ -33,7 +40,8 @@ namespace Myrtus.Clarity.Domain.Users
             string lastName,
             string email)
         {
-            User user = new(Guid.NewGuid(), firstName, lastName, email);
+            NotificationPreference notificationPreference = new(true, true, true);
+            User user = new(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
             user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
             user.AddRole(Role.DefaultRole);
             user.UpdatedBy = "System";
@@ -45,7 +53,8 @@ namespace Myrtus.Clarity.Domain.Users
             string lastName,
             string email)
         {
-            return new User(Guid.NewGuid(), firstName, lastName, email);
+            NotificationPreference notificationPreference = new(true, true, true);
+            return new User(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
         }
 
         public void AddRole(Role role)

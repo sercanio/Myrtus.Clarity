@@ -9,6 +9,7 @@
     <DockerServiceName>Myrtus-api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="core\Myrtus.Clarity.Core.Domain.Abstractions\ValueObject.cs" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
