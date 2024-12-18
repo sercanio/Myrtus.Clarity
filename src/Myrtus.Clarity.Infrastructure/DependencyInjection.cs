@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,7 @@ using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
 using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
 using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
-using Myrtus.Clarity.Core.Infrastructure.Notification.Services;
+using Myrtus.Clarity.Core.Infrastructure.Notifications.Services;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
 using Myrtus.Clarity.Infrastructure.Authentication;
 using Myrtus.Clarity.Infrastructure.Authorization;
@@ -103,7 +104,9 @@ namespace Myrtus.Clarity.Infrastructure
             services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoConnectionString))
                     .AddSingleton(sp => sp.GetRequiredService<IMongoClient>().GetDatabase(mongoDatabaseName))
                     .AddScoped<INoSqlRepository<AuditLog>, NoSqlRepository<AuditLog>>(sp =>
-                        new NoSqlRepository<AuditLog>(sp.GetRequiredService<IMongoDatabase>(), "AuditLogs"));
+                        new NoSqlRepository<AuditLog>(sp.GetRequiredService<IMongoDatabase>(), "AuditLogs"))
+                    .AddScoped<INoSqlRepository<Notification>, NoSqlRepository<Notification>>(sp =>
+                        new NoSqlRepository<Notification>(sp.GetRequiredService<IMongoDatabase>(), "Notifications"));
         }
 
         private static void AddAzureAuthentication(IServiceCollection services, IConfiguration configuration)
@@ -201,6 +204,7 @@ namespace Myrtus.Clarity.Infrastructure
         private static void AddSignalR(IServiceCollection services)
         {
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, DefaultUserIdProvider>();
         }
     }
 }

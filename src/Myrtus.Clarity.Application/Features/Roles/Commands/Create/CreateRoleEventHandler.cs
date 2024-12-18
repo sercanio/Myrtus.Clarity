@@ -38,20 +38,20 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Create
             };
             await _auditLogService.LogAsync(log);
 
-            await _notificationService.SendNotificationToUserAsync(
-                message: $"Role '{role.Name}' has been created.",
-                userId: "af2b6718-99a0-4d0c-8597-5ba3c3e20a5e");
+            await _notificationService.SendNotificationToUserGroupAsync(
+                details: $"Role '{role.Name}' has been created by {role.CreatedBy}.",
+                groupName: Role.Admin.Name);
 
-            Mail mail = new(
-                subject: "Role Created",
-                textBody: $"Role '{role.Name}' has been created.",
-                htmlBody: $"<p>Role '{role.Name}' has been created.</p>",
-                toList:
-                [
-                    new(encoding: Encoding.UTF8, name: role.CreatedBy, address: role.CreatedBy)
-                ]);
+            //Mail mail = new(
+            //    subject: "Role Created",
+            //    textBody: $"Role '{role.Name}' has been created.",
+            //    htmlBody: $"<p>Role '{role.Name}' has been created.</p>",
+            //    toList:
+            //    [
+            //        new(encoding: Encoding.UTF8, name: role.CreatedBy, address: role.CreatedBy)
+            //    ]);
 
-            await _emailService.SendEmailAsync(mail);
+            //await _emailService.SendEmailAsync(mail);
         }
     }
 }

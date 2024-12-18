@@ -7,7 +7,8 @@ using Myrtus.Clarity.Application.Repositories.NoSQL;
 
 namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
 {
-    public class GetAllAuditLogsQueryHandler(INoSqlRepository<AuditLog> auditLogRepository) : IRequestHandler<GetAllAuditLogsQuery, Result<IPaginatedList<GetAllAuditLogsQueryResponse>>>
+    public sealed class GetAllAuditLogsQueryHandler(INoSqlRepository<AuditLog> auditLogRepository)
+        : IRequestHandler<GetAllAuditLogsQuery, Result<IPaginatedList<GetAllAuditLogsQueryResponse>>>
     {
         private readonly INoSqlRepository<AuditLog> _auditLogRepository = auditLogRepository;
 

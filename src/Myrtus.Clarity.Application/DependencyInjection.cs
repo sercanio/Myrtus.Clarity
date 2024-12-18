@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 using Myrtus.Clarity.Application.Services.Roles;
 using Myrtus.Clarity.Application.Services.Users;
-using Myrtus.Clarity.Application.Services.Mailing;
-using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
-using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
+using Myrtus.Clarity.Core.Application.Abstractions.Behaviors;
 
 namespace Myrtus.Clarity.Application
 {
