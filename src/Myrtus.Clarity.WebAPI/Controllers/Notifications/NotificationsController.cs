@@ -4,7 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifications;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
+using Myrtus.Clarity.WebAPI.Attributes;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Notifications
 {
@@ -14,6 +16,7 @@ namespace Myrtus.Clarity.WebAPI.Controllers.Notifications
     public class NotificationsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
         [HttpGet]
+        [HasPermission(Permissions.NotificationsRead)]
         public async Task<IActionResult> GetAllNotifications(
             [FromQuery] int pageIndex = 0,
             [FromQuery] int pageSize = 10,

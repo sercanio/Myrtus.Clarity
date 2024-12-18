@@ -18,5 +18,10 @@
         public const string AuditLogsDelete = "auditlogs:delete";
 
         public const string PermissionsRead = "permissions:read";
+
+        public const string NotificationsRead = "notifications:read";
+        public const string NotificationsCreate = "notifications:create";
+        public const string NotificationsUpdate = "notifications:update";
+        public const string NotificationsDelete = "notifications:delete";
     }
 }

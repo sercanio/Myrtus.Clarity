@@ -26,7 +26,8 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
                     Permission.RolesUpdate,
                     Permission.RolesDelete,
                     Permission.PermissionsRead,
-                    Permission.AuditLogsRead
+                    Permission.AuditLogsRead,
+                    Permission.NotificationsRead
             ];
 
             const string sql =

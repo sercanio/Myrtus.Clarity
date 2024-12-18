@@ -19,6 +19,7 @@ namespace Myrtus.Clarity.WebAPI.Controllers.AuditLogs
     {
 
         [HttpGet]
+        [HasPermission(Permissions.AuditLogsRead)]
         public async Task<IActionResult> GetAllAuditLogs(
             [FromQuery] int pageIndex = 0,
             [FromQuery] int pageSize = 10,

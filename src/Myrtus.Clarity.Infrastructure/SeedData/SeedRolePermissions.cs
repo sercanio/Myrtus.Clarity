@@ -18,6 +18,7 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
             List<object> rolePermissions =
                 [
                     new { RoleId = Role.DefaultRole.Id, PermissionId = Permission.UsersRead.Id },
+                    new { RoleId = Role.DefaultRole.Id, PermissionId = Permission.NotificationsRead.Id },
                     new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersRead.Id },
                     new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersCreate.Id },
                     new { RoleId = Role.Admin.Id, PermissionId = Permission.UsersUpdate.Id },
@@ -27,7 +28,8 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
                     new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesUpdate.Id },
                     new { RoleId = Role.Admin.Id, PermissionId = Permission.RolesDelete.Id },
                     new { RoleId = Role.Admin.Id, PermissionId = Permission.PermissionsRead.Id },
-                    new { RoleId = Role.Admin.Id, PermissionId = Permission.AuditLogsRead.Id }
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.AuditLogsRead.Id },
+                    new { RoleId = Role.Admin.Id, PermissionId = Permission.NotificationsRead.Id }
                 ];
 
             const string sql =
