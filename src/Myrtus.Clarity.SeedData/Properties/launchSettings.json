@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Myrtus.Clarity.SeedData": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
