@@ -1,0 +1,9 @@
+Errors:
+  Forbidden: "You do not have permission to access this resource."
+  User:
+    NotFound: "The user with the specified identifier was not found"
+    InvalidCredentials: "The provided credentials were invalid"
+    IdentityIdNotFound: "The identity id is not accessible"
+  Role:
+    NotFound: "The role with the specified identifier was not found"
+    Overlap: "The current role is overlapping with an existing one"

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Myrtus.Clarity.Domain;
 using Myrtus.Clarity.Infrastructure;
 using Myrtus.Clarity.Infrastructure.SeedData;
 using Myrtus.Clarity.WebAPI;
+using Myrtus.Clarity.WebAPI.Middleware;
 using Serilog;
 
 namespace Myrtus.Clarity.SeedData
@@ -29,6 +31,8 @@ namespace Myrtus.Clarity.SeedData
                 Guid adminId = await app.SeedUsersDataAsync();
                 await app.SeedRoleUserDataAsync(adminId);
             }
+
+            await host.RunAsync();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -43,6 +47,14 @@ namespace Myrtus.Clarity.SeedData
                     services.AddApplication();
                     services.AddInfrastructure(context.Configuration);
                     services.AddWebApi(context.Configuration);
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.Configure(app =>
+                    {
+                        app.UseMiddleware<ExceptionHandlingMiddleware>();
+                        // Other middleware registrations...
+                    });
                 })
                 .UseSerilog((context, loggerConfig) =>
                     loggerConfig.ReadFrom.Configuration(context.Configuration));

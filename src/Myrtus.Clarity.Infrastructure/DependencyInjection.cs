@@ -74,6 +74,8 @@ namespace Myrtus.Clarity.Infrastructure
 
             AddSignalR(services);
 
+            //AddLocalization(services);
+
             return services;
         }
 
@@ -206,5 +208,10 @@ namespace Myrtus.Clarity.Infrastructure
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, DefaultUserIdProvider>();
         }
+
+        //private static void AddLocalization(IServiceCollection services)
+        //{
+        //    services.AddSingleton<ILocalizationService, LocalizationService>();
+        //}
     }
 }

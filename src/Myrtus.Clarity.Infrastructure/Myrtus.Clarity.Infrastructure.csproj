@@ -50,6 +50,15 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <None Update="Resources\en.yaml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\tr.yaml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	
+	<ItemGroup>
 	  <PackageReference Update="SonarAnalyzer.CSharp" Version="9.32.0.97167">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

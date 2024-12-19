@@ -13,8 +13,11 @@ using Myrtus.Clarity.Infrastructure;
 using Myrtus.Clarity.WebAPI;
 using Myrtus.Clarity.WebAPI.Extensions;
 using Myrtus.Clarity.WebAPI.OpenApi;
-using Serilog;
 using System.Text.Json.Serialization;
+using Serilog;
+using Myrtus.Clarity.Core.Application.Abstractions.Localization.Services;
+using Myrtus.Clarity.Core.Infrastructure.Localization.Services;
+using Myrtus.Clarity.WebAPI.Middleware;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +66,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
 
         // settings for SignalR authentication with Azure AD B2C
-
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -80,7 +82,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 return Task.CompletedTask;
             }
         };
-
     });
 
 builder.Services.AddDomain(builder.Configuration);
@@ -115,6 +116,8 @@ app.UseRequestContextLogging();
 app.UseSerilogRequestLogging();
 
 app.UseCustomExceptionHandler();
+
+app.UseCustomForbiddenRequestHandler();
 
 app.UseAuthentication();
 
