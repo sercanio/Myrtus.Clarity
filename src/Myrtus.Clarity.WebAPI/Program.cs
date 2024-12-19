@@ -1,21 +1,20 @@
 using Asp.Versioning.ApiExplorer;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using Myrtus.Clarity.Core.Infrastructure.SignalR.Hubs;
 using Myrtus.Clarity.Application;
+using Myrtus.Clarity.Core.Infrastructure.SignalR.Hubs;
 using Myrtus.Clarity.Domain;
 using Myrtus.Clarity.Infrastructure;
 using Myrtus.Clarity.WebAPI;
 using Myrtus.Clarity.WebAPI.Extensions;
-using Myrtus.Clarity.WebAPI.Extensions.SeedData;
 using Myrtus.Clarity.WebAPI.OpenApi;
 using Serilog;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -105,11 +104,6 @@ if (app.Environment.IsDevelopment())
             options.SwaggerEndpoint(url, name);
         }
     });
-
-    app.ApplyMigrations();
-
-    // Uncomment for seed admin user, roles and permissions
-    //app.SeedDataAsync().GetAwaiter().GetResult();
 }
 
 app.UseHttpsRedirection();
