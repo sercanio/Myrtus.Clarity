@@ -1,7 +1,6 @@
 using Asp.Versioning.ApiExplorer;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -47,44 +46,7 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    IConfigurationSection swaggerOAuthSettings = builder.Configuration.GetSection("Swagger:OAuth2");
-
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Type = SecuritySchemeType.OAuth2,
-        Flows = new OpenApiOAuthFlows
-        {
-            AuthorizationCode = new OpenApiOAuthFlow
-            {
-                AuthorizationUrl = new Uri(swaggerOAuthSettings["AuthorizationUrl"]),
-                TokenUrl = new Uri(swaggerOAuthSettings["TokenUrl"]),
-                Scopes = new Dictionary<string, string>
-                {
-                    { "openid", swaggerOAuthSettings["Scopes:openid"] },
-                    { "profile", swaggerOAuthSettings["Scopes:profile"] },
-                    { "email", swaggerOAuthSettings["Scopes:email"] }
-                }
-            }
-        }
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "oauth2"
-                }
-            },
-            new[] { "openid", "profile", "email" }
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
 
 // Add Azure AD B2C authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -142,17 +104,6 @@ if (app.Environment.IsDevelopment())
         {
             options.SwaggerEndpoint(url, name);
         }
-
-        string? clientId = builder.Configuration["Keycloak:AuthClientId"];
-        string? clientSecret = builder.Configuration["Keycloak:AuthClientSecret"];
-        string? redirectUri = builder.Configuration["Keycloak:RedirectUri"];
-
-        options.OAuthClientId(clientId);
-        options.OAuthClientSecret(clientSecret);
-        options.OAuthAppName("Myrtus Clarity Swagger UI");
-        options.OAuthUsePkce();
-
-        options.OAuth2RedirectUrl(redirectUri);
     });
 
     app.ApplyMigrations();
