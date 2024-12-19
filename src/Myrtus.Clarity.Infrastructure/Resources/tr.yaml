@@ -1,0 +1,9 @@
+Errors:
+  Forbidden: "Bu kaynaða eriþim izniniz yok."
+  User:
+    NotFound: "Belirtilen kimliðe sahip kullanýcý bulunamadý"
+    InvalidCredentials: "Saðlanan kimlik bilgileri geçersiz"
+    IdentityIdNotFound: "Kimlik ID'sine eriþilemiyor"
+  Role:
+    NotFound: "Belirtilen kimliðe sahip rol bulunamadý"
+    Overlap: "Mevcut rol, mevcut olanla çakýþýyor"

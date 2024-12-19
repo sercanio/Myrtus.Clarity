@@ -1,14 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Myrtus.Clarity.Core.Application.Abstractions.Localization.Services;
+using System.Globalization;
+using System.Text;
+using System.Text.Json;
 
 namespace Myrtus.Clarity.WebAPI.Middleware
 {
-    internal sealed class ExceptionHandlingMiddleware(
-            RequestDelegate next,
-            ILogger<ExceptionHandlingMiddleware> logger)
+    public sealed class ExceptionHandlingMiddleware(
+                                RequestDelegate next,
+                                ILogger<ExceptionHandlingMiddleware> logger,
+                                ILocalizationService localizationService)
     {
         private readonly RequestDelegate _next = next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger = logger;
+        private readonly ILocalizationService _localizationService = localizationService;
 
         private static readonly Action<ILogger, string, Exception> _logError =
             LoggerMessage.Define<string>(
@@ -26,7 +32,8 @@ namespace Myrtus.Clarity.WebAPI.Middleware
             {
                 _logError(_logger, exception.Message, exception);
 
-                ExceptionDetails exceptionDetails = GetExceptionDetails(exception);
+                var language = GetLanguageFromHeader(context);
+                ExceptionDetails exceptionDetails = GetExceptionDetails(exception, language);
 
                 ProblemDetails problemDetails = new()
                 {
@@ -34,6 +41,7 @@ namespace Myrtus.Clarity.WebAPI.Middleware
                     Type = exceptionDetails.Type,
                     Title = exceptionDetails.Title,
                     Detail = exceptionDetails.Detail,
+                    Instance = context.Request.Path
                 };
 
                 if (exceptionDetails.Errors is not null)
@@ -42,26 +50,47 @@ namespace Myrtus.Clarity.WebAPI.Middleware
                 }
 
                 context.Response.StatusCode = exceptionDetails.Status;
+                context.Response.ContentType = "application/json; charset=utf-8";
 
-                await context.Response.WriteAsJsonAsync(problemDetails);
+                var options = new JsonSerializerOptions
+                {
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    WriteIndented = true
+                };
+                var json = JsonSerializer.Serialize(problemDetails, options);
+                await context.Response.WriteAsync(json, Encoding.UTF8);
             }
         }
 
-        private static ExceptionDetails GetExceptionDetails(Exception exception)
+        private string GetLanguageFromHeader(HttpContext context)
+        {
+            var acceptLanguageHeader = context.Request.Headers["Accept-Language"].ToString();
+            if (!string.IsNullOrEmpty(acceptLanguageHeader))
+            {
+                var languages = acceptLanguageHeader.Split(',');
+                if (languages.Length > 0)
+                {
+                    return languages[0];
+                }
+            }
+            return CultureInfo.CurrentCulture.Name;
+        }
+
+        private ExceptionDetails GetExceptionDetails(Exception exception, string language)
         {
             return exception switch
             {
                 ValidationException validationException => new ExceptionDetails(
                     StatusCodes.Status400BadRequest,
-                    "ValidationFailure",
+                    "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
                     "Validation error",
-                    "One or more validation errors has occurred",
+                    _localizationService.GetLocalizedString("Errors.Validation", language),
                     validationException.Errors),
                 _ => new ExceptionDetails(
                     StatusCodes.Status500InternalServerError,
-                    "ServerError",
+                    "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
                     "Server error",
-                    "An unexpected error has occurred",
+                    _localizationService.GetLocalizedString("Errors.ServerError", language),
                     null)
             };
         }

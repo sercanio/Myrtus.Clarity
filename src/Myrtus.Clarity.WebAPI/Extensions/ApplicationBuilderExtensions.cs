@@ -20,6 +20,11 @@ namespace Myrtus.Clarity.WebAPI.Extensions
             app.UseMiddleware<ExceptionHandlingMiddleware>();
         }
 
+        public static void UseCustomForbiddenRequestHandler(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ForbiddenResponseMiddleware>();
+        }
+
         public static IApplicationBuilder UseRequestContextLogging(this IApplicationBuilder app)
         {
             app.UseMiddleware<RequestContextLoggingMiddleware>();

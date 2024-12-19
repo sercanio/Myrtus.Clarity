@@ -1,4 +1,6 @@
-﻿using Myrtus.Clarity.Core.WebApi;
+﻿using Myrtus.Clarity.Core.Application.Abstractions.Localization.Services;
+using Myrtus.Clarity.Core.Infrastructure.Localization.Services;
+using Myrtus.Clarity.Core.WebApi;
 
 namespace Myrtus.Clarity.WebAPI;
 
@@ -9,6 +11,7 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddScoped<IErrorHandlingService, ErrorHandlingService>();
+        services.AddSingleton<ILocalizationService, LocalizationService>();
 
         return services;
     }
