@@ -74,8 +74,6 @@ namespace Myrtus.Clarity.Infrastructure
 
             AddSignalR(services);
 
-            //AddLocalization(services);
-
             return services;
         }
 
