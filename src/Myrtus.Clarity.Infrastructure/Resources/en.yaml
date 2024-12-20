@@ -1,5 +1,6 @@
 Errors:
   Forbidden: "You do not have permission to access this resource."
+  TooManyRequests: "You sent too many requests. Please try again later."
   User:
     NotFound: "The user with the specified identifier was not found"
     InvalidCredentials: "The provided credentials were invalid"

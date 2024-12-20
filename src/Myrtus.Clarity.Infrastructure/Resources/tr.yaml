@@ -1,5 +1,6 @@
 Errors:
-  Forbidden: "Bu kaynaða eriþim izniniz yok."
+  Forbidden: "Bu kaynaða eriþim izniniz yok"
+  TooManyRequests: "Çok fazla istek gönderdiniz. Daha sonra tekrar deneyin"
   User:
     NotFound: "Belirtilen kimliðe sahip kullanýcý bulunamadý"
     InvalidCredentials: "Saðlanan kimlik bilgileri geçersiz"

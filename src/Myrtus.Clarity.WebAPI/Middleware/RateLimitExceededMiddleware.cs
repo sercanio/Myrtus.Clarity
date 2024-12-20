@@ -1,22 +1,23 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Myrtus.Clarity.Core.Application.Abstractions.Localization.Services;
 using System.Globalization;
-using System.Net;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
+using System.Threading.Tasks;
 
 namespace Myrtus.Clarity.WebAPI.Middleware
 {
-    public class ForbiddenResponseMiddleware
+    public class RateLimitExceededMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ForbiddenResponseMiddleware> _logger;
         private readonly ILocalizationService _localizationService;
 
-        public ForbiddenResponseMiddleware(RequestDelegate next, ILogger<ForbiddenResponseMiddleware> logger, ILocalizationService localizationService)
+        public RateLimitExceededMiddleware(RequestDelegate next, ILocalizationService localizationService)
         {
             _next = next;
-            _logger = logger;
             _localizationService = localizationService;
         }
 
@@ -24,28 +25,35 @@ namespace Myrtus.Clarity.WebAPI.Middleware
         {
             await _next(context);
 
-            if (context.Response.StatusCode == (int)HttpStatusCode.Forbidden)
+            if (context.Response.StatusCode == StatusCodes.Status429TooManyRequests)
             {
-                _logger.LogWarning("Forbidden request: {Path}", context.Request.Path);
-
+                var retryAfter = context.Response.Headers.RetryAfter.ToString();
                 var language = GetLanguageFromHeader(context);
+
                 var problemDetails = new ProblemDetails
                 {
-                    Status = (int)HttpStatusCode.Forbidden,
-                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3",
-                    Title = "Forbidden",
-                    Detail = _localizationService.GetLocalizedString("Errors.Forbidden", language),
+                    Status = StatusCodes.Status429TooManyRequests,
+                    Type = "https://httpstatuses.com/429",
+                    Title = "Too Many Requests",
+                    Detail = _localizationService.GetLocalizedString("Errors.TooManyRequests", language),
                     Instance = context.Request.Path
                 };
 
+                if (!string.IsNullOrEmpty(retryAfter))
+                {
+                    problemDetails.Extensions["retryAfter"] = retryAfter;
+                }
+
                 context.Response.ContentType = "application/json; charset=utf-8";
+
                 var options = new JsonSerializerOptions
                 {
-                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                     WriteIndented = true
                 };
-                var json = JsonSerializer.Serialize(problemDetails, options);
-                await context.Response.WriteAsync(json, Encoding.UTF8);
+
+                var jsonResponse = JsonSerializer.Serialize(problemDetails, options);
+                await context.Response.WriteAsync(jsonResponse, Encoding.UTF8);
             }
         }
 

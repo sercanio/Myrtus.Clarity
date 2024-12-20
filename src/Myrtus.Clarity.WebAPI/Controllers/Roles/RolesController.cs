@@ -13,12 +13,14 @@ using Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdatePermission
 using Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdateRoleName;
 using Myrtus.Clarity.WebAPI.Controllers;
 using Myrtus.Clarity.WebAPI.Controllers.Roles;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Myrtus.Clarity.WebAPI.Attributes.Roles
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/roles")]
+    [EnableRateLimiting("fixed")]
     public class RolesController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
         [HttpGet]

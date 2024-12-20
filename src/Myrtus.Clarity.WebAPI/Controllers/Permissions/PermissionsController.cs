@@ -7,12 +7,14 @@ using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebApi;
 using Myrtus.Clarity.Application.Features.Permissions.Queries.GetAllPermissions;
 using Myrtus.Clarity.WebAPI.Attributes;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.PermissionsController
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/permissions")]
+    [EnableRateLimiting("fixed")]
     public class PermissionsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
         [HttpGet]

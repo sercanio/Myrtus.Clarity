@@ -2,6 +2,7 @@
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifications;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
@@ -13,6 +14,7 @@ namespace Myrtus.Clarity.WebAPI.Controllers.Notifications
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/notifications")]
+    [EnableRateLimiting("fixed")]
     public class NotificationsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
         [HttpGet]

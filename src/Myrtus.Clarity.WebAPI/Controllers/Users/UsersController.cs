@@ -12,12 +12,14 @@ using Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsersDynamic;
 using Myrtus.Clarity.Application.Features.Users.Queries.GetUser;
 using Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles;
 using Myrtus.Clarity.WebAPI.Attributes;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Users
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/users")]
+    [EnableRateLimiting("fixed")]
     public class UsersController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
         [HttpGet]

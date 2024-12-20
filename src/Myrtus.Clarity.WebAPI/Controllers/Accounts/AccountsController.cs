@@ -1,24 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Ardalis.Result;
 using Asp.Versioning;
 using MediatR;
-using Ardalis.Result;
-using Myrtus.Clarity.Core.WebApi;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Myrtus.Clarity.Application.Features.Accounts.LogInUser;
 using Myrtus.Clarity.Application.Features.Accounts.RegisterUser;
-using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
-using Myrtus.Clarity.Domain.Users.ValueObjects;
 using Myrtus.Clarity.Application.Features.Accounts.UpdateNotificationPreferences;
+using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
+using Myrtus.Clarity.Core.Infrastructure.Authorization;
+using Myrtus.Clarity.Core.WebApi;
+using Myrtus.Clarity.Domain.Users.ValueObjects;
+using Myrtus.Clarity.WebAPI.Attributes;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Accounts
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/accounts")]
+    [EnableRateLimiting("fixed")]
     public class AccountsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
         [HttpGet("me")]
-        //[HasPermission(Permissions.UsersRead)]
+        [HasPermission(Permissions.UsersRead)]
         public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
         {
             GetLoggedInUserQuery query = new();
@@ -28,7 +32,7 @@ namespace Myrtus.Clarity.WebAPI.Controllers.Accounts
         }
 
         [HttpPatch("me/notifications")]
-        //[HasPermission(Permissions.UsersUpdate)]
+        [HasPermission(Permissions.NotificationsRead)]
         public async Task<IActionResult> UpdateNotifications(
             UpdateUserNotificationsRequest request,
             CancellationToken cancellationToken)

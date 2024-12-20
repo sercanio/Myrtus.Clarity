@@ -32,11 +32,17 @@ namespace Myrtus.Clarity.WebAPI.Extensions
             app.UseMiddleware<ForbiddenResponseMiddleware>();
         }
 
+        public static void UseRateLimitExceededHandler(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<RateLimitExceededMiddleware>();
+        }
+
         public static IApplicationBuilder UseRequestContextLogging(this IApplicationBuilder app)
         {
             app.UseMiddleware<RequestContextLoggingMiddleware>();
             return app;
         }
+
 
         public static IServiceCollection ConfigureCors(
             this IServiceCollection services, 

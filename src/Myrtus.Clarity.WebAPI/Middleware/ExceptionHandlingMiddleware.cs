@@ -4,8 +4,8 @@ using FluentValidation;
 namespace Myrtus.Clarity.WebAPI.Middleware
 {
     internal sealed class ExceptionHandlingMiddleware(
-            RequestDelegate next,
-            ILogger<ExceptionHandlingMiddleware> logger)
+                RequestDelegate next,
+                ILogger<ExceptionHandlingMiddleware> logger)
     {
         private readonly RequestDelegate _next = next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger = logger;
@@ -26,24 +26,32 @@ namespace Myrtus.Clarity.WebAPI.Middleware
             {
                 _logError(_logger, exception.Message, exception);
 
-                ExceptionDetails exceptionDetails = GetExceptionDetails(exception);
-
-                ProblemDetails problemDetails = new()
+                if (!context.Response.HasStarted)
                 {
-                    Status = exceptionDetails.Status,
-                    Type = exceptionDetails.Type,
-                    Title = exceptionDetails.Title,
-                    Detail = exceptionDetails.Detail,
-                };
+                    ExceptionDetails exceptionDetails = GetExceptionDetails(exception);
 
-                if (exceptionDetails.Errors is not null)
-                {
-                    problemDetails.Extensions["errors"] = exceptionDetails.Errors;
+                    ProblemDetails problemDetails = new()
+                    {
+                        Status = exceptionDetails.Status,
+                        Type = exceptionDetails.Type,
+                        Title = exceptionDetails.Title,
+                        Detail = exceptionDetails.Detail,
+                    };
+
+                    if (exceptionDetails.Errors is not null)
+                    {
+                        problemDetails.Extensions["errors"] = exceptionDetails.Errors;
+                    }
+
+                    context.Response.StatusCode = exceptionDetails.Status;
+                    context.Response.ContentType = "application/json";
+
+                    await context.Response.WriteAsJsonAsync(problemDetails);
                 }
-
-                context.Response.StatusCode = exceptionDetails.Status;
-
-                await context.Response.WriteAsJsonAsync(problemDetails);
+                else
+                {
+                    _logger.LogWarning("The response has already started, the exception handling middleware will not modify the response.");
+                }
             }
         }
 

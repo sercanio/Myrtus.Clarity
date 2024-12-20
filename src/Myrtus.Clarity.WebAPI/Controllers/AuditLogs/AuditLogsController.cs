@@ -9,12 +9,14 @@ using Myrtus.Clarity.Core.WebApi;
 using Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs;
 using Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogsDynamic;
 using Myrtus.Clarity.WebAPI.Attributes;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.AuditLogs
 {
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/auditlogs")]
+    [EnableRateLimiting("fixed")]
     public class AuditLogsController(ISender sender, IErrorHandlingService errorHandlingService) : BaseController(sender, errorHandlingService)
     {
 
