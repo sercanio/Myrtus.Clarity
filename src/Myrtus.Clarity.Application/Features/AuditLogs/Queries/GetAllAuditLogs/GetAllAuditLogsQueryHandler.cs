@@ -8,7 +8,7 @@ using Myrtus.Clarity.Application.Repositories.NoSQL;
 namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
 {
     public sealed class GetAllAuditLogsQueryHandler(INoSqlRepository<AuditLog> auditLogRepository)
-        : IRequestHandler<GetAllAuditLogsQuery, Result<IPaginatedList<GetAllAuditLogsQueryResponse>>>
+                : IRequestHandler<GetAllAuditLogsQuery, Result<IPaginatedList<GetAllAuditLogsQueryResponse>>>
     {
         private readonly INoSqlRepository<AuditLog> _auditLogRepository = auditLogRepository;
 
@@ -16,7 +16,9 @@ namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
         {
             IEnumerable<AuditLog> auditLogs = await _auditLogRepository.GetAllAsync(cancellationToken);
 
-            List<GetAllAuditLogsQueryResponse> paginatedAuditLogs = auditLogs
+            List<AuditLog> sortedAuditLogs = auditLogs.OrderByDescending(auditLog => auditLog.Timestamp).ToList();
+
+            List<GetAllAuditLogsQueryResponse> paginatedAuditLogs = sortedAuditLogs
                 .Skip(request.PageIndex * request.PageSize)
                 .Take(request.PageSize)
                 .Select(auditLog => new GetAllAuditLogsQueryResponse(
@@ -32,7 +34,7 @@ namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
 
             PaginatedList<GetAllAuditLogsQueryResponse> paginatedList = new(
                 paginatedAuditLogs,
-                auditLogs.Count(),
+                sortedAuditLogs.Count,
                 request.PageIndex,
                 request.PageSize
             );
