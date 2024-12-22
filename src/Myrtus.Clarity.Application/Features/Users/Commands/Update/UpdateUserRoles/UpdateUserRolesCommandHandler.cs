@@ -58,7 +58,7 @@ namespace Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRo
             }
 
             User? modifierUser = await _userRepository.GetUserByIdAsync(_userContext.UserId, cancellationToken);
-            user.UpdatedBy = modifierUser!.Email ?? "System";
+            user.UpdatedBy = modifierUser!.Email.Value ?? "System";
 
             _userRepository.Update(user);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

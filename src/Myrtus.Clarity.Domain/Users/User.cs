@@ -7,10 +7,10 @@ namespace Myrtus.Clarity.Domain.Users
 {
     public sealed class User : Entity, IAggregateRoot
     {
-        private readonly List<Role> _roles = [];
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string Email { get; private set; }
+        private readonly List<Role> _roles = new();
+        public FirstName FirstName { get; private set; }
+        public LastName LastName { get; private set; }
+        public Email Email { get; private set; }
         public string IdentityId { get; private set; } = string.Empty;
         public NotificationPreference NotificationPreference { get; private set; }
 
@@ -18,9 +18,9 @@ namespace Myrtus.Clarity.Domain.Users
 
         private User(
             Guid id,
-            string firstName,
-            string lastName,
-            string email,
+            FirstName firstName,
+            LastName lastName,
+            Email email,
             NotificationPreference notificationPreference) : base(id)
         {
             FirstName = firstName;
@@ -31,14 +31,14 @@ namespace Myrtus.Clarity.Domain.Users
 
         private User()
         {
-            FirstName = string.Empty;
-            LastName = string.Empty;
-            Email = string.Empty;
+            FirstName = new FirstName("DefaultFirstName");
+            LastName = new LastName("DefaultLastName");
+            Email = new Email("default@example.com");
         }
 
-        public static User Create(string firstName,
-            string lastName,
-            string email)
+        public static User Create(FirstName firstName,
+            LastName lastName,
+            Email email)
         {
             NotificationPreference notificationPreference = new(true, true, true);
             User user = new(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
@@ -49,9 +49,9 @@ namespace Myrtus.Clarity.Domain.Users
         }
 
         public static User CreateWithoutRolesForSeeding(
-            string firstName,
-            string lastName,
-            string email)
+            FirstName firstName,
+            LastName lastName,
+            Email email)
         {
             NotificationPreference notificationPreference = new(true, true, true);
             return new User(Guid.NewGuid(), firstName, lastName, email, notificationPreference);

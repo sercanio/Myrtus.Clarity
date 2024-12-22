@@ -33,7 +33,7 @@ namespace Myrtus.CMS.Application.Features.Users.Commands.Update.UpdateUserRoles
                 Action = UserDomainEvents.RemovedRole,
                 Entity = user.GetType().Name,
                 EntityId = user.Id.ToString(),
-                Details = $"{user.GetType().Name} '{user.Email}' has been revoked the role '{role!.Name}'."
+                Details = $"{user.GetType().Name} '{user.Email.Value}' has been revoked the role '{role!.Name}'."
             };
             await _auditLogService.LogAsync(log);
         }

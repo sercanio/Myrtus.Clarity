@@ -41,7 +41,7 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Create
                 cancellationToken: cancellationToken);
             if (user is not null)
             {
-                role.CreatedBy = user.Email;
+                role.CreatedBy = user.Email.Value;
             }
 
             await _roleRepository.AddAsync(role);

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Myrtus.Clarity.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.Clarity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241222202542_createEmailValueObject")]
+    partial class createEmailValueObject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,10 +167,20 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_on_utc");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
                     b.Property<string>("IdentityId")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("identity_id");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text")
@@ -227,7 +240,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
 
             modelBuilder.Entity("Myrtus.Clarity.Domain.Users.User", b =>
                 {
-                    b.OwnsOne("Myrtus.Clarity.Domain.Users.ValueObjects.Email", "Email", b1 =>
+                    b.OwnsOne("Myrtus.Clarity.Domain.Users.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uuid")
@@ -243,46 +256,6 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                             b1.HasIndex("Value")
                                 .IsUnique()
                                 .HasDatabaseName("ix_users_email");
-
-                            b1.ToTable("users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId")
-                                .HasConstraintName("fk_users_users_id");
-                        });
-
-                    b.OwnsOne("Myrtus.Clarity.Domain.Users.ValueObjects.FirstName", "FirstName", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("first_name");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId")
-                                .HasConstraintName("fk_users_users_id");
-                        });
-
-                    b.OwnsOne("Myrtus.Clarity.Domain.Users.ValueObjects.LastName", "LastName", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("last_name");
-
-                            b1.HasKey("UserId");
 
                             b1.ToTable("users");
 
@@ -319,12 +292,6 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         });
 
                     b.Navigation("Email")
-                        .IsRequired();
-
-                    b.Navigation("FirstName")
-                        .IsRequired();
-
-                    b.Navigation("LastName")
                         .IsRequired();
 
                     b.Navigation("NotificationPreference")

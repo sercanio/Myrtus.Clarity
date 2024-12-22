@@ -1,5 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure.Models;
 using Myrtus.Clarity.Domain.Users;
+using Myrtus.Clarity.Domain.Users.ValueObjects;
 
 namespace Myrtus.Clarity.Infrastructure.Authentication.Models
 {
@@ -17,7 +18,7 @@ namespace Myrtus.Clarity.Infrastructure.Authentication.Models
 
         public string[] DisableableCredentialTypes { get; set; } = [];
 
-        public string Email { get; set; } = string.Empty;
+        public Email Email { get; set; } = new Email(string.Empty);
 
         public bool? EmailVerified { get; set; }
 
@@ -29,9 +30,9 @@ namespace Myrtus.Clarity.Infrastructure.Authentication.Models
 
         public string[] Groups { get; set; } = [];
 
-        public string FirstName { get; set; } = string.Empty;
+        public FirstName FirstName { get; set; } = new FirstName(string.Empty);
 
-        public string LastName { get; set; } = string.Empty;
+        public LastName LastName { get; set; } = new LastName(string.Empty);
 
         public int? NotBefore { get; set; }
 
@@ -53,7 +54,7 @@ namespace Myrtus.Clarity.Infrastructure.Authentication.Models
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Username = user.Email,
+                Username = user.Email.Value,
                 Enabled = true,
                 EmailVerified = true,
                 CreatedTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),

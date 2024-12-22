@@ -39,7 +39,7 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Delete
                 cancellationToken: cancellationToken);
             if (user is not null)
             {
-                role.UpdatedBy = user.Email;
+                role.UpdatedBy = user.Email.Value;
             }
 
             try
