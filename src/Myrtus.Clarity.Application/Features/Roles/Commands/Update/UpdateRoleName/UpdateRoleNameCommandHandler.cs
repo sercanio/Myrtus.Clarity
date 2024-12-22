@@ -39,7 +39,7 @@ namespace Myrtus.Clarity.Application.Features.Roles.Commands.Update.UpdateRoleNa
             role.ChangeName(request.Name);
 
             User user = await _userService.GetUserByIdAsync(_userContext.UserId, cancellationToken);
-            role.UpdatedBy = user.Email;
+            role.UpdatedBy = user.Email.Value;
 
             _roleRepository.Update(role);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

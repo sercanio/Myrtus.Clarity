@@ -1,20 +1,21 @@
 ﻿using System.Collections.ObjectModel;
 using Myrtus.Clarity.Application.Features.Roles.Queries.GetRoleById;
+using Myrtus.Clarity.Domain.Users.ValueObjects;
 
 namespace Myrtus.Clarity.Application.Features.Users.Queries.GetUser
 {
     public sealed record GetUserQueryResponse
     {
         public Guid Id { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
+        public Email Email { get; set; } = new Email(string.Empty);
+        public FirstName? FirstName { get; set; }
+        public LastName? LastName { get; set; }
         public ICollection<GetRoleByIdQueryResponse> Roles { get; set; } = [];
 
         public GetUserQueryResponse(Guid id,
-            string email,
-            string? firstName,
-            string? lastName,
+            Email email,
+            FirstName? firstName,
+            LastName? lastName,
             Collection<GetRoleByIdQueryResponse> roles)
         {
             Id = id;
@@ -24,7 +25,7 @@ namespace Myrtus.Clarity.Application.Features.Users.Queries.GetUser
             Roles = roles;
         }
 
-        public GetUserQueryResponse(Guid id, string email, string? firstName, string? lastName)
+        public GetUserQueryResponse(Guid id, Email email, FirstName? firstName, LastName? lastName)
         {
             Id = id;
             Email = email;

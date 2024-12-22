@@ -67,15 +67,15 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
                 {
                     AccountEnabled = true,
                     DisplayName = $"{user.FirstName} {user.LastName}",
-                    GivenName = user.FirstName,
-                    Surname = user.LastName,
+                    GivenName = user.FirstName.Value,
+                    Surname = user.LastName.Value,
                     Identities = new List<ObjectIdentity>
                         {
                             new ObjectIdentity
                             {
                                 SignInType = "emailAddress",
                                 Issuer = _configuration["AzureAd:Domain"],
-                                IssuerAssignedId = user.Email
+                                IssuerAssignedId = user.Email.Value
                             }
                         },
                     PasswordProfile = new PasswordProfile
@@ -128,7 +128,7 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
                     {"scope", "openid"},
                     {"response_type", "code"},
                     {"prompt", "login"},
-                    {"login_hint", user.Email},
+                    {"login_hint", user.Email.Value},
                     {"code_challenge", codeChallenge},
                     {"code_challenge_method", "S256"}
                 };
@@ -159,7 +159,7 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
                         new MailboxAddress(
                             encoding: Encoding.UTF8,
                             name: $"{user.FirstName} {user.LastName}",
-                            address: user.Email)
+                            address: user.Email.Value)
                 });
 
             // Send the email using IMailService

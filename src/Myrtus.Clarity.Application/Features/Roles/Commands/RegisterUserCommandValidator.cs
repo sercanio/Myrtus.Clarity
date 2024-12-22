@@ -10,7 +10,7 @@ namespace Myrtus.Clarity.Application.Features.Accounts.RegisterUser
 
             RuleFor(c => c.LastName).NotEmpty();
 
-            RuleFor(c => c.Email).EmailAddress();
+            RuleFor(c => c.Email.Value).EmailAddress();
 
             RuleFor(c => c.Password).NotEmpty().MinimumLength(5);
         }

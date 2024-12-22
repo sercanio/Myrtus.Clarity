@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 using Myrtus.Clarity.Domain.Users;
 using Myrtus.Clarity.Domain.Roles;
+using Myrtus.Clarity.Domain.Users.ValueObjects;
 
 namespace Myrtus.Clarity.Infrastructure.SeedData
 {
@@ -25,9 +26,9 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
             using IDbConnection connection = sqlConnectionFactory.CreateConnection();
 
             User adminUser = User.CreateWithoutRolesForSeeding(
-                "Admin",
-                "Admin",
-                "admin@email.com");
+                new FirstName("Admin"),
+                new LastName("User"),
+                new Email("admin@email.com"));
 
             adminUser.SetIdentityId("5a7e3a65-0515-45a7-8c4c-f17a03efd851");
             AdminId = adminUser.Id;
@@ -35,9 +36,9 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
             var adminUserDto = new
             {
                 adminUser.Id,
-                adminUser.FirstName,
-                adminUser.LastName,
-                adminUser.Email,
+                FirstName = adminUser.FirstName.Value,
+                LastName = adminUser.LastName.Value,
+                Email = adminUser.Email.Value,
                 adminUser.IdentityId,
                 adminUser.CreatedBy,
                 CreatedOnUtc = DateTime.UtcNow
@@ -45,24 +46,24 @@ namespace Myrtus.Clarity.Infrastructure.SeedData
 
             const string userSql =
                 """
-                INSERT INTO users (id, first_name, last_name, email, identity_id, created_by, created_on_utc)
-                VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedBy, @CreatedOnUtc)
-                ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
-                """;
+                    INSERT INTO users (id, first_name, last_name, email, identity_id, created_by, created_on_utc)
+                    VALUES (@Id, @FirstName, @LastName, @Email, @IdentityId, @CreatedBy, @CreatedOnUtc)
+                    ON CONFLICT (id) DO NOTHING; -- Avoid duplicate entries
+                    """;
             await connection.ExecuteAsync(userSql, adminUserDto);
 
-            List<object> roleUsers =
-                [
-                        new { RoleId = Role.DefaultRole.Id, UserId = adminUser.Id },
-                        new { RoleId = Role.Admin.Id, UserId = adminUser.Id }
-                ];
+            List<object> roleUsers = new List<object>
+                {
+                    new { RoleId = Role.DefaultRole.Id, UserId = adminUser.Id },
+                    new { RoleId = Role.Admin.Id, UserId = adminUser.Id }
+                };
 
             const string roleSql =
                 """
-                INSERT INTO role_user (roles_id, users_id)
-                VALUES(@RoleId, @UserId)
-                ON CONFLICT (roles_id, users_id) DO NOTHING;
-                """;
+                    INSERT INTO role_user (roles_id, users_id)
+                    VALUES(@RoleId, @UserId)
+                    ON CONFLICT (roles_id, users_id) DO NOTHING;
+                    """;
             await connection.ExecuteAsync(roleSql, roleUsers);
 
             return AdminId;

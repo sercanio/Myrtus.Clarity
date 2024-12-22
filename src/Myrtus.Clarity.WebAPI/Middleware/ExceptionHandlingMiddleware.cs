@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Myrtus.Clarity.WebAPI.Middleware
 {
-    internal sealed class ExceptionHandlingMiddleware(
+    public sealed class ExceptionHandlingMiddleware(
                 RequestDelegate next,
                 ILogger<ExceptionHandlingMiddleware> logger)
     {

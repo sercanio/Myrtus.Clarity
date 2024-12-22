@@ -6,13 +6,27 @@ namespace Myrtus.Clarity.Infrastructure.Configurations
 {
     internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {
-        public static Guid AdminId { get; }
-
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("users");
             builder.HasKey(user => user.Id);
-            builder.HasIndex(user => user.Email).IsUnique();
+
+            builder.OwnsOne(user => user.FirstName, firstName =>
+            {
+                firstName.Property(f => f.Value).HasColumnName("first_name");
+            });
+
+            builder.OwnsOne(user => user.LastName, lastName =>
+            {
+                lastName.Property(l => l.Value).HasColumnName("last_name");
+            });
+
+            builder.OwnsOne(user => user.Email, email =>
+            {
+                email.Property(e => e.Value).HasColumnName("email");
+                email.HasIndex(e => e.Value).IsUnique();
+            });
+
             builder.HasIndex(user => user.IdentityId).IsUnique();
 
             builder.OwnsOne(user => user.NotificationPreference, np =>

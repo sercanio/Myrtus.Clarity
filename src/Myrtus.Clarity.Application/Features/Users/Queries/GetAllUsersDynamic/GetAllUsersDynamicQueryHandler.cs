@@ -24,7 +24,8 @@ namespace Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsersDynamic
                     cancellationToken,
                     user => user.Roles);
 
-                List<GetAllUsersDynamicQueryResponse> mappedUsers = users.Items.Select(user => new GetAllUsersDynamicQueryResponse(
+                List<GetAllUsersDynamicQueryResponse> mappedUsers = users.Items.Select(
+                    user => new GetAllUsersDynamicQueryResponse(
                     user.Id,
                     user.Email,
                     user.FirstName,

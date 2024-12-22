@@ -24,7 +24,7 @@ namespace Myrtus.Clarity.Application.Features.Accounts.RegisterUser
                 return;
             }
 
-            user.CreatedBy = user.Email;
+            user.CreatedBy = user.Email.Value;
 
             AuditLog log = new()
             {
@@ -32,7 +32,7 @@ namespace Myrtus.Clarity.Application.Features.Accounts.RegisterUser
                 Action = UserDomainEvents.Created,
                 Entity = user.GetType().Name,
                 EntityId = user.Id.ToString(),
-                Details = $"User with email '{user.Email}' created."
+                Details = $"User with email '{user.Email.Value}' created."
             };
             await _auditLogService.LogAsync(log);
         }

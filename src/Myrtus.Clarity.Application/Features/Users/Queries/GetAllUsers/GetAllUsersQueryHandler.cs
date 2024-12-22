@@ -22,7 +22,8 @@ namespace Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsers
                 include: user => user.Roles,
                 cancellationToken: cancellationToken);
 
-            List<GetAllUsersQueryResponse> mappedUsers = users.Items.Select(user => new GetAllUsersQueryResponse(
+            List<GetAllUsersQueryResponse> mappedUsers = users.Items.Select(
+                user => new GetAllUsersQueryResponse(
                 user.Id,
                 user.Email,
                 user.FirstName,
