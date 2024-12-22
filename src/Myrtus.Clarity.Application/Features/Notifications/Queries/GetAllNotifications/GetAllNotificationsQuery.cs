@@ -6,5 +6,5 @@ namespace Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifi
     public sealed record GetAllNotificationsQuery(
         int PageIndex,
         int PageSize,
-        CancellationToken CancellationToken) : IQuery<IPaginatedList<GetAllNotificationsQueryResponse>>;
+        CancellationToken CancellationToken) : IQuery<GetAllNotificationsWithUnreadCountResponse>;
 }

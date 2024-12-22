@@ -14,7 +14,9 @@ namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogs
 
         public async Task<Result<IPaginatedList<GetAllAuditLogsQueryResponse>>> Handle(GetAllAuditLogsQuery request, CancellationToken cancellationToken)
         {
-            IEnumerable<AuditLog> auditLogs = await _auditLogRepository.GetAllAsync(cancellationToken);
+            IEnumerable<AuditLog> auditLogs = await _auditLogRepository.GetAllAsync(
+                            predicate: null,
+                            cancellationToken: cancellationToken);
 
             List<AuditLog> sortedAuditLogs = auditLogs.OrderByDescending(auditLog => auditLog.Timestamp).ToList();
 
