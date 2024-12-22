@@ -20,6 +20,7 @@ namespace Myrtus.Clarity.Domain.Roles
         public static readonly Permission AuditLogsRead = new(Guid.Parse("3050d953-5dcf-4eb0-a18d-a3ce62a0dd3c"), "auditlogs", "auditlogs:read");
 
         public static readonly Permission NotificationsRead = new(Guid.Parse("a03a127b-9a03-46a0-b709-b6919f2598be"), "notifications", "notifications:read");
+        public static readonly Permission NotificationsUpdate = new(Guid.Parse("a5585e9e-ec65-431b-9bb9-9bbc1663ebb8"), "notifications", "notifications:update");
         public Permission(Guid id, string feature, string name) : base(id)
         {
             Feature = feature;

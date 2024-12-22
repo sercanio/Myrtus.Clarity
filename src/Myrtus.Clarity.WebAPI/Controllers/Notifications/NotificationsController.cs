@@ -34,7 +34,7 @@ namespace Myrtus.Clarity.WebAPI.Controllers.Notifications
         }
 
         [HttpPatch("read")]
-        //[HasPermission(Permissions.NotificationsUpdate)]
+        [HasPermission(Permissions.NotificationsUpdate)]
         public async Task<IActionResult> MarkNotificationsAsRead(
             CancellationToken cancellationToken = default)
         {
