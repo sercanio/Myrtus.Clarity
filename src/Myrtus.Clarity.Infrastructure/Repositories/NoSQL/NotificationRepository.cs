@@ -14,7 +14,7 @@ namespace Myrtus.Clarity.Infrastructure.Repositories.NoSQL
 
         public async Task<IEnumerable<Notification>> GetByPredicateAsync(Expression<Func<Notification, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _collection.Find(predicate).ToListAsync(cancellationToken);
+            return (await _collection.Find(predicate).ToListAsync(cancellationToken));
         }
     }
 }

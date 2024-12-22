@@ -9,5 +9,5 @@
           string EntityId,
           DateTime Timestamp,
           string Details,
-          bool IsRread);
+          bool IsRead);
 }

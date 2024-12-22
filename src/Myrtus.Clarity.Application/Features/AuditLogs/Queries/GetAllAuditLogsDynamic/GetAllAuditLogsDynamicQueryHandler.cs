@@ -8,13 +8,18 @@ using Myrtus.Clarity.Application.Repositories.NoSQL;
 
 namespace Myrtus.Clarity.Application.Features.AuditLogs.Queries.GetAllAuditLogsDynamic
 {
-    public class GetAllAuditLogsDynamicQueryHandler(INoSqlRepository<AuditLog> auditLogRepository) : IRequestHandler<GetAllAuditLogsDynamicQuery, Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>>
+    public class GetAllAuditLogsDynamicQueryHandler(INoSqlRepository<AuditLog> auditLogRepository) 
+        : IRequestHandler<GetAllAuditLogsDynamicQuery, Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>>
     {
         private readonly INoSqlRepository<AuditLog> _auditLogRepository = auditLogRepository;
 
-        public async Task<Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>> Handle(GetAllAuditLogsDynamicQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IPaginatedList<GetAllAuditLogsDynamicQueryResponse>>> Handle(
+            GetAllAuditLogsDynamicQuery request, 
+            CancellationToken cancellationToken)
         {
-            IEnumerable<AuditLog> auditLogs = await _auditLogRepository.GetAllAsync(cancellationToken);
+            IEnumerable<AuditLog> auditLogs = await _auditLogRepository.GetAllAsync(
+                            predicate: null,
+                            cancellationToken: cancellationToken);
 
             IQueryable<AuditLog> filteredAuditLogs = auditLogs.AsQueryable().ToDynamic(request.DynamicQuery);
 

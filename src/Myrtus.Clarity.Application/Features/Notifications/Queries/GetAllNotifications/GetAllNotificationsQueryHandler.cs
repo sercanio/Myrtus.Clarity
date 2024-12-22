@@ -10,7 +10,7 @@ using Myrtus.Clarity.Domain.Users;
 
 namespace Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifications
 {
-    public sealed class GetAllNotificationsQueryHandler : IRequestHandler<GetAllNotificationsQuery, Result<IPaginatedList<GetAllNotificationsQueryResponse>>>
+    public sealed class GetAllNotificationsQueryHandler : IRequestHandler<GetAllNotificationsQuery, Result<GetAllNotificationsWithUnreadCountResponse>>
     {
         private readonly INotificationService _notificationService;
         private readonly IUserContext _userContext;
@@ -23,7 +23,7 @@ namespace Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifi
             _userService = userService;
         }
 
-        public async Task<Result<IPaginatedList<GetAllNotificationsQueryResponse>>> Handle(GetAllNotificationsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetAllNotificationsWithUnreadCountResponse>> Handle(GetAllNotificationsQuery request, CancellationToken cancellationToken)
         {
             User? user = await _userService.GetAsync(
                 predicate: user => user.IdentityId == _userContext.IdentityId,
@@ -35,6 +35,8 @@ namespace Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifi
             }
 
             List<Notification> notifications = await _notificationService.GetNotificationsByUserIdAsync(user.IdentityId.ToString());
+
+            int unreadCount = notifications.Count(notification => !notification.IsRead);
 
             List<GetAllNotificationsQueryResponse> paginatedNotifications = notifications
                 .OrderByDescending(notification => notification.Timestamp)
@@ -60,7 +62,9 @@ namespace Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifi
                 request.PageSize
             );
 
-            return Result.Success<IPaginatedList<GetAllNotificationsQueryResponse>>(paginatedList);
+            var response = new GetAllNotificationsWithUnreadCountResponse(paginatedList, unreadCount);
+
+            return Result.Success(response);
         }
     }
 }
