@@ -7,7 +7,7 @@ namespace Myrtus.Clarity.Application.Features.Users.Queries.GetUser
     public sealed record GetUserQueryResponse
     {
         public Guid Id { get; set; }
-        public Email Email { get; set; } = new Email(string.Empty);
+        public Email Email { get; set; }
         public FirstName? FirstName { get; set; }
         public LastName? LastName { get; set; }
         public ICollection<GetRoleByIdQueryResponse> Roles { get; set; } = [];

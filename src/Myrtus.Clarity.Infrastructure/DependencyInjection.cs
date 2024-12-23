@@ -28,7 +28,7 @@ using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
 using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
 using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
-using Myrtus.Clarity.Core.Infrastructure.Notifications.Services;
+using Myrtus.Clarity.Infrastructure.Notifications.Services;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
 using Myrtus.Clarity.Infrastructure.Authentication;
 using Myrtus.Clarity.Infrastructure.Authorization;
