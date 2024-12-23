@@ -7,7 +7,8 @@ using Myrtus.Clarity.Application.Features.Notifications.Commands.MarkNotificatio
 using Myrtus.Clarity.Application.Features.Notifications.Queries.GetAllNotifications;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
-using Myrtus.Clarity.Core.WebApi;
+using Myrtus.Clarity.Core.WebAPI;
+using Myrtus.Clarity.Core.WebAPI.Controllers;
 using Myrtus.Clarity.WebAPI.Attributes;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Notifications

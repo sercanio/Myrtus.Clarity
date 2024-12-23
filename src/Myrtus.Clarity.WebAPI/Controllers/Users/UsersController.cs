@@ -3,7 +3,6 @@ using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
-using Myrtus.Clarity.Core.WebApi;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Dynamic;
 using Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsers;
@@ -13,6 +12,8 @@ using Myrtus.Clarity.Application.Features.Users.Queries.GetUser;
 using Myrtus.Clarity.Application.Features.Users.Commands.Update.UpdateUserRoles;
 using Myrtus.Clarity.WebAPI.Attributes;
 using Microsoft.AspNetCore.RateLimiting;
+using Myrtus.Clarity.Core.WebAPI;
+using Myrtus.Clarity.Core.WebAPI.Controllers;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Users
 {

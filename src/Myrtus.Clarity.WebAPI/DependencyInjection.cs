@@ -1,6 +1,6 @@
 ﻿using Myrtus.Clarity.Core.Application.Abstractions.Localization.Services;
 using Myrtus.Clarity.Core.Infrastructure.Localization.Services;
-using Myrtus.Clarity.Core.WebApi;
+using Myrtus.Clarity.Core.WebAPI;
 
 namespace Myrtus.Clarity.WebAPI;
 

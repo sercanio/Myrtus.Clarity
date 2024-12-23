@@ -9,7 +9,8 @@ using Myrtus.Clarity.Application.Features.Accounts.RegisterUser;
 using Myrtus.Clarity.Application.Features.Accounts.UpdateNotificationPreferences;
 using Myrtus.Clarity.Application.Features.Users.Queries.GetLoggedInUser;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
-using Myrtus.Clarity.Core.WebApi;
+using Myrtus.Clarity.Core.WebAPI;
+using Myrtus.Clarity.Core.WebAPI.Controllers;
 using Myrtus.Clarity.Domain.Users.ValueObjects;
 using Myrtus.Clarity.WebAPI.Attributes;
 

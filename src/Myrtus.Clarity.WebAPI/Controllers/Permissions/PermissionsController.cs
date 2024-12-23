@@ -4,10 +4,11 @@ using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
-using Myrtus.Clarity.Core.WebApi;
 using Myrtus.Clarity.Application.Features.Permissions.Queries.GetAllPermissions;
 using Myrtus.Clarity.WebAPI.Attributes;
 using Microsoft.AspNetCore.RateLimiting;
+using Myrtus.Clarity.Core.WebAPI;
+using Myrtus.Clarity.Core.WebAPI.Controllers;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.PermissionsController
 {
