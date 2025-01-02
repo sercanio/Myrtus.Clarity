@@ -14,6 +14,8 @@ using Myrtus.Clarity.WebAPI.Attributes;
 using Microsoft.AspNetCore.RateLimiting;
 using Myrtus.Clarity.Core.WebAPI;
 using Myrtus.Clarity.Core.WebAPI.Controllers;
+using ApiVersion = Microsoft.AspNetCore.Mvc.ApiVersion;
+using ApiVersionAttribute = Microsoft.AspNetCore.Mvc.ApiVersionAttribute;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Users
 {

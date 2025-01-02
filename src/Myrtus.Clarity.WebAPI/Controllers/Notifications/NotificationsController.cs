@@ -10,6 +10,8 @@ using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.WebAPI;
 using Myrtus.Clarity.Core.WebAPI.Controllers;
 using Myrtus.Clarity.WebAPI.Attributes;
+using ApiVersion = Microsoft.AspNetCore.Mvc.ApiVersion;
+using ApiVersionAttribute = Microsoft.AspNetCore.Mvc.ApiVersionAttribute;
 
 namespace Myrtus.Clarity.WebAPI.Controllers.Notifications
 {
