@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Asp.Versioning;
 using MediatR;
 using Ardalis.Result;
 using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
