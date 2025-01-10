@@ -27,9 +27,9 @@ namespace Myrtus.Clarity.Application.Features.Users.Queries.GetAllUsersDynamic
                 List<GetAllUsersDynamicQueryResponse> mappedUsers = users.Items.Select(
                     user => new GetAllUsersDynamicQueryResponse(
                     user.Id,
-                    user.Email,
-                    user.FirstName,
-                    user.LastName,
+                    user.Email.Value,
+                    user.FirstName.Value,
+                    user.LastName.Value,
                     new Collection<LoggedInUserRolesDto>(
                         user.Roles
                             .Where(role => role.DeletedOnUtc == null)
