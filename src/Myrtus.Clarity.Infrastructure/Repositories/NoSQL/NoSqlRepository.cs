@@ -1,5 +1,7 @@
 ﻿using MongoDB.Driver;
 using Myrtus.Clarity.Application.Repositories.NoSQL;
+using Myrtus.Clarity.Core.Application.Abstractions.Pagination;
+using Myrtus.Clarity.Core.Infrastructure.Pagination;
 using System.Linq.Expressions;
 
 namespace Myrtus.Clarity.Infrastructure.Repositories.NoSQL
@@ -18,10 +20,17 @@ namespace Myrtus.Clarity.Infrastructure.Repositories.NoSQL
             return await _collection.Find(predicate).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? predicate, CancellationToken cancellationToken = default)
+        public async Task<IPaginatedList<T>> GetAllAsync(int pageIndex = 0, int pageSize = 10, Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
         {
             var filter = predicate ?? (_ => true);
-            return await _collection.Find(filter).ToListAsync(cancellationToken);
+            var totalCount = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
+
+            var items = await _collection.Find(filter)
+                .Skip(pageIndex * pageSize)
+                .Limit(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedList<T>(items, (int)totalCount, pageIndex, pageSize);
         }
 
         public async Task AddAsync(T entity, CancellationToken cancellationToken = default)

@@ -90,7 +90,8 @@ namespace Myrtus.Clarity.Infrastructure.Notifications.Services
 
         public async Task<IEnumerable<Notification>> GetNotificationsByUserIdsAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _notificationRepository.GetAllAsync(n => n.UserId == userId, cancellationToken);
+            var paginatedList = await _notificationRepository.GetAllAsync(predicate: n => n.UserId == userId, cancellationToken: cancellationToken);
+            return paginatedList.Items;
         }
 
         public async Task SendNotificationToUserGroupAsync(string details, string groupName)
@@ -110,7 +111,7 @@ namespace Myrtus.Clarity.Infrastructure.Notifications.Services
                 predicate: n => n.UserId == UserId && !n.IsRead,
                 cancellationToken: cancellation);
 
-            foreach (var notification in notifications)
+            foreach (var notification in notifications.Items)
             {
                 notification.IsRead = true;
                 await _notificationRepository.UpdateAsync(notification, cancellation);
