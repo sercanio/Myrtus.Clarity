@@ -30,11 +30,8 @@ namespace Myrtus.Clarity.Domain.Users
             NotificationPreference = notificationPreference;
         }
 
-        private User() // EF Core requires a parameterless constructor
+        private User()
         {
-            FirstName = new FirstName("DefaultFirstName");
-            LastName = new LastName("DefaultLastName");
-            Email = new Email("default@example.com");
         }
 
         public static User Create(
@@ -45,7 +42,7 @@ namespace Myrtus.Clarity.Domain.Users
             NotificationPreference notificationPreference = new(true, true, true);
             var user = new User(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
             user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
-            user.AddRole(Role.DefaultRole); // Example default assignment
+            user.AddRole(Role.DefaultRole);
             user.UpdatedBy = "System";
             return user;
         }

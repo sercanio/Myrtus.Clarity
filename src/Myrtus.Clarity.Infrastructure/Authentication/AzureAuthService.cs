@@ -66,7 +66,7 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
                 var userToCreate = new Microsoft.Graph.Models.User
                 {
                     AccountEnabled = true,
-                    DisplayName = $"{user.FirstName} {user.LastName}",
+                    DisplayName = $"{user.FirstName.Value} {user.LastName.Value}",
                     GivenName = user.FirstName.Value,
                     Surname = user.LastName.Value,
                     Identities = new List<ObjectIdentity>
@@ -137,14 +137,14 @@ namespace Myrtus.Clarity.Infrastructure.Authentication
 
             // Create the email message using Mail object
             var subject = "Welcome to Myrtus Clarity - Set Your Password";
-            var textBody = $"Dear {user.FirstName},\n\n" +
+            var textBody = $"Dear {user.FirstName.Value},\n\n" +
                            "Welcome to Myrtus Clarity! Please click the link below to set your password and activate your account:\n" +
                            $"{passwordResetLink}\n\n" +
                            "If you did not expect this email, please ignore it.\n\n" +
                            "Best regards,\nThe Myrtus Clarity Team";
 
             var htmlBody = $@"
-                    <p>Dear {user.FirstName},</p>
+                    <p>Dear {user.FirstName.Value},</p>
                     <p>Welcome to Myrtus Clarity! Please click the link below to set your password and activate your account:</p>
                     <p><a href=""{passwordResetLink}"">Set your password</a></p>
                     <p>If you did not expect this email, please ignore it.</p>

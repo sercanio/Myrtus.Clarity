@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users;
 using Myrtus.Clarity.Domain.Users.ValueObjects;
 
@@ -44,7 +45,6 @@ namespace Myrtus.Clarity.Infrastructure.Configurations
                 np.Property(p => p.IsPushNotificationEnabled).HasColumnName("push_notification");
             });
 
-            // Seed a default admin user
             var adminUser = User.CreateWithoutRolesForSeeding(
                 new FirstName("Sercan"),
                 new LastName("Ateş"),

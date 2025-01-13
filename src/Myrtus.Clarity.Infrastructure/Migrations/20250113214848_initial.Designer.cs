@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Myrtus.Clarity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250113163205_initial")]
+    [Migration("20250113214848_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -108,7 +108,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(569),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(3554),
                             Feature = "users",
                             Name = "users:read"
                         },
@@ -116,7 +116,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1840),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4729),
                             Feature = "users",
                             Name = "users:create"
                         },
@@ -124,7 +124,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("25bb194c-ea15-4339-9f45-5a895c51b626"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1846),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4734),
                             Feature = "users",
                             Name = "users:update"
                         },
@@ -132,7 +132,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1849),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4736),
                             Feature = "users",
                             Name = "users:delete"
                         },
@@ -140,7 +140,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1851),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4737),
                             Feature = "roles",
                             Name = "roles:read"
                         },
@@ -148,7 +148,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1853),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4739),
                             Feature = "roles",
                             Name = "roles:create"
                         },
@@ -156,7 +156,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1855),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4740),
                             Feature = "roles",
                             Name = "roles:update"
                         },
@@ -164,7 +164,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1856),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4743),
                             Feature = "roles",
                             Name = "roles:delete"
                         },
@@ -172,7 +172,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("0eeb5f27-10fd-430a-9257-a8457107141a"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1858),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4744),
                             Feature = "permissions",
                             Name = "permissions:read"
                         },
@@ -180,7 +180,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("3050d953-5dcf-4eb0-a18d-a3ce62a0dd3c"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1859),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4745),
                             Feature = "auditlogs",
                             Name = "auditlogs:read"
                         },
@@ -188,7 +188,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("a03a127b-9a03-46a0-b709-b6919f2598be"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1861),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4747),
                             Feature = "notifications",
                             Name = "notifications:read"
                         },
@@ -196,7 +196,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("a5585e9e-ec65-431b-9bb9-9bbc1663ebb8"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1862),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 594, DateTimeKind.Utc).AddTicks(4748),
                             Feature = "notifications",
                             Name = "notifications:update"
                         });
@@ -249,9 +249,17 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 799, DateTimeKind.Utc).AddTicks(4150),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 597, DateTimeKind.Utc).AddTicks(7011),
                             IsDefault = false,
                             Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 597, DateTimeKind.Utc).AddTicks(7591),
+                            IsDefault = true,
+                            Name = "Registered"
                         });
                 });
 
@@ -302,7 +310,7 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             Id = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7"),
                             CreatedBy = "System",
-                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 895, DateTimeKind.Utc).AddTicks(9898),
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 21, 48, 47, 666, DateTimeKind.Utc).AddTicks(1533),
                             IdentityId = "b3398ff2-1b43-4af7-812d-eb4347eecbb8"
                         });
                 });
@@ -385,6 +393,21 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         {
                             RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
                             PermissionId = new Guid("a5585e9e-ec65-431b-9bb9-9bbc1663ebb8")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
+                            PermissionId = new Guid("a03a127b-9a03-46a0-b709-b6919f2598be")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
+                            PermissionId = new Guid("a5585e9e-ec65-431b-9bb9-9bbc1663ebb8")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
+                            PermissionId = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca")
                         });
                 });
 
@@ -410,6 +433,11 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         new
                         {
                             RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("5dc6ec47-5b7c-4c2b-86cd-3a671834e56e"),
                             UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7")
                         });
                 });

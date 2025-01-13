@@ -55,9 +55,9 @@ namespace Myrtus.Clarity.WebAPI.Controllers.Accounts
             CancellationToken cancellationToken)
         {
             RegisterUserCommand command = new(
-                request.Email,
-                request.FirstName,
-                request.LastName,
+                new Email(request.Email),
+                new FirstName(request.FirstName),
+                new LastName(request.FirstName),
                 request.Password);
 
             Result<Guid> result = await _sender.Send(command, cancellationToken);
