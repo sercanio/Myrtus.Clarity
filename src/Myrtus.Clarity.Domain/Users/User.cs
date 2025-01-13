@@ -2,19 +2,20 @@
 using Myrtus.Clarity.Domain.Roles;
 using Myrtus.Clarity.Domain.Users.Events;
 using Myrtus.Clarity.Domain.Users.ValueObjects;
+using System.Collections.Generic;
 
 namespace Myrtus.Clarity.Domain.Users
 {
     public sealed class User : Entity, IAggregateRoot
     {
         private readonly List<Role> _roles = new();
+        public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+
         public FirstName FirstName { get; private set; }
         public LastName LastName { get; private set; }
         public Email Email { get; private set; }
         public string IdentityId { get; private set; } = string.Empty;
         public NotificationPreference NotificationPreference { get; private set; }
-
-        public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
 
         private User(
             Guid id,
@@ -29,21 +30,22 @@ namespace Myrtus.Clarity.Domain.Users
             NotificationPreference = notificationPreference;
         }
 
-        private User()
+        private User() // EF Core requires a parameterless constructor
         {
             FirstName = new FirstName("DefaultFirstName");
             LastName = new LastName("DefaultLastName");
             Email = new Email("default@example.com");
         }
 
-        public static User Create(FirstName firstName,
+        public static User Create(
+            FirstName firstName,
             LastName lastName,
             Email email)
         {
             NotificationPreference notificationPreference = new(true, true, true);
-            User user = new(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
+            var user = new User(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
             user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
-            user.AddRole(Role.DefaultRole);
+            user.AddRole(Role.DefaultRole); // Example default assignment
             user.UpdatedBy = "System";
             return user;
         }
@@ -54,19 +56,24 @@ namespace Myrtus.Clarity.Domain.Users
             Email email)
         {
             NotificationPreference notificationPreference = new(true, true, true);
-            return new User(Guid.NewGuid(), firstName, lastName, email, notificationPreference);
+            return new User(Guid.Parse("55c7f429-0916-4d84-8b76-d45185d89aa7"), firstName, lastName, email, notificationPreference);
         }
 
         public void AddRole(Role role)
         {
-            this._roles.Add(role);
-            this.RaiseDomainEvent(new UserRoleAddedDomainEvent(this.Id, role.Id));
+            if (!_roles.Contains(role))
+            {
+                _roles.Add(role);
+                RaiseDomainEvent(new UserRoleAddedDomainEvent(Id, role.Id));
+            }
         }
 
         public void RemoveRole(Role role)
         {
-            _ = this._roles.Remove(role);
-            this.RaiseDomainEvent(new UserRoleRemovedDomainEvent(this.Id, role.Id));
+            if (_roles.Remove(role))
+            {
+                RaiseDomainEvent(new UserRoleRemovedDomainEvent(Id, role.Id));
+            }
         }
 
         public void SetIdentityId(string identityId)

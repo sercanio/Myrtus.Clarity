@@ -1,6 +1,6 @@
-﻿using Myrtus.Clarity.Core.Infrastructure.Outbox;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Myrtus.Clarity.Core.Infrastructure.Outbox;
 
 namespace Myrtus.Clarity.Infrastructure.Configurations
 {
@@ -10,7 +10,11 @@ namespace Myrtus.Clarity.Infrastructure.Configurations
         {
             builder.ToTable("outbox_messages");
             builder.HasKey(outboxMessage => outboxMessage.Id);
-            builder.Property(outboxMessage => outboxMessage.Content).HasColumnType("jsonb");
+
+            builder.Property(outboxMessage => outboxMessage.Content)
+                   .HasColumnType("jsonb");
+
+            // No seed data here
         }
     }
 }

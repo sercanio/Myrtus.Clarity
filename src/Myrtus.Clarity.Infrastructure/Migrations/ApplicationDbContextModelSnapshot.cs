@@ -99,6 +99,104 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         .HasName("pk_permissions");
 
                     b.ToTable("permissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(569),
+                            Feature = "users",
+                            Name = "users:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1840),
+                            Feature = "users",
+                            Name = "users:create"
+                        },
+                        new
+                        {
+                            Id = new Guid("25bb194c-ea15-4339-9f45-5a895c51b626"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1846),
+                            Feature = "users",
+                            Name = "users:update"
+                        },
+                        new
+                        {
+                            Id = new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1849),
+                            Feature = "users",
+                            Name = "users:delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1851),
+                            Feature = "roles",
+                            Name = "roles:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1853),
+                            Feature = "roles",
+                            Name = "roles:create"
+                        },
+                        new
+                        {
+                            Id = new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1855),
+                            Feature = "roles",
+                            Name = "roles:update"
+                        },
+                        new
+                        {
+                            Id = new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1856),
+                            Feature = "roles",
+                            Name = "roles:delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("0eeb5f27-10fd-430a-9257-a8457107141a"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1858),
+                            Feature = "permissions",
+                            Name = "permissions:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("3050d953-5dcf-4eb0-a18d-a3ce62a0dd3c"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1859),
+                            Feature = "auditlogs",
+                            Name = "auditlogs:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("a03a127b-9a03-46a0-b709-b6919f2598be"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1861),
+                            Feature = "notifications",
+                            Name = "notifications:read"
+                        },
+                        new
+                        {
+                            Id = new Guid("a5585e9e-ec65-431b-9bb9-9bbc1663ebb8"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 797, DateTimeKind.Utc).AddTicks(1862),
+                            Feature = "notifications",
+                            Name = "notifications:update"
+                        });
                 });
 
             modelBuilder.Entity("Myrtus.Clarity.Domain.Roles.Role", b =>
@@ -142,6 +240,16 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         .HasName("pk_roles");
 
                     b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 799, DateTimeKind.Utc).AddTicks(4150),
+                            IsDefault = false,
+                            Name = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Myrtus.Clarity.Domain.Users.User", b =>
@@ -185,44 +293,122 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         .HasDatabaseName("ix_users_identity_id");
 
                     b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7"),
+                            CreatedBy = "System",
+                            CreatedOnUtc = new DateTime(2025, 1, 13, 16, 32, 4, 895, DateTimeKind.Utc).AddTicks(9898),
+                            IdentityId = "b3398ff2-1b43-4af7-812d-eb4347eecbb8"
+                        });
                 });
 
-            modelBuilder.Entity("PermissionRole", b =>
+            modelBuilder.Entity("role_permission", b =>
                 {
-                    b.Property<Guid>("PermissionsId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uuid")
-                        .HasColumnName("permissions_id");
+                        .HasColumnName("role_id");
 
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("PermissionId")
                         .HasColumnType("uuid")
-                        .HasColumnName("roles_id");
+                        .HasColumnName("permission_id");
 
-                    b.HasKey("PermissionsId", "RolesId")
-                        .HasName("pk_permission_role");
+                    b.HasKey("RoleId", "PermissionId")
+                        .HasName("pk_role_permission");
 
-                    b.HasIndex("RolesId")
-                        .HasDatabaseName("ix_permission_role_roles_id");
+                    b.HasIndex("PermissionId")
+                        .HasDatabaseName("ix_role_permission_permission_id");
 
-                    b.ToTable("permission_role", (string)null);
+                    b.ToTable("role_permission", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("33261a4a-c423-4876-8f15-e40068aea5ca")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("9f79a54c-0b54-4de5-94b9-8582a5f32e78")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("25bb194c-ea15-4339-9f45-5a895c51b626")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("559dd4ec-4d2e-479d-a0a9-5229ecc04fb4")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("d066e4ee-6af2-4857-bd40-b9b058fa2201")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("940c88ad-24fe-4d86-a982-fa5ea224edba")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("346d3cc6-ac81-42b1-8539-cd53f42b6566")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("386e40e9-da38-4d2f-8d02-ac4cbaddf760")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("0eeb5f27-10fd-430a-9257-a8457107141a")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("3050d953-5dcf-4eb0-a18d-a3ce62a0dd3c")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("a03a127b-9a03-46a0-b709-b6919f2598be")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            PermissionId = new Guid("a5585e9e-ec65-431b-9bb9-9bbc1663ebb8")
+                        });
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("role_user", b =>
                 {
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uuid")
-                        .HasColumnName("roles_id");
+                        .HasColumnName("role_id");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("users_id");
+                        .HasColumnName("user_id");
 
-                    b.HasKey("RolesId", "UsersId")
+                    b.HasKey("RoleId", "UserId")
                         .HasName("pk_role_user");
 
-                    b.HasIndex("UsersId")
-                        .HasDatabaseName("ix_role_user_users_id");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_role_user_user_id");
 
                     b.ToTable("role_user", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = new Guid("4b606d86-3537-475a-aa20-26aadd8f5cfd"),
+                            UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7")
+                        });
                 });
 
             modelBuilder.Entity("Myrtus.Clarity.Domain.Users.User", b =>
@@ -249,6 +435,13 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("UserId")
                                 .HasConstraintName("fk_users_users_id");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7"),
+                                    Value = "sercanates91@gmail.com"
+                                });
                         });
 
                     b.OwnsOne("Myrtus.Clarity.Domain.Users.ValueObjects.FirstName", "FirstName", b1 =>
@@ -269,6 +462,13 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("UserId")
                                 .HasConstraintName("fk_users_users_id");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7"),
+                                    Value = "Sercan"
+                                });
                         });
 
                     b.OwnsOne("Myrtus.Clarity.Domain.Users.ValueObjects.LastName", "LastName", b1 =>
@@ -289,6 +489,13 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("UserId")
                                 .HasConstraintName("fk_users_users_id");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7"),
+                                    Value = "Ateş"
+                                });
                         });
 
                     b.OwnsOne("Myrtus.Clarity.Domain.Users.ValueObjects.NotificationPreference", "NotificationPreference", b1 =>
@@ -316,6 +523,15 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("UserId")
                                 .HasConstraintName("fk_users_users_id");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("55c7f429-0916-4d84-8b76-d45185d89aa7"),
+                                    IsEmailNotificationEnabled = true,
+                                    IsInAppNotificationEnabled = true,
+                                    IsPushNotificationEnabled = true
+                                });
                         });
 
                     b.Navigation("Email")
@@ -331,38 +547,38 @@ namespace Myrtus.Clarity.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PermissionRole", b =>
+            modelBuilder.Entity("role_permission", b =>
                 {
                     b.HasOne("Myrtus.Clarity.Domain.Roles.Permission", null)
                         .WithMany()
-                        .HasForeignKey("PermissionsId")
+                        .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_permission_role_permission_permissions_id");
+                        .HasConstraintName("FK_role_permission_permissions_PermissionId");
 
                     b.HasOne("Myrtus.Clarity.Domain.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_permission_role_role_roles_id");
+                        .HasConstraintName("FK_role_permission_roles_RoleId");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("role_user", b =>
                 {
                     b.HasOne("Myrtus.Clarity.Domain.Roles.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_user_role_roles_id");
+                        .HasConstraintName("FK_role_user_roles_RoleId");
 
                     b.HasOne("Myrtus.Clarity.Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_user_user_users_id");
+                        .HasConstraintName("FK_role_user_users_UserId");
                 });
 #pragma warning restore 612, 618
         }
