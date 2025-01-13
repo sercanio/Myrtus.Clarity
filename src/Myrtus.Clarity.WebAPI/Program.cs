@@ -31,6 +31,7 @@ builder.Host.UseSerilog((context, loggerConfig) =>
 // Configure MongoDB GuidRepresentation
 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
+// Rate Limiting Config
 var rateLimitingConfig = builder.Configuration.GetSection("RateLimiting:FixedWindowPolicy");
 
 builder.Services.AddRateLimiter(options =>
@@ -65,6 +66,8 @@ builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.ConfigureControllers();
 builder.Services.AddValidatiors();
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.OperationFilter<SwaggerFileOperationFilter>();
@@ -106,7 +109,8 @@ builder.Services.AddTransient<IOperationFilter, SwaggerFileOperationFilter>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"{builder.Configuration["AzureAdB2C:Instance"]}/{builder.Configuration["AzureAdB2C:TenantId"]}/{builder.Configuration["AzureAdB2C:SignUpSignInPolicyId"]}/v2.0/";
+        options.Authority =
+            $"{builder.Configuration["AzureAdB2C:Instance"]}/{builder.Configuration["AzureAdB2C:TenantId"]}/{builder.Configuration["AzureAdB2C:SignUpSignInPolicyId"]}/v2.0/";
         options.Audience = builder.Configuration["AzureAdB2C:ClientId"];
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -125,7 +129,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 // If the request is for our hub...
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) &&
-                    (path.StartsWithSegments("/notificationHub") || path.StartsWithSegments("/auditLogHub")))
+                    (path.StartsWithSegments("/notificationHub") ||
+                     path.StartsWithSegments("/auditLogHub")))
                 {
                     // Read the token out of the query string
                     context.Token = accessToken;
@@ -135,13 +140,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Domain / Application / Infrastructure / WebApi
 builder.Services.AddDomain(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddWebApi(builder.Configuration);
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
+// Dynamically load modules
 var modulesPath = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "..", "modules"));
+var moduleInstances = new List<IClarityModule>();
 
 if (Directory.Exists(modulesPath))
 {
@@ -155,15 +163,22 @@ if (Directory.Exists(modulesPath))
         {
             var assembly = Assembly.LoadFrom(moduleFile);
 
-            builder.Services.AddControllers().AddApplicationPart(assembly).AddControllersAsServices();
+            // Add controllers from module
+            builder.Services.AddControllers()
+                .AddApplicationPart(assembly)
+                .AddControllersAsServices();
 
+            // Find all types implementing IClarityModule
             var moduleTypes = assembly.GetTypes()
-                .Where(t => typeof(IClarityModule).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+                .Where(t => typeof(IClarityModule).IsAssignableFrom(t)
+                            && !t.IsInterface && !t.IsAbstract);
 
+            // Create & call ConfigureServices
             foreach (var type in moduleTypes)
             {
-                var moduleInstance = (IClarityModule)Activator.CreateInstance(type);
+                var moduleInstance = (IClarityModule)Activator.CreateInstance(type)!;
                 moduleInstance.ConfigureServices(builder.Services, builder.Configuration);
+                moduleInstances.Add(moduleInstance);
             }
         }
         catch (ReflectionTypeLoadException ex)
@@ -183,52 +198,52 @@ if (Directory.Exists(modulesPath))
 
 WebApplication app = builder.Build();
 
+// If dev environment, set up swagger endpoints
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        foreach ((string url, string name) in from ApiVersionDescription description in app.DescribeApiVersions()
-                                              let url = $"/swagger/{description.GroupName}/swagger.json"
-                                              let name = description.GroupName.ToUpperInvariant()
-                                              select (url, name))
+        foreach ((string url, string name) in
+            from ApiVersionDescription description in app.DescribeApiVersions()
+            let url = $"/swagger/{description.GroupName}/swagger.json"
+            let name = description.GroupName.ToUpperInvariant()
+            select (url, name))
         {
             options.SwaggerEndpoint(url, name);
         }
     });
 }
 
+// Middlewares
 app.UseHttpsRedirection();
-
 app.UseCors("CorsPolicy");
-
 app.UseRequestContextLogging();
-
 app.UseSerilogRequestLogging();
-
 app.UseCustomExceptionHandler();
-
 app.UseCustomForbiddenRequestHandler();
-
 app.UseRateLimitExceededHandler();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.UseRateLimiter();
 
+// Routes
 app.MapControllers();
-
 app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 app.MapHub<AuditLogHub>("/auditLogHub");
-
 app.MapHub<NotificationHub>("/notificationHub");
 
+// **Finally**, invoke Configure on each module
+foreach (var moduleInstance in moduleInstances)
+{
+    moduleInstance.Configure(app);
+}
+
+// Run the app
 app.Run();
 
 public partial class Program;

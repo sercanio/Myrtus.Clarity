@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -16,7 +15,6 @@ using Myrtus.Clarity.Core.Application.Abstractions.Auditing;
 using Myrtus.Clarity.Core.Application.Abstractions.Authentication;
 using Myrtus.Clarity.Core.Application.Abstractions.Caching;
 using Myrtus.Clarity.Core.Application.Abstractions.Clock;
-using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
 using Myrtus.Clarity.Core.Application.Abstractions.Mailing;
 using Myrtus.Clarity.Core.Application.Abstractions.Notification;
 using Myrtus.Clarity.Core.Domain.Abstractions;
@@ -26,7 +24,6 @@ using Myrtus.Clarity.Core.Infrastructure.Authentication.Azure;
 using Myrtus.Clarity.Core.Infrastructure.Authorization;
 using Myrtus.Clarity.Core.Infrastructure.Caching;
 using Myrtus.Clarity.Core.Infrastructure.Clock;
-using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
 using Myrtus.Clarity.Core.Infrastructure.Mailing.MailKit;
 using Myrtus.Clarity.Infrastructure.Notifications.Services;
 using Myrtus.Clarity.Core.Infrastructure.Outbox;
@@ -89,11 +86,6 @@ namespace Myrtus.Clarity.Infrastructure
                     .AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IRoleRepository, RoleRepository>()
                     .AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
-
-            services.AddSingleton<ISqlConnectionFactory>(_ =>
-                new SqlConnectionFactory(connectionString));
-
-            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
             // MongoDB configuration
             string mongoConnectionString = configuration.GetConnectionString("MongoDb") ??
@@ -206,10 +198,5 @@ namespace Myrtus.Clarity.Infrastructure
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, DefaultUserIdProvider>();
         }
-
-        //private static void AddLocalization(IServiceCollection services)
-        //{
-        //    services.AddSingleton<ILocalizationService, LocalizationService>();
-        //}
     }
 }
