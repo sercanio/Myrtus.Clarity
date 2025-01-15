@@ -9,17 +9,7 @@
     <DockerServiceName>Myrtus-api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="core\Myrtus.Clarity.Core.Domain.Abstractions\ValueObject.cs" />
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
-    <None Include="modules\cms\src\CMSModule\Controllers\UploadMediaResponse.cs" />
-    <None Include="src\Myrtus.Clarity.Application\Features\Notifications\Queries\GetAllNotifications\GetAllNotificationsWithUnreadCountResponse.cs" />
-    <None Include="src\Myrtus.Clarity.Infrastructure\Configurations\RolePermissionConfiguration.cs" />
-    <None Include="src\Myrtus.Clarity.Infrastructure\Configurations\RoleUserConfiguration.cs" />
-    <None Include="src\Myrtus.Clarity.WebAPI\Middleware\ForbiddenResponseMiddleware.cs" />
-    <None Include="src\Myrtus.Clarity.WebAPI\Middleware\RateLimitExceededMiddleware.cs" />
   </ItemGroup>
 </Project>
