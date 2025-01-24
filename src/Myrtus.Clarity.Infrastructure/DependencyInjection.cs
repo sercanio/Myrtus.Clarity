@@ -33,6 +33,8 @@ using Myrtus.Clarity.Infrastructure.Mailing;
 using Myrtus.Clarity.Infrastructure.Repositories;
 using Myrtus.Clarity.Infrastructure.Repositories.NoSQL;
 using Quartz;
+using Myrtus.Clarity.Core.Application.Abstractions.Data.Dapper;
+using Myrtus.Clarity.Core.Infrastructure.Data.Dapper;
 
 namespace Myrtus.Clarity.Infrastructure
 {
@@ -86,6 +88,8 @@ namespace Myrtus.Clarity.Infrastructure
                     .AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IRoleRepository, RoleRepository>()
                     .AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+            services.AddScoped<ISqlConnectionFactory, SqlConnectionFactory>();
 
             // MongoDB configuration
             string mongoConnectionString = configuration.GetConnectionString("MongoDb") ??
