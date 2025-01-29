@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- Existing Package References -->
 		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
 		<PackageReference Include="FluentValidation" Version="11.11.0" />
@@ -31,10 +32,10 @@
 		<PackageReference Include="StackExchange.Redis" Version="2.8.16" />
 		<PackageReference Include="MongoDB.Driver" Version="3.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- Existing Project References -->
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Application.Abstractions.Module\Myrtus.Clarity.Core.Application.Abstractions.Module.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Domain.Abstractions\Myrtus.Clarity.Core.Domain.Abstractions.csproj" />
 		<ProjectReference Include="..\..\core\Myrtus.Clarity.Core.Infrastructure.Localization\Myrtus.Clarity.Core.Infrastructure.Localization.csproj" />
@@ -45,11 +46,55 @@
 	</ItemGroup>
 
 	<ItemGroup>
-   <PackageReference Update="SonarAnalyzer.CSharp" Version="9.32.0.97167">
-     <PrivateAssets>all</PrivateAssets>
-     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-   </PackageReference>
+		<!-- Existing Package Updates -->
+		<PackageReference Update="SonarAnalyzer.CSharp" Version="9.32.0.97167">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
+
+	<ItemGroup>
+		<!-- 1. Include Module DLLs and PDBs as Content to Copy to Publish Directory -->
+		<Content Include="..\..\modules\**\bin\$(Configuration)\$(TargetFramework)\*.dll">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<!-- This Link element ensures that the DLLs are placed under the 'modules' folder in the publish output -->
+			<Link>modules\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+		<Content Include="..\..\modules\**\bin\$(Configuration)\$(TargetFramework)\*.pdb">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<Link>modules\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+	</ItemGroup>
+
+	<!-- 2. Define a Target to Copy Module Assemblies After Publish -->
+	<Target Name="CopyModulesAfterPublish" AfterTargets="Publish">
+		<!-- Define the destination path for modules within the publish directory -->
+		<PropertyGroup>
+			<!-- 'PublishDir' is a built-in property that points to the publish output folder -->
+			<ModulesPublishPath>$(PublishDir)modules\</ModulesPublishPath>
+		</PropertyGroup>
+
+		<!-- Create the modules directory if it doesn't exist -->
+		<MakeDir Directories="$(ModulesPublishPath)" Condition="!Exists('$(ModulesPublishPath)')" />
+
+		<!-- Collect all module DLLs and PDBs -->
+		<ItemGroup>
+			<ModuleAssemblies Include="..\..\modules\**\bin\$(Configuration)\$(TargetFramework)\*.dll" />
+			<ModulePDBs Include="..\..\modules\**\bin\$(Configuration)\$(TargetFramework)\*.pdb" />
+		</ItemGroup>
+
+		<!-- Copy module assemblies -->
+		<Copy
+		  SourceFiles="@(ModuleAssemblies)"
+		  DestinationFolder="$(ModulesPublishPath)"
+		  SkipUnchangedFiles="true" />
+
+		<!-- Copy module PDBs -->
+		<Copy
+		  SourceFiles="@(ModulePDBs)"
+		  DestinationFolder="$(ModulesPublishPath)"
+		  SkipUnchangedFiles="true" />
+	</Target>
 
 	<ProjectExtensions>
 		<VisualStudio>

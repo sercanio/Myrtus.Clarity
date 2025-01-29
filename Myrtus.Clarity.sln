@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Behaviours", "core\Myrtus.Clarity.Core.Application.Abstractions.Behaviours\Myrtus.Clarity.Core.Application.Abstractions.Behaviours.csproj", "{715F7132-E1A3-45BE-9F6F-694488D03C32}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}"
+#Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrastructure.Pagination", "core\Myrtus.Clarity.Core.Infrastructure.Pagination\Myrtus.Clarity.Core.Infrastructure.Pagination.csproj", "{32EFB480-650C-4B84-8FFB-D3A0921C034C}"
 EndProject

@@ -148,7 +148,10 @@ builder.Services.AddWebApi(builder.Configuration);
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 // Dynamically load modules
-var modulesPath = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "..", "modules"));
+var modulesPath = builder.Environment.IsDevelopment()
+    ? Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "..", "modules"))
+    : Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "modules"));
+
 var moduleInstances = new List<IClarityModule>();
 
 if (Directory.Exists(modulesPath))

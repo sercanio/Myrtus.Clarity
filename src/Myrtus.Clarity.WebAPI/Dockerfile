@@ -25,9 +25,9 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Generate dev certificate
-RUN apt-get update && \
-    apt-get install -y libc6-dev openssl && \
-    dotnet dev-certs https && \
-    dotnet dev-certs https --trust
+#RUN apt-get update && \
+    #apt-get install -y libc6-dev openssl && \
+    #dotnet dev-certs https && \
+    #dotnet dev-certs https --trust
 
 ENTRYPOINT ["dotnet", "Myrtus.Clarity.WebAPI.dll"]
