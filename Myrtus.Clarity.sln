@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Behaviours", "core\Myrtus.Clarity.Core.Application.Abstractions.Behaviours\Myrtus.Clarity.Core.Application.Abstractions.Behaviours.csproj", "{715F7132-E1A3-45BE-9F6F-694488D03C32}"
 EndProject
-#Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Infrastructure.Pagination", "core\Myrtus.Clarity.Core.Infrastructure.Pagination\Myrtus.Clarity.Core.Infrastructure.Pagination.csproj", "{32EFB480-650C-4B84-8FFB-D3A0921C034C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.Application.Abstractions.Pagination", "core\Myrtus.Clarity.Core.Application.Abstractions.Pagination\Myrtus.Clarity.Core.Application.Abstractions.Pagination.csproj", "{810180F5-8283-4CD7-AE55-DEBC786041A1}"
@@ -40,6 +38,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{202FB0B2-02DD-4D2E-869E-7B29DC80FC91}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		docker-compose.override.yml = docker-compose.override.yml
+		docker-compose.yml = docker-compose.yml
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myrtus.Clarity.Core.WebApi", "core\Myrtus.Clarity.Core.WebApi\Myrtus.Clarity.Core.WebApi.csproj", "{C59E9F93-04CF-46DE-B6B3-49B7801BCDDC}"
@@ -132,10 +134,6 @@ Global
 		{715F7132-E1A3-45BE-9F6F-694488D03C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{715F7132-E1A3-45BE-9F6F-694488D03C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{715F7132-E1A3-45BE-9F6F-694488D03C32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADD5AF21-A432-4B22-BA2A-479AE85F98FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32EFB480-650C-4B84-8FFB-D3A0921C034C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32EFB480-650C-4B84-8FFB-D3A0921C034C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32EFB480-650C-4B84-8FFB-D3A0921C034C}.Release|Any CPU.ActiveCfg = Release|Any CPU

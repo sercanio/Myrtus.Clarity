@@ -1,4 +1,51 @@
+version: '3.8'  # Updated to a more recent version for better features
+
 services:
+  Myrtus-db:
+    image: postgres:latest
+    container_name: Myrtus.Db
+    environment:
+      POSTGRES_DB: Myrtus
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./containers/database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  Myrtus-redis:
+    image: redis:latest
+    container_name: Myrtus.Redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  Myrtus-mongodb:
+    image: mongo:latest
+    container_name: Myrtus.MongoDb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - ./containers/mongodb:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   Myrtus-api:
     image: ${DOCKER_REGISTRY-}myrtusapi
     container_name: Myrtus.WebAPI
@@ -6,37 +53,47 @@ services:
       context: .
       dockerfile: src/Myrtus.Clarity.WebAPI/Dockerfile
     depends_on:
-      - Myrtus-db
-
-  Myrtus-db:
-    image: postgres:latest
-    container_name: Myrtus.Db
+      Myrtus-db:
+        condition: service_healthy
+      Myrtus-redis:
+        condition: service_healthy
+      Myrtus-mongodb:
+        condition: service_healthy
     environment:
-      - POSTGRES_DB=Myrtus
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - ./.containers/database:/var/lib/postgresql/data
+      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_URLS: "http://+:5000"  # Configure to use only HTTP
+      ConnectionStrings__Database: "Host=Myrtus-db;Port=5432;Database=Myrtus;Username=postgres;Password=postgres;"
+      ConnectionStrings__Cache: "Myrtus-redis:6379"
+      ConnectionStrings__MongoDb: "mongodb://mongo:mongo@Myrtus-mongodb:27017"
     ports:
-      - 5432:5432
+      - "5000:5000"  # Expose only HTTP port
+    volumes:
+      - ./usersecrets:/app/.microsoft/usersecrets:ro
+      # Removed HTTPS volumes
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   Myrtus-seq:
     image: datalust/seq:latest
     container_name: Myrtus.Seq
     environment:
-      - ACCEPT_EULA=Y
+      ACCEPT_EULA: "Y"
     ports:
-      - 5341:5341
-      - 8081:80
+      - "5341:5341"
+      - "8081:80"
     volumes:
-      - ./.containers/logging/seq/data:/data
-
-  Myrtus-redis:
-    image: redis:latest
-    container_name: Myrtus.Redis
-    restart: always
-    ports:
-      - 6379:6379
+      - ./containers/logging/seq/data:/data
+    depends_on:
+      Myrtus-api:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5341/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   Myrtus-redis-insight:
     image: redis/redisinsight:latest
@@ -47,18 +104,15 @@ services:
     volumes:
       - redis-insight:/data
     environment:
-      - RIHOST=redis://Myrtus-redis:6379
+      RIHOST: "redis://Myrtus-redis:6379"
+    depends_on:
+      Myrtus-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5540"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  Myrtus-mongodb:
-    image: mongo:latest
-    container_name: Myrtus.MongoDb
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=mongo
-      - MONGO_INITDB_ROOT_PASSWORD=mongo
-    volumes:
-      - ./.containers/mongodb:/data/db
-    ports:
-      - 27017:27017
-       
 volumes:
   redis-insight:

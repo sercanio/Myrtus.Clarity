@@ -219,7 +219,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // Middlewares
-app.UseHttpsRedirection();
+// Remove or comment out the following line
+// app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 app.UseRequestContextLogging();
 app.UseSerilogRequestLogging();
