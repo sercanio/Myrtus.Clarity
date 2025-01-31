@@ -1,5 +1,3 @@
-version: '3.8'  # Updated to a more recent version for better features
-
 services:
   Myrtus-db:
     image: postgres:latest
@@ -14,9 +12,9 @@ services:
       - "5432:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   Myrtus-redis:
     image: redis:latest
@@ -26,9 +24,9 @@ services:
       - "6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   Myrtus-mongodb:
     image: mongo:latest
@@ -41,10 +39,21 @@ services:
     ports:
       - "27017:27017"
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "mongosh", "-u", "mongo", "-p", "mongo", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  Myrtus-seq:
+    image: datalust/seq:latest
+    container_name: Myrtus.Seq
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5341:5341"
+      - "8081:80"
+    volumes:
+      - ./containers/logging/seq/data:/data
 
   Myrtus-api:
     image: ${DOCKER_REGISTRY-}myrtusapi
@@ -61,39 +70,11 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Release
-      ASPNETCORE_URLS: "http://+:5000"  # Configure to use only HTTP
-      ConnectionStrings__Database: "Host=Myrtus-db;Port=5432;Database=Myrtus;Username=postgres;Password=postgres;"
-      ConnectionStrings__Cache: "Myrtus-redis:6379"
-      ConnectionStrings__MongoDb: "mongodb://mongo:mongo@Myrtus-mongodb:27017"
+      ASPNETCORE_URLS: "http://+:5000"
     ports:
       - "5000:5000"  # Expose only HTTP port
     volumes:
       - ./usersecrets:/app/.microsoft/usersecrets:ro
-      # Removed HTTPS volumes
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  Myrtus-seq:
-    image: datalust/seq:latest
-    container_name: Myrtus.Seq
-    environment:
-      ACCEPT_EULA: "Y"
-    ports:
-      - "5341:5341"
-      - "8081:80"
-    volumes:
-      - ./containers/logging/seq/data:/data
-    depends_on:
-      Myrtus-api:
-        condition: service_started
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5341/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   Myrtus-redis-insight:
     image: redis/redisinsight:latest
@@ -108,11 +89,6 @@ services:
     depends_on:
       Myrtus-redis:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5540"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
 volumes:
   redis-insight:
