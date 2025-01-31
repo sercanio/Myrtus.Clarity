@@ -22,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using Asp.Versioning.ApiExplorer;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -146,6 +147,14 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddWebApi(builder.Configuration);
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
+
+// Update database with latest migration
+using (IServiceScope scope = builder.Services.BuildServiceProvider().CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 // Dynamically load modules
 var modulesPath = builder.Environment.IsDevelopment()
