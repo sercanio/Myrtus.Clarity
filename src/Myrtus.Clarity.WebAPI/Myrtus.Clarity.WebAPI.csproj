@@ -66,6 +66,10 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Remove="..\..\modules\cms\src\CMSModule\bin\Debug\net9.0\**" />
+	</ItemGroup>
+
 	<!-- 2. Define a Target to Copy Module Assemblies After Publish -->
 	<Target Name="CopyModulesAfterPublish" AfterTargets="Publish">
 		<!-- Define the destination path for modules within the publish directory -->
@@ -84,16 +88,10 @@
 		</ItemGroup>
 
 		<!-- Copy module assemblies -->
-		<Copy
-		  SourceFiles="@(ModuleAssemblies)"
-		  DestinationFolder="$(ModulesPublishPath)"
-		  SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(ModuleAssemblies)" DestinationFolder="$(ModulesPublishPath)" SkipUnchangedFiles="true" />
 
 		<!-- Copy module PDBs -->
-		<Copy
-		  SourceFiles="@(ModulePDBs)"
-		  DestinationFolder="$(ModulesPublishPath)"
-		  SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(ModulePDBs)" DestinationFolder="$(ModulesPublishPath)" SkipUnchangedFiles="true" />
 	</Target>
 
 	<ProjectExtensions>
