@@ -72,9 +72,14 @@ services:
       ASPNETCORE_ENVIRONMENT: Release
       ASPNETCORE_URLS: "http://+:5000"
     ports:
-      - "5000:5000"  # Expose only HTTP port
+      - "5000:5000"
     volumes:
       - ./usersecrets:/app/.microsoft/usersecrets:ro
+    labels:
+      - "traefik.enable=true"
+      - 'traefik.http.routers.backend.rule=(Host("localhost") && (PathPrefix(`/api`) || PathPrefix(`/notificationHub`) || PathPrefix(`/auditLogHub`)))'
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.services.api.loadbalancer.server.port=5000"
 
   Myrtus-redis-insight:
     image: redis/redisinsight:latest
@@ -89,6 +94,24 @@ services:
     depends_on:
       Myrtus-redis:
         condition: service_healthy
+
+  Myrtus-traefik:
+    image: traefik:v2.9
+    container_name: Myrtus.Traefik
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.watch=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--api.dashboard=true"
+      - "--log.level=INFO"
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   redis-insight:
