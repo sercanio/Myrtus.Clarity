@@ -402,3 +402,4 @@ FodyWeavers.xsd
 */**/appsettings.development.json
 */**/appsettings.secrets.json
 /containers
+/secrets
