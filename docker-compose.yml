@@ -95,19 +95,6 @@ services:
       Myrtus-redis:
         condition: service_healthy
 
-  Myrtus-webui:
-    build:
-      context: ./Myrtus.WebUI
-      dockerfile: Dockerfile
-    container_name: Myrtus.WebUI
-    ports:
-      - "3000:80"
-    labels:
-      - "traefik.enable=true"
-      - 'traefik.http.routers.webui.rule=Host(`localhost`) && PathPrefix(`/`)' 
-      - "traefik.http.routers.webui.entrypoints=web"
-      - "traefik.http.services.webui.loadbalancer.server.port=80"
-
   Myrtus-traefik:
     image: traefik:v2.9
     container_name: Myrtus.Traefik
